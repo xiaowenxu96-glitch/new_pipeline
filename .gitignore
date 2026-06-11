@@ -1,0 +1,26 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Output files
+output_files/
+**/output/
+
+# Excel (data files)
+*.xlsx
+
+# Debug / temp files
+_*.txt
+_*.py
+
+# IDE
+*.code-workspace
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

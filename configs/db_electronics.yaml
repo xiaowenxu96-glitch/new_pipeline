@@ -1,0 +1,129 @@
+industry: "电子-存储价格"
+source_file: "D:/SWS/new_pipeline/电子/电子20260513_dqk修正_【申万电子】存储价格数据库_20260518181932.xlsx"
+target_file: "D:/SWS/new_pipeline/电子/申万电子目标文档1.xlsx"
+output_dir: "D:/SWS/new_pipeline/电子/output"
+
+defaults:
+  start_date: "2014-01-01"
+  date_format: "yyyy-mm-dd"
+
+sheets:
+  # ==================== Sheet 1: 现货价格 ====================
+  - sheet_name: "现货价格"
+    source_sheet: "现货价格"
+    data_start_row: 47
+    sections:
+      # DRAM现货价格 (每日)
+      - date_col: "B"
+        indicators:
+          "AA000344983600": "C"   # DDR5 16G(2Gx8)4800/5600
+          "AA000344762000": "D"   # DDR4 16Gb(2Gx8)3200
+          "AA000344761900": "E"   # DDR4 16Gb(1Gx16)3200
+          "AA000343875000": "F"   # DDR4 8Gb(1Gx8)3200
+          "AA000344762100": "G"   # DDR4 8Gb(512Mx16)3200
+          "AA000256692100": "H"   # DDR3 4Gb 512Mx8 1600MHz
+          "AA000256692300": "I"   # DDR3 4Gb 256Mx16 1600/1866
+      # NAND Wafer现货价格
+      - date_col: "K"
+        indicators:
+          "AA000256693500": "L"   # Wafer 128Gb TLC
+          "AA000256693400": "M"   # Wafer 256Gb TLC
+          "AA000256693300": "N"   # Wafer 512Gb TLC
+          "AA000344980300": "O"   # Wafer 1Tb TLC
+      # NAND Flash现货价格
+      - date_col: "R"
+        indicators:
+          "AA000343876400": "S"   # Flash MLC 256Gb
+          "AA000343876500": "T"   # Flash MLC 128Gb
+          "AA000256692700": "U"   # Flash MLC 64Gb
+          "AA000256692800": "V"   # Flash MLC 32Gb
+          "AA000343876100": "W"   # Flash SLC 16Gb
+          "AA000343876200": "X"   # Flash SLC 8Gb
+          "AA000343876300": "Y"   # Flash SLC 4Gb
+          "AA000256692500": "Z"   # Flash SLC 2Gb
+          "AA000256692600": "AA"  # Flash SLC 1Gb
+    actions:
+      - type: "electronics_write_sheet"
+    post_processes:
+      - action: "electronics_update_chart_ranges"
+
+  # ==================== Sheet 2: 存储器价格指数（周） ====================
+  - sheet_name: "存储器价格指数（周）"
+    source_sheet: "存储器价格指数（周）"
+    data_start_row: 48
+    sections:
+      - date_col: "B"
+        indicators:
+          "AA000344664500": "C"   # DRAM指数
+          "AA000344664400": "D"   # NAND指数
+    actions:
+      - type: "electronics_write_sheet"
+    post_processes:
+      - action: "electronics_update_chart_ranges"
+
+  # ==================== Sheet 3: 存储产品价格_周 ====================
+  - sheet_name: "存储产品价格_周 "
+    source_sheet: "存储产品价格_周"
+    data_start_row: 35
+    sections:
+      # 存储器价格指数
+      - date_col: "B"
+        indicators:
+          "AA000344664500": "C"   # DRAM指数
+          "AA000344664400": "D"   # NAND指数
+      # NAND Flash晶圆价格
+      - date_col: "F"
+        indicators:
+          "AA000344980300": "G"   # Wafer 1Tb TLC
+          "AA000256693300": "H"   # Wafer 512Gb TLC
+          "AA000256693400": "I"   # Wafer 256Gb TLC
+          "AA000256693500": "J"   # Wafer 128Gb TLC
+      # SSD价格
+      - date_col: "L"
+        indicators:
+          "AA000344632600": "M"   # SSD 120GB SATA3 渠道
+          "AA000344632700": "N"   # SSD 240GB SATA3 渠道
+          "AA000344632800": "O"   # SSD 480GB SATA3 渠道
+          "AA000344634800": "P"   # SSD 256GB SATA3 行业
+          "AA000344634900": "Q"   # SSD 512GB SATA3 行业
+      # eMMC价格
+      - date_col: "S"
+        indicators:
+          "AA000344638600": "T"   # eMMC 8GB 5.1
+          "AA000344638700": "U"   # eMMC 16GB 5.1
+          "AA000344638800": "V"   # eMMC 32GB 5.1
+          "AA000344638900": "W"   # eMMC 64GB 5.1
+          "AA000344639000": "X"   # eMMC 128GB 5.1
+      # DDR价格 (注意: AC和AD为同一指标重复)
+      - date_col: "Z"
+        indicators:
+          - ["AA000344629700", "AA"]  # DDR4 16Gb 3200
+          - ["AA000344979200", "AB"]  # DDR4 16Gb eTT
+          - ["AA000344629600", "AC"]  # DDR4 8Gb 3200
+          - ["AA000344629600", "AD"]  # DDR4 8Gb 3200 (重复)
+          - ["AA000344979300", "AE"]  # DDR4 8Gb eTT
+          - ["AA000344979400", "AF"]  # DDR4 4Gb eTT
+      # 内存条价格
+      - date_col: "AH"
+        indicators:
+          "AA000344630800": "AI"  # UDIMM 8GB 2666
+          "AA000344630900": "AJ"  # UDIMM 16GB 2666
+          "AA000344631000": "AK"  # UDIMM 32GB 2666
+          "AA000344631700": "AL"  # SODIMM 4GB 2666
+          "AA000344631800": "AM"  # SODIMM 8GB 2666
+          "AA000344631900": "AN"  # SODIMM 16GB 2666
+      # LPDDR价格
+      - date_col: "AP"
+        indicators:
+          "AA000344636200": "AQ"  # LPDDR4X 96Gb
+          "AA000344636300": "AR"  # LPDDR4X 64Gb
+          "AA000344636400": "AS"  # LPDDR4X 48Gb
+          "AA000344636500": "AT"  # LPDDR4X 32Gb
+          "AA000344636600": "AU"  # LPDDR4 16Gb
+          "AA000344636700": "AV"  # LPDDR4 8Gb
+          "AA000344636800": "AW"  # LPDDR3 16Gb
+          "AA000344636900": "AX"  # LPDDR3 8Gb
+    actions:
+      - type: "electronics_write_sheet"
+    post_processes:
+      - action: "electronics_update_chart_ranges"

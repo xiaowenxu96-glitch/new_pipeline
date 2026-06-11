@@ -1,0 +1,1512 @@
+industry: 宏观
+source_file: D:/【交付审核】/_导出验收/Excel数据验收/宏观/宏观20250513_【申万宏源宏观】中观景气跟踪数据库_20250522120540.xlsx
+target_file: D:/【交付审核】/_导出验收/Excel数据验收/宏观/宏观目标文档.xlsx
+output_dir: D:/【交付审核】/_导出验收/new_pipeline/output_files
+defaults:
+  start_date: '2014-01-01'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: 1.1 电力
+  source_sheet: 1.1 电力
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000061778900
+    start_row: 10
+    start_col: I
+  - type: create_pivot_table
+    indicator_code: AA000061778900
+    start_row: 9
+    start_col: N
+    years: 8
+  - type: macro_create_festival_pivot
+    base_col: I
+    value_col: J
+    target_start_col: AE
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000061904600
+    - AA000061904700
+    start_row: 11
+    start_col: AS
+  - type: create_pivot_table
+    indicator_code: AA000061904700
+    start_row: 9
+    start_col: BB
+    years: 9
+  - type: macro_create_festival_pivot
+    base_col: A
+    value_col: B
+    target_start_col: BO
+    target_start_row: 9
+    recent_years: 7
+  - type: create_pivot_table
+    indicator_code: AA000061904600
+    start_row: 9
+    start_col: CA
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: A
+    value_col: B
+    target_start_col: CK
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000120858300
+    start_row: 10
+    start_col: DR
+  - type: create_pivot_table
+    indicator_code: AA000120858300
+    start_row: 9
+    start_col: DW
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: A
+    value_col: B
+    target_start_col: EJ
+    target_start_row: 10
+    recent_years: 7
+- sheet_name: 1.2 焦炭、铁矿石
+  source_sheet: 1.2 焦炭、铁矿石
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000061434700
+    - AA000061434100
+    - AA000061434200
+    - AA000061434300
+    - AA000061434400
+    - AA000061434500
+    - AA000061434600
+    start_row: 11
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000061433200
+    start_row: 9
+    start_col: M
+    years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000061433200
+    start_row: 10
+    start_col: AF
+  - type: create_pivot_table
+    indicator_code: AA000061433200
+    start_row: 9
+    start_col: AJ
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: AF
+    value_col: AG
+    target_start_col: AU
+    target_start_row: 10
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000010713300
+    start_row: 11
+    start_col: BH
+  - type: create_pivot_table
+    indicator_code: AA000010713300
+    start_row: 10
+    start_col: BK
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: BH
+    value_col: BI
+    target_start_col: BT
+    target_start_row: 10
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000061171700
+    - AA000059842200
+    start_row: 11
+    start_col: CU
+  - type: write_indicator_group
+    indicators:
+    - AA000061777300
+    start_row: 10
+    start_col: DB
+  - type: create_pivot_table
+    indicator_code: AA000061777300
+    start_row: 9
+    start_col: DE
+    years: 5
+  - type: macro_create_festival_pivot
+    base_col: DB
+    value_col: DC
+    target_start_col: DN
+    target_start_row: 9
+    recent_years: 5
+- sheet_name: 1.2 钢铁
+  source_sheet: 1.2 钢铁
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000059641800
+    start_row: 10
+    start_col: C
+  - type: create_pivot_table
+    indicator_code: AA000059641800
+    start_row: 4
+    start_col: H
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: C
+    value_col: D
+    target_start_col: T
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000059641600
+    start_row: 10
+    start_col: AF
+  - type: create_pivot_table
+    indicator_code: AA000059641600
+    start_row: 4
+    start_col: AI
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: AF
+    value_col: AG
+    target_start_col: AT
+    target_start_row: 4
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000061060700
+    start_row: 12
+    start_col: BF
+  - type: create_pivot_table
+    indicator_code: AA000061060700
+    start_row: 10
+    start_col: BI
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: BF
+    value_col: BG
+    target_start_col: BS
+    target_start_row: 10
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000061099800
+    - AA000061100000
+    - AA000061099900
+    - AA000061100100
+    - AA000061100200
+    - AA000061100300
+    start_row: 6
+    start_col: CD
+  - type: create_pivot_table
+    indicator_code: AA000061100300
+    start_row: 4
+    start_col: CP
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: CD
+    value_col: CJ
+    target_start_col: DB
+    target_start_row: 4
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000059479300
+    start_row: 10
+    start_col: EA
+  - type: create_pivot_table
+    indicator_code: AA000059479300
+    start_row: 10
+    start_col: EI
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: EA
+    value_col: EB
+    target_start_col: ER
+    target_start_row: 10
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000061027400
+    start_row: 8
+    start_col: FD
+  - type: create_pivot_table
+    indicator_code: AA000061027400
+    start_row: 4
+    start_col: FG
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: FD
+    value_col: FE
+    target_start_col: FS
+    target_start_row: 7
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000061027400
+    - AA000010694800
+    - AA000010694700
+    - AA000010694900
+    - AA000010695100
+    - AA000010695000
+    start_row: 6
+    start_col: GE
+- sheet_name: 1.2 螺纹钢
+  source_sheet: 1.2 螺纹钢
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000061099800
+    start_row: 10
+    start_col: AE
+  - type: create_pivot_table
+    indicator_code: AA000061099800
+    start_row: 9
+    start_col: AI
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: AE
+    value_col: AF
+    target_start_col: AT
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000061102700
+    - AA000059842400
+    start_row: 11
+    start_col: BG
+- sheet_name: 1.2 冷轧板卷
+  source_sheet: 1.2 冷轧板卷
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000061100100
+    start_row: 10
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000061100100
+    start_row: 9
+    start_col: U
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: B
+    value_col: C
+    target_start_col: AF
+    target_start_row: 9
+    recent_years: 7
+- sheet_name: 1.2 中厚板
+  source_sheet: 1.2 中厚板
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000061100200
+    start_row: 10
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000061100200
+    start_row: 9
+    start_col: F
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: B
+    value_col: C
+    target_start_col: V
+    target_start_row: 9
+    recent_years: 7
+- sheet_name: 1.4 纯碱、橡塑
+  source_sheet: 1.4 纯碱、橡塑
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000066349900
+    start_row: 11
+    start_col: C
+  - type: create_pivot_table
+    indicator_code: AA000066349900
+    start_row: 5
+    start_col: G
+    years: 8
+  - type: macro_create_festival_pivot
+    base_col: C
+    value_col: D
+    target_start_col: S
+    target_start_row: 5
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000066350100
+    - AA000066234000
+    start_row: 11
+    start_col: AF
+  - type: write_indicator_group
+    indicators:
+    - AA000120858100
+    start_row: 12
+    start_col: AK
+  - type: create_pivot_table
+    indicator_code: AA000120858100
+    start_row: 9
+    start_col: AO
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: AK
+    value_col: AL
+    target_start_col: AZ
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000120857600
+    start_row: 11
+    start_col: BL
+  - type: create_pivot_table
+    indicator_code: AA000120857600
+    start_row: 9
+    start_col: BO
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: BL
+    value_col: BM
+    target_start_col: BZ
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000066350000
+    - AA000066233900
+    start_row: 11
+    start_col: CM
+  - type: write_indicator_group
+    indicators:
+    - AA000120857900
+    start_row: 11
+    start_col: CR
+  - type: create_pivot_table
+    indicator_code: AA000120857900
+    start_row: 9
+    start_col: CV
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: CR
+    value_col: CS
+    target_start_col: DG
+    target_start_row: 9
+    recent_years: 7
+- sheet_name: 1.5 化纤
+  source_sheet: 1.5 化纤
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000058887900
+    start_row: 11
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000058887900
+    start_row: 8
+    start_col: I
+    years: 9
+  - type: macro_create_festival_pivot
+    base_col: B
+    value_col: C
+    target_start_col: W
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000066350300
+    start_row: 9
+    start_col: AI
+  - type: create_pivot_table
+    indicator_code: AA000066350300
+    start_row: 8
+    start_col: AM
+    years: 5
+  - type: macro_create_festival_pivot
+    base_col: AI
+    value_col: AJ
+    target_start_col: AY
+    target_start_row: 9
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000066350200
+    - AA000058888300
+    - AA000066357200
+    start_row: 10
+    start_col: BL
+  - type: write_indicator_group
+    indicators:
+    - AA000120857700
+    start_row: 10
+    start_col: CT
+  - type: create_pivot_table
+    indicator_code: AA000120857700
+    start_row: 8
+    start_col: CX
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: CT
+    value_col: CU
+    target_start_col: DJ
+    target_start_row: 9
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000120859300
+    start_row: 10
+    start_col: FO
+  - type: write_indicator_group
+    indicators:
+    - AA000120858000
+    start_row: 10
+    start_col: FS
+  - type: create_pivot_table
+    indicator_code: AA000120857700
+    start_row: 8
+    start_col: FW
+    years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000066231300
+    start_row: 10
+    start_col: IC
+  - type: write_indicator_group
+    indicators:
+    - AA000058888000
+    start_row: 10
+    start_col: IG
+  - type: create_pivot_table
+    indicator_code: AA000058888000
+    start_row: 8
+    start_col: IK
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: IG
+    value_col: IH
+    target_start_col: IV
+    target_start_row: 9
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000066231700
+    start_row: 11
+    start_col: KX
+  - type: create_pivot_table
+    indicator_code: AA000066231700
+    start_row: 8
+    start_col: LB
+    years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000120858200
+    start_row: 11
+    start_col: LN
+  - type: create_pivot_table
+    indicator_code: AA000120858200
+    start_row: 8
+    start_col: LR
+    years: 7
+- sheet_name: 1.6 汽车
+  source_sheet: 1.6 汽车
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000065919800
+    start_row: 11
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000065919800
+    start_row: 10
+    start_col: H
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: D
+    value_col: E
+    target_start_col: T
+    target_start_row: 10
+    recent_years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000066231500
+    start_row: 11
+    start_col: AG
+  - type: create_pivot_table
+    indicator_code: AA000066231500
+    start_row: 10
+    start_col: AK
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: AG
+    value_col: AH
+    target_start_col: AW
+    target_start_row: 10
+    recent_years: 7
+- sheet_name: 1.5 新能源
+  source_sheet: 1.5 新能源
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000062443900
+    start_row: 11
+    start_col: C
+  - type: create_pivot_table
+    indicator_code: AA000062443900
+    start_row: 10
+    start_col: H
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: C
+    value_col: D
+    target_start_col: S
+    target_start_row: 10
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000075252500
+    start_row: 11
+    start_col: AC
+  - type: create_pivot_table
+    indicator_code: AA000075252500
+    start_row: 10
+    start_col: AG
+    years: 7
+  - type: macro_create_festival_pivot
+    base_col: AC
+    value_col: AD
+    target_start_col: AR
+    target_start_row: 10
+    recent_years: 5
+- sheet_name: 2.4 (月度)基建数据
+  source_sheet: 2.4 (月度)基建数据
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000070945600
+    start_row: 5
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000070945600
+    start_row: 4
+    start_col: K
+    years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000070877200
+    start_row: 6
+    start_col: AE
+  - type: create_pivot_table
+    indicator_code: AA000070877200
+    start_row: 5
+    start_col: AL
+    years: 5
+- sheet_name: 3.1 货运流量
+  source_sheet: 3.1 货运流量
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000063653600
+    start_row: 6
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000063653600
+    start_row: 4
+    start_col: T
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: B
+    value_col: C
+    target_start_col: AH
+    target_start_row: 4
+    recent_years: 6
+  - type: write_indicator_group
+    indicators:
+    - AA000063656900
+    start_row: 6
+    start_col: AU
+  - type: macro_create_festival_pivot
+    base_col: A
+    value_col: B
+    target_start_col: G
+    target_start_row: 4
+    recent_years: 7
+  - type: create_pivot_table
+    indicator_code: AA000063656900
+    start_row: 5
+    start_col: BB
+    years: 4
+- sheet_name: 3.1 省份货运流量
+  source_sheet: 3.1 省份货运流量
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000063653700
+    - AA000063653800
+    - AA000063653900
+    - AA000063654000
+    - AA000063656300
+    - AA000063654100
+    - AA000063654200
+    - AA000063656200
+    - AA000063654300
+    - AA000063654400
+    - AA000063654500
+    - AA000063654600
+    - AA000063654700
+    - AA000063654800
+    - AA000063654900
+    - AA000063655000
+    - AA000063655100
+    - AA000063655200
+    - AA000063655300
+    - AA000063656500
+    - AA000063655400
+    - AA000063655500
+    - AA000063655600
+    - AA000063655700
+    - AA000063655800
+    start_row: 12
+    start_col: D
+- sheet_name: 3.1 交通运输部物流数据
+  source_sheet: 3.1 交通运输部物流数据
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000065055200
+    - AA000065055400
+    - AA000065055600
+    - AA000065055800
+    - AA000065056000
+    - AA000065056200
+    - AA000065056300
+    - AA000065056400
+    - AA000065056600
+    start_row: 14
+    start_col: D
+  - type: write_indicator_group
+    indicators:
+    - AA000065596100
+    - AA000065596300
+    - AA000065596500
+    - AA000065596700
+    - AA000065597100
+    - AA000065597200
+    - AA000065597300
+    - AA000065597400
+    - AA000065597600
+    start_row: 14
+    start_col: O
+  - type: create_pivot_table
+    indicator_code: AA000065596100
+    start_row: 7
+    start_col: AO
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: P
+    target_start_col: AW
+    target_start_row: 7
+    recent_years: 3
+  - type: create_pivot_table
+    indicator_code: AA000065596300
+    start_row: 7
+    start_col: BG
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: Q
+    target_start_col: BO
+    target_start_row: 7
+    recent_years: 3
+  - type: create_pivot_table
+    indicator_code: AA000065596500
+    start_row: 7
+    start_col: BZ
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: R
+    target_start_col: CH
+    target_start_row: 7
+    recent_years: 3
+  - type: create_pivot_table
+    indicator_code: AA000065596700
+    start_row: 7
+    start_col: DD
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: S
+    target_start_col: DL
+    target_start_row: 7
+    recent_years: 3
+  - type: create_pivot_table
+    indicator_code: AA000065597100
+    start_row: 7
+    start_col: DW
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: T
+    target_start_col: EE
+    target_start_row: 7
+    recent_years: 3
+  - type: create_pivot_table
+    indicator_code: AA000065597400
+    start_row: 7
+    start_col: EP
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: W
+    target_start_col: EX
+    target_start_row: 7
+    recent_years: 3
+  - type: create_pivot_table
+    indicator_code: AA000065597600
+    start_row: 7
+    start_col: FI
+    years: 4
+  - type: macro_create_festival_pivot
+    base_col: O
+    value_col: X
+    target_start_col: FQ
+    target_start_row: 7
+    recent_years: 3
+- sheet_name: 3.1 交通运输部物流(月度)
+  source_sheet: 3.1 交通运输部物流(月度)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000058682500
+    - AA000058691200
+    - AA000065841300
+    - AA000063146100
+    start_row: 6
+    start_col: A
+  - type: create_pivot_table
+    indicator_code: AA000058682500
+    start_row: 3
+    start_col: I
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058691200
+    start_row: 3
+    start_col: U
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000065841300
+    start_row: 3
+    start_col: AF
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000063146100
+    start_row: 3
+    start_col: AQ
+    years: 7
+- sheet_name: 3.2 城市间
+  source_sheet: 3.2 城市间
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000063853700
+    - AA000063854000
+    start_row: 8
+    start_col: AI
+  - type: write_indicator_group
+    indicators:
+    - AA000063853700
+    - AA000063854000
+    start_row: 8
+    start_col: AN
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2020
+    end_year: 2024
+    pivot_start_col: AW
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2020
+    end_year: 2024
+    pivot_start_col: BY
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_chuxi_pivot
+    date_col: AR
+    value_col: AS
+    start_row: 15
+    target_start_col: BQ
+    target_start_row: 4
+  - type: macro_create_chuxi_pivot
+    date_col: AR
+    value_col: AT
+    start_row: 15
+    target_start_col: CS
+    target_start_row: 4
+- sheet_name: 3.4 干散货
+  source_sheet: 3.4 干散货
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000058674600
+    start_row: 6
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000058674600
+    start_row: 4
+    start_col: F
+    years: 7
+- sheet_name: 3.4 集装箱运价
+  source_sheet: 3.4 集装箱运价
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000058676400
+    - AA000058677200
+    - AA000058676700
+    - AA000058676500
+    - AA000058676600
+    - AA000058676900
+    - AA000058677000
+    - AA000058677400
+    - AA000058677100
+    - AA000058676800
+    - AA000058850400
+    - AA000058677300
+    - AA000064936800
+    start_row: 14
+    start_col: C
+  - type: create_pivot_table
+    indicator_code: AA000058676400
+    start_row: 13
+    start_col: U
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058677200
+    start_row: 13
+    start_col: AI
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058676700
+    start_row: 13
+    start_col: AW
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058676500
+    start_row: 13
+    start_col: BK
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058676600
+    start_row: 13
+    start_col: BY
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058676900
+    start_row: 13
+    start_col: CM
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058677000
+    start_row: 13
+    start_col: DA
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058677400
+    start_row: 13
+    start_col: DO
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058677100
+    start_row: 13
+    start_col: EC
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058676800
+    start_row: 13
+    start_col: EQ
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058850400
+    start_row: 13
+    start_col: FE
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000058677300
+    start_row: 13
+    start_col: FS
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000064936800
+    start_row: 13
+    start_col: GG
+    years: 7
+- sheet_name: 3.4 出口（集装箱吞吐）
+  source_sheet: 3.4 出口（集装箱吞吐）
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000065051000
+    - AA000065051200
+    - AA000065051300
+    start_row: 13
+    start_col: A
+  - type: write_indicator_group
+    indicators:
+    - AA000058693600
+    - AA000058694400
+    - AA000058691600
+    - AA000058692600
+    - AA000058693800
+    - AA000058693600
+    start_row: 13
+    start_col: L
+- sheet_name: 3.4 出口(陆路)
+  source_sheet: 3.4 出口(陆路)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000082096700
+    start_row: 11
+    start_col: BS
+  - type: create_pivot_table
+    indicator_code: AA000082096700
+    start_row: 10
+    start_col: BW
+    years: 5
+  - type: macro_create_festival_pivot
+    base_col: BS
+    value_col: BT
+    target_start_col: CF
+    target_start_row: 10
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000082096800
+    start_row: 11
+    start_col: CS
+  - type: create_pivot_table
+    indicator_code: AA000082096800
+    start_row: 10
+    start_col: CX
+    years: 5
+  - type: macro_create_festival_pivot
+    base_col: CS
+    value_col: CT
+    target_start_col: DG
+    target_start_row: 10
+    recent_years: 5
+  - type: write_indicator_group
+    indicators:
+    - AA000082096900
+    start_row: 11
+    start_col: DT
+  - type: create_pivot_table
+    indicator_code: AA000082096900
+    start_row: 10
+    start_col: DY
+    years: 5
+  - type: macro_create_festival_pivot
+    base_col: DT
+    value_col: DU
+    target_start_col: EH
+    target_start_row: 10
+    recent_years: 5
+- sheet_name: 4.1 新房成交
+  source_sheet: 4.1 新房成交
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000077652500
+    - AA000077652600
+    - AA000077652700
+    start_row: 8
+    start_col: F
+  - type: write_indicator_group
+    indicators:
+    - AA000077652400
+    start_row: 9
+    start_col: W
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2017
+    end_year: 2024
+    pivot_start_col: AC
+    pivot_start_row: 5
+    row: 4
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2017
+    end_year: 2024
+    pivot_start_col: BT
+    pivot_start_row: 5
+    row: 4
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: DK
+    pivot_start_row: 5
+    row: 4
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: EY
+    pivot_start_row: 5
+    row: 4
+  - type: macro_create_chuxi_pivot
+    date_col: W
+    value_col: Y
+    start_row: 9
+    target_start_col: BH
+    target_start_row: 4
+  - type: macro_create_chuxi_pivot
+    date_col: F
+    value_col: J
+    start_row: 8
+    target_start_col: CY
+    target_start_row: 4
+  - type: macro_create_chuxi_pivot
+    date_col: F
+    value_col: K
+    start_row: 8
+    target_start_col: EM
+    target_start_row: 4
+  - type: macro_create_chuxi_pivot
+    date_col: F
+    value_col: L
+    start_row: 8
+    target_start_col: FZ
+    target_start_row: 4
+- sheet_name: 4.1 新房成交(一线城市)
+  source_sheet: 4.1 新房成交(一线城市)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000077778100
+    - AA000076985600
+    - AA000077777000
+    - AA000075875200
+    start_row: 24
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000077778100
+    start_row: 8
+    start_col: X
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000076985600
+    start_row: 8
+    start_col: AI
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077777000
+    start_row: 8
+    start_col: AU
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000075875200
+    start_row: 8
+    start_col: BG
+    years: 7
+  - type: write_indicator_group
+    indicators:
+    - AA000077778100
+    - AA000076985600
+    - AA000077777000
+    - AA000075875200
+    start_row: 9
+    start_col: BZ
+- sheet_name: 4.1 新房成交(二线城市iFind)
+  source_sheet: 4.1 新房成交(二线城市iFind)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000075961200
+    - AA000078111500
+    - AA000076940500
+    - AA000059384600
+    - AA000077782600
+    - AA000075995600
+    - AA000076199700
+    - AA000077778800
+    - AA000120860000
+    - AA000076095700
+    start_row: 24
+    start_col: B
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: AE
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: BE
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: CG
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: DI
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: EK
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: FM
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: GO
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: HQ
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: IS
+    pivot_start_row: 9
+    row: 8
+  - type: macro_create_yearly_date_scaffold
+    start_year: 2018
+    end_year: 2024
+    pivot_start_col: JU
+    pivot_start_row: 9
+    row: 8
+- sheet_name: 4.2 二手房挂牌价格
+  source_sheet: 4.2 二手房挂牌价格
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000077649800
+    - AA000077650900
+    - AA000077651000
+    - AA000077651100
+    - AA000077651200
+    start_row: 9
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000077649800
+    start_row: 4
+    start_col: M
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077650900
+    start_row: 4
+    start_col: W
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077651000
+    start_row: 4
+    start_col: AG
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077651100
+    start_row: 4
+    start_col: AQ
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077651200
+    start_row: 4
+    start_col: BA
+    years: 7
+- sheet_name: 4.2 二手房挂牌量
+  source_sheet: 4.2 二手房挂牌量
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000077649700
+    - AA000077650500
+    - AA000077650600
+    - AA000077650700
+    - AA000077650800
+    start_row: 9
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000077649700
+    start_row: 4
+    start_col: M
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077650500
+    start_row: 4
+    start_col: X
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077650600
+    start_row: 4
+    start_col: AI
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077650700
+    start_row: 4
+    start_col: AT
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077650800
+    start_row: 4
+    start_col: BE
+    years: 7
+- sheet_name: 4.3 土地
+  source_sheet: 4.3 土地
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000077658500
+    - AA000077663200
+    - AA000077663300
+    - AA000077663400
+    - AA000077658700
+    - AA000077664400
+    - AA000077664500
+    - AA000077664600
+    - AA000077658900
+    - AA000077665000
+    - AA000077665100
+    - AA000077665200
+    start_row: 7
+    start_col: B
+  - type: create_pivot_table
+    indicator_code: AA000077658500
+    start_row: 4
+    start_col: R
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077663200
+    start_row: 4
+    start_col: AB
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077663300
+    start_row: 4
+    start_col: AL
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077663400
+    start_row: 4
+    start_col: AV
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077658700
+    start_row: 4
+    start_col: BF
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000077664400
+    start_row: 4
+    start_col: BP
+    years: 5
+  - type: create_pivot_table
+    indicator_code: AA000077664500
+    start_row: 4
+    start_col: BX
+    years: 5
+  - type: create_pivot_table
+    indicator_code: AA000077664600
+    start_row: 4
+    start_col: CF
+    years: 5
+  - type: create_pivot_table
+    indicator_code: AA000077658900
+    start_row: 4
+    start_col: CN
+    years: 5
+  - type: create_pivot_table
+    indicator_code: AA000077665000
+    start_row: 4
+    start_col: CV
+    years: 5
+  - type: create_pivot_table
+    indicator_code: AA000077665100
+    start_row: 4
+    start_col: DD
+    years: 5
+  - type: create_pivot_table
+    indicator_code: AA000077665200
+    start_row: 4
+    start_col: DL
+    years: 5
+- sheet_name: 5.1 农产品物价指数
+  source_sheet: 5.1 农产品物价指数
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000102799900
+    - AA000102800100
+    - AA000102800200
+    - AA000102800000
+    - AA000120857300
+    start_row: 7
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000102799900
+    start_row: 4
+    start_col: M
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000102800100
+    start_row: 4
+    start_col: X
+    years: 9
+  - type: create_pivot_table
+    indicator_code: AA000102800200
+    start_row: 4
+    start_col: AL
+    years: 8
+  - type: create_pivot_table
+    indicator_code: AA000102800000
+    start_row: 4
+    start_col: AY
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000120857300
+    start_row: 4
+    start_col: BJ
+    years: 7
+- sheet_name: 5.2 工业品价格指数(日度)
+  source_sheet: 5.2 工业品价格指数(日度)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000083347400
+    - AA000083347700
+    - AA000083347800
+    - AA000083347600
+    - AA000083348000
+    - AA000083347500
+    - AA000083348100
+    - AA000083347900
+    start_row: 7
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000083347400
+    start_row: 4
+    start_col: R
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083347700
+    start_row: 4
+    start_col: AC
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083347800
+    start_row: 4
+    start_col: AO
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083347600
+    start_row: 4
+    start_col: BC
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083348000
+    start_row: 4
+    start_col: BO
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083347500
+    start_row: 4
+    start_col: CA
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083348100
+    start_row: 4
+    start_col: CP
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083347900
+    start_row: 4
+    start_col: DE
+    years: 7
+- sheet_name: 5.2 工业品价格指数(金属类)
+  source_sheet: 5.2 工业品价格指数(金属类)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000083346800
+    - AA000083346600
+    - AA000083346100
+    - AA000083346000
+    start_row: 6
+    start_col: D
+  - type: create_pivot_table
+    indicator_code: AA000083346800
+    start_row: 4
+    start_col: Q
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083346600
+    start_row: 4
+    start_col: AE
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083346100
+    start_row: 4
+    start_col: AT
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000083346000
+    start_row: 4
+    start_col: BH
+    years: 7
+- sheet_name: 5.2 五金机电价格指数(周度)
+  source_sheet: 5.2 五金机电价格指数(周度)
+  actions:
+  - type: write_indicator_group
+    indicators:
+    - AA000066394500
+    - AA000066394600
+    - AA000074348600
+    - AA000066394800
+    - AA000066394900
+    - AA000066395000
+    - AA000066395100
+    - AA000074348700
+    - AA000066395200
+    - AA000066395300
+    - AA000066395400
+    start_row: 7
+    start_col: A
+  - type: create_pivot_table
+    indicator_code: AA000074348600
+    start_row: 5
+    start_col: P
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000066395000
+    start_row: 5
+    start_col: AA
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000066395100
+    start_row: 5
+    start_col: AL
+    years: 7
+  - type: create_pivot_table
+    indicator_code: AA000074348700
+    start_row: 5
+    start_col: AW
+    years: 7

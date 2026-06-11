@@ -1,0 +1,65 @@
+industry: "有色金属"
+source_file: "D:/SWS/new_pipeline/有色金属/有色金属20260608_dqk修正_【金属周报-细分板块底稿】_20260608190603.xlsx"
+target_file: "D:/SWS/new_pipeline/有色金属/有色金属目标文档.xlsx"
+output_dir: "D:/SWS/new_pipeline/有色金属/output"
+
+defaults:
+  start_date: "2016-01-03"
+  date_format: "yyyy-mm"
+  start_row: 6
+
+sheets:
+  # ==================== 图5 金价与实际利率 ====================
+  - sheet_name: "图5金价与实际利率"
+    source_sheet: "图5金价与实际利率"
+    data_start_row: 6
+    date_col: "F"
+    indicators:
+      "AA000257341800": "G"
+      "AA000329877200": "H"
+    actions:
+      - type: "metal_write_sheet"
+
+  # ==================== 图6 美国通胀预期 ====================
+  - sheet_name: "图6美国通胀预期"
+    source_sheet: "图6美国通胀预期"
+    data_start_row: 6
+    date_col: "F"
+    indicators:
+      "AA000329989900": "G"
+      "AA000329877200": "H"
+    actions:
+      - type: "metal_write_sheet"
+
+  # ==================== 图7 黄金ETF持仓 ====================
+  - sheet_name: "图7黄金ETF持仓"
+    source_sheet: "图7黄金ETF持仓"
+    data_start_row: 6
+    date_col: "F"
+    indicators:
+      "AA000257341800": "G"
+      "AA000258987200": "H"
+      "AA000258987400": "I"
+    actions:
+      - type: "metal_write_sheet"
+
+  # ==================== 图8 COMEX非商业持仓 ====================
+  - sheet_name: "图8COMEX非商业持仓"
+    source_sheet: "图8COMEX非商业持仓"
+    data_start_row: 6
+    date_col: "E"
+    indicators:
+      "AA000259128300": "F"
+      "AA000259128400": "G"
+    actions:
+      - type: "metal_write_sheet"
+
+  # ==================== 图10 中国央行购金（月度） ====================
+  - sheet_name: "图10中国央行购金（月度）"
+    source_sheet: "图10中国央行购金（月度）"
+    data_start_row: 6
+    date_col: "A"
+    indicators:
+      "AA000084782500": "B"
+    actions:
+      - type: "metal_write_sheet"
