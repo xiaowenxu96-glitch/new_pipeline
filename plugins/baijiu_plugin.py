@@ -8,9 +8,147 @@ from openpyxl.utils import column_index_from_string as col_letter_to_num
 class BaijiuPlugin:
     """白酒 Pipeline 插件：按产品名匹配写入 + 图表 XML 更新"""
 
+    # 数据写入：按指标代码匹配（源指标代码→目标列）
     # ================================================================
-    # 数据写入：源列→目标列（按产品名匹配目标表头）
+    @staticmethod
+    def baijiu_write_sheet_by_code(context, params):
+        ws = context['ws']
+        reader = context['data_reader']
+        sc = context['sheet_config']
+
+        source_sheet = sc['source_sheet']
+        data_start = sc.get('data_start_row', 9)
+        date_col_num = col_letter_to_num(sc['date_col'])
+        indicator_pairs = list(sc.get('indicators', {}).items())
+
+        all_codes = set(code for code, _ in indicator_pairs)
+        code_dfs = {}
+        for aa_code in all_codes:
+            ind_data = reader.read_indicator_data(source_sheet, aa_code)
+            df = ind_data["data"]
+            if df.empty:
+                continue
+            valid_dates = pd.to_datetime(df['日期'], errors='coerce')
+            df = df[valid_dates.notna()].copy()
+            value_col = df.columns[-1]
+            df = df[df[value_col].notna()].copy()
+            if df.empty:
+                continue
+            df = df.sort_values('日期', ascending=True).reset_index(drop=True)
+            code_dfs[aa_code] = df
+
+        if not code_dfs:
+            print(f"    - [{source_sheet}] 无有效指标数据")
+            return
+
+        # 合并所有指标的日期并集
+        all_dates = set()
+        for df in code_dfs.values():
+            all_dates.update(df['日期'])
+        date_list = sorted(all_dates, reverse=False)
+
+        # 写日期列
+        for i, date_val in enumerate(date_list):
+            row = data_start + i
+            date_cell = ws.cell(row=row, column=date_col_num)
+            date_cell.value = date_val.to_pydatetime() if isinstance(date_val, pd.Timestamp) else date_val
+            date_cell.number_format = 'yyyy-mm-dd'
+
+        # 写各指标值
+        for aa_code, target_col in indicator_pairs:
+            df = code_dfs.get(aa_code)
+            if df is None or df.empty:
+                continue
+            value_map = dict(zip(df['日期'], df[df.columns[-1]]))
+            target_col_num = col_letter_to_num(target_col)
+            for i, date_val in enumerate(date_list):
+                row = data_start + i
+                val = value_map.get(date_val)
+                if val is not None and pd.notna(val):
+                    cell = ws.cell(row=row, column=target_col_num)
+                    try:
+                        cell.value = float(val)
+                    except (ValueError, TypeError):
+                        cell.value = val
+                    cell.number_format = '0.00'
+
+        print(f"    - [{source_sheet}] {len(indicator_pairs)}个指标代码匹配写入")
+
     # ================================================================
+    # 汇总行填充：计算最新/上周/上月/年初值，写入数据 sheet 顶部行
+    # 取代原 VLOOKUP 公式（openpyxl 不会计算，保存后均为 None）
+    # ================================================================
+    @staticmethod
+    def baijiu_fill_summary_rows(context, params):
+        ws = context['ws']
+        sc = context['sheet_config']
+        from datetime import timedelta
+
+        date_col_num = col_letter_to_num(sc['date_col'])
+        data_start = sc.get('data_start_row', 7)
+
+        # 收集所有数据列 (有非空值的列)
+        data_cols = []
+        for c in range(date_col_num + 1, ws.max_column + 1):
+            for r in range(data_start, ws.max_row + 1):
+                v = ws.cell(row=r, column=c).value
+                if v is not None:
+                    data_cols.append(c)
+                    break
+
+        if not data_cols:
+            return
+
+        # 建立日期→行号映射
+        date_rows = {}
+        all_dates = []
+        for r in range(data_start, ws.max_row + 1):
+            dv = ws.cell(row=r, column=date_col_num).value
+            if dv is not None:
+                dt = pd.to_datetime(dv) if not hasattr(dv, 'strftime') else dv
+                date_rows[r] = dt
+                all_dates.append(dt)
+
+        if not all_dates:
+            return
+
+        latest = max(all_dates)
+        targets = {
+            1: latest,
+            2: latest - timedelta(days=7),
+            3: latest - timedelta(days=28),
+            4: latest - timedelta(days=364),
+        }
+
+        for col in data_cols:
+            col_values = {}
+            for r in range(data_start, ws.max_row + 1):
+                v = ws.cell(row=r, column=col).value
+                if v is not None:
+                    col_values[r] = v
+
+            for tgt_row, tgt_date in targets.items():
+                best_row = None
+                best_date = None
+                for r, d in date_rows.items():
+                    if d <= tgt_date and r in col_values:
+                        if best_date is None or d > best_date:
+                            best_date = d
+                            best_row = r
+                if best_row is not None:
+                    cell = ws.cell(row=tgt_row, column=col)
+                    cell.value = col_values[best_row]
+                    cell.number_format = '0.00'
+
+        # 填充日期列（用于 G1, G2, G3, G4）
+        date_output_col = date_col_num - 1  # 通常在日期列左边一列
+        for tgt_row, tgt_date in targets.items():
+            cell = ws.cell(row=tgt_row, column=date_output_col)
+            cell.value = tgt_date.to_pydatetime() if hasattr(tgt_date, 'to_pydatetime') else tgt_date
+            cell.number_format = 'yyyy-mm-dd'
+
+        print(f"    - [{sc['sheet_name']}] 汇总行填充完成")
+
     @staticmethod
     def baijiu_write_sheet(context, params):
         ws = context['ws']
@@ -130,12 +268,16 @@ class BaijiuPlugin:
     # 图表 XML 更新
     # ================================================================
     _CHART_SHEET_MAP = {
-        10: 0, 11: 0, 12: 0,
-        13: 1,
-        15: 2, 16: 2, 17: 2, 18: 2, 19: 2, 20: 2, 21: 2, 22: 2, 23: 2,
-        24: 2, 25: 2, 26: 2, 27: 2, 28: 2, 29: 2, 30: 2, 31: 2,
-        32: 3, 33: 3, 34: 3, 35: 3, 36: 3, 37: 3, 38: 3, 39: 3, 40: 3,
-        41: 3, 42: 3, 43: 3, 44: 3, 45: 3, 46: 3, 47: 3, 48: 3,
+        4: -1, 6: -1, 8: -1,   # 作图 sheet 自身（用虚拟配置 N=date_col）
+        5: 2, 14: 2,  # 飞天次新酒
+        7: 3,   # 白酒品牌批价（今日酒价）
+        9: 1,   # 飞天100ml 和 飞天1L原箱
+        10: 0, 11: 0, 12: 0,   # 各酒厂主要产品
+        13: 1,  # 飞天100ml 和 飞天1L原箱
+        15: 3, 16: 3, 17: 3, 18: 3, 19: 3, 20: 3, 21: 3, 22: 3, 23: 3,  # 白酒品牌批价（今日酒价）
+        24: 3, 25: 3, 26: 3, 27: 3, 28: 3, 29: 3, 30: 3, 31: 3,
+        32: 4, 33: 4, 34: 4, 35: 4, 36: 4, 37: 4, 38: 4, 39: 4, 40: 4,  # 白酒品牌批价 (酒价参考)
+        41: 4, 42: 4, 43: 4, 44: 4, 45: 4, 46: 4, 47: 4, 48: 4,
     }
 
     @staticmethod
@@ -144,15 +286,47 @@ class BaijiuPlugin:
         config = context['config']
         tmp = filepath + '.tmp'
 
-        with zipfile.ZipFile(filepath, 'r') as zin, zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
+        # 从原始模板恢复被 openpyxl 破坏的 drawing/vml 文件
+        template_file = config.get('target_file', filepath)
+        with zipfile.ZipFile(template_file, 'r') as ztpl:
+            tpl_data = {name: ztpl.read(name) for name in ztpl.namelist()}
+        tpl_names = set(tpl_data.keys())
+
+        with zipfile.ZipFile(filepath, 'r') as zin, \
+             zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
+            out_names = set(zin.namelist())
+
             for item in zin.infolist():
-                data = zin.read(item.filename)
-                if item.filename.startswith('xl/charts/chart') and item.filename.endswith('.xml'):
-                    data = BaijiuPlugin._patch_chart_xml(data, item.filename, filepath, config)
+                fn = item.filename
+                data = zin.read(fn)
+
+                # 恢复被 openpyxl 破坏的 drawing/vml/theme (含 _rels)
+                if (fn.startswith('xl/drawings/') or
+                    fn.startswith('xl/ctrlProps/') or
+                    fn.startswith('xl/theme/')) and fn in tpl_names:
+                    data = tpl_data[fn]
+
+                # 修补图表 XML
+                if fn.startswith('xl/charts/chart') and fn.endswith('.xml'):
+                    data = BaijiuPlugin._patch_chart_xml(data, fn, filepath, config)
+
+                # openpyxl 把 vmlDrawing 改名成了 commentsDrawing，跳过它
+                if fn.startswith('xl/drawings/commentsDrawing') and fn.endswith('.vml'):
+                    continue
+
                 zout.writestr(item, data)
 
+            # 补充 openpyxl 删除的文件
+            for tpl_name in tpl_names:
+                if (tpl_name.startswith('xl/drawings/vmlDrawing') or
+                    tpl_name.startswith('xl/ctrlProps/') or
+                    tpl_name.startswith('xl/theme/')) and tpl_name not in out_names:
+                    info = zipfile.ZipInfo(tpl_name)
+                    info.compress_type = zipfile.ZIP_DEFLATED
+                    zout.writestr(info, tpl_data[tpl_name])
+
         shutil.move(tmp, filepath)
-        print(f"    [XML] 图表更新完成")
+        print(f"    [XML] 图表更新完成（含模板图像恢复）")
 
     @staticmethod
     def _patch_chart_xml(xml_bytes, filename, filepath, config):
@@ -165,8 +339,12 @@ class BaijiuPlugin:
         sheet_idx = BaijiuPlugin._CHART_SHEET_MAP.get(cn)
         if sheet_idx is None:
             return xml_bytes
-        sc = config['sheets'][sheet_idx]
-        is_first_two = (sheet_idx in [0, 1])
+        if sheet_idx == -1:
+            sc = {'sheet_name': '作图', 'date_col': 'N', 'data_start_row': 7, 'max_data_cols': 16}
+            is_first_two = False
+        else:
+            sc = config['sheets'][sheet_idx]
+            is_first_two = (sheet_idx in [0, 1])
 
         cs, er = BaijiuPlugin._chart_rows(filepath, sc, is_first_two)
         if cs is None:
@@ -223,38 +401,239 @@ class BaijiuPlugin:
     def _chart_rows(filepath, sc, is_first_two):
         data_start = sc.get('data_start_row', 9)
         dc = col_letter_to_num(sc['date_col'])
+        sheet_name = sc.get('sheet_name', '')
 
-        df = pd.read_excel(filepath, sheet_name=sc['sheet_name'], header=None)
+        import openpyxl
+        wb = openpyxl.load_workbook(filepath, data_only=False)
+        if sheet_name not in wb.sheetnames:
+            wb.close()
+            return None, None
+        ws = wb[sheet_name]
+
         end_row, latest = data_start, None
-        for r in range(len(df), data_start - 1, -1):
-            v = df.iloc[r - 1, dc - 1]
-            if pd.notna(v):
+        for r in range(ws.max_row, data_start - 1, -1):
+            v = ws.cell(row=r, column=dc).value
+            if v is not None and str(v).strip() != '':
                 if end_row == data_start:
                     end_row = r
                 if latest is None:
                     try:
                         latest = pd.to_datetime(v)
-                    except:
+                    except Exception:
                         pass
                 if end_row != data_start and latest is not None:
                     break
 
-        if latest is None:
-            return None, None
-
-        if is_first_two:
+        chart_start = data_start
+        if latest is not None and is_first_two:
             cutoff = pd.Timestamp(year=latest.year - 2, month=1, day=1)
-            chart_start = data_start
             for r in range(data_start, end_row + 1):
-                v = df.iloc[r - 1, dc - 1]
-                if pd.notna(v):
+                v = ws.cell(row=r, column=dc).value
+                if v is not None:
                     try:
                         if pd.to_datetime(v) >= cutoff:
                             chart_start = r
                             break
-                    except:
+                    except Exception:
                         pass
-        else:
-            chart_start = data_start
 
+        wb.close()
         return chart_start, end_row
+
+    # ================================================================
+    # 作图 Sheet 填充：解析公式引用，写入实算值
+    # ================================================================
+    @staticmethod
+
+    # ================================================================
+    @staticmethod
+    def baijiu_fill_zuotu(context, params):
+        filepath = context['filepath']
+        import openpyxl
+        wb = openpyxl.load_workbook(filepath)
+
+        sheet_name = None
+        for sn in wb.sheetnames:
+            if len(sn) == 2 and sn.encode('utf-8') == b'\xe4\xbd\x9c\xe5\x9b\xbe':
+                sheet_name = sn
+                break
+        if sheet_name is None:
+            wb.close()
+            return
+
+        ws = wb[sheet_name]
+
+        def resolve_any_cell(rws, cell_addr):
+            clean = cell_addr.replace('$', '')
+            val = rws[clean].value
+            if val is None:
+                return None
+            if not isinstance(val, str) or not val.startswith('='):
+                return val
+            return _resolve_formula(val, rws)
+
+        def _resolve_formula(f, current_ws):
+            f = f.strip()
+            if not f.startswith('='):
+                return f
+            # Strip [NN] external workbook references
+            f_noeq = f[1:]
+            f_noeq = re.sub(r'\[\d+\]', '', f_noeq)
+            # VLOOKUP
+            vm = re.match(
+                                r"^VLOOKUP\(\s*(.+?)\s*,\s*\$?([A-Z]+)\$?(\d+):\$?([A-Z]+)\$?(\d+)\s*,\s*(\d+)\s*,\s*(TRUE|FALSE)\s*\)$",
+                f_noeq, re.IGNORECASE
+            )
+            if vm:
+                lookup_expr, sc_col, sc_row, ec_col, ec_row, col_idx_str, approx = vm.groups()
+                lookup_val = _resolve_expr(lookup_expr, current_ws)
+                if lookup_val is None:
+                    return None
+                return _vlookup(lookup_val, vm.group(2) + vm.group(3), vm.group(4) + vm.group(5),
+                                int(col_idx_str), approx.upper() == 'TRUE', current_ws)
+            # Cross-sheet ref
+            ref_m = re.match(r"^(?:'([^']+)'|([A-Za-z0-9_一-鿿 ()（）\-]+))!(\$?[A-Z]+\$?\d+)$", f_noeq)
+            if ref_m:
+                ref_sheet = ref_m.group(1) or ref_m.group(2)
+                ref_addr = ref_m.group(3).replace('$', '')
+                if ref_sheet in wb.sheetnames:
+                    return resolve_any_cell(wb[ref_sheet], ref_addr)
+            # MAX
+            max_m = re.match(r"^MAX\(([A-Z]+\d+):([A-Z]+\d+)\)$", f_noeq, re.IGNORECASE)
+            if max_m:
+                return _range_max(max_m.group(1), max_m.group(2), current_ws)
+            # Arithmetic: =EXPR1-EXPR2 with optional sheet refs
+            sheet_pat = r"(?:(?:'[^']*')|[^!\-+*/^&()=<>,]+)!"
+            cell_only = r"\$?[A-Z]+\$?\d+"
+            cell_with_sheet = rf"(?:{sheet_pat})?{cell_only}"
+            am = re.match(rf"^({cell_with_sheet})-({cell_with_sheet})$", f_noeq)
+            if am:
+                c1 = _resolve_expr(am.group(1), current_ws)
+                c2 = _resolve_expr(am.group(2), current_ws)
+                if c1 is not None and c2 is not None:
+                    try:
+                        return float(c1) - float(c2)
+                    except (ValueError, TypeError):
+                        return None
+            return None
+
+        def _resolve_expr(expr, current_ws):
+            expr = expr.strip()
+            if expr.startswith("="):
+                return _resolve_formula(expr, current_ws)
+            # Match cell ref from the right: always ends with COL$ROW
+            cell_m = re.search(r"(\$?[A-Z]+\$?\d+)$", expr)
+            if cell_m:
+                cell_part = cell_m.group(1).replace("$", "")
+                sheet_part = expr[:cell_m.start()]
+                if sheet_part:
+                    if sheet_part.endswith("!"):
+                        sheet_part = sheet_part[:-1]
+                    sheet_part = sheet_part.strip("'").strip('"')
+                    if sheet_part in wb.sheetnames:
+                        return resolve_any_cell(wb[sheet_part], cell_part)
+                else:
+                    return resolve_any_cell(current_ws, cell_part)
+            try:
+                return float(expr)
+            except (ValueError, TypeError):
+                pass
+            try:
+                return pd.to_datetime(expr)
+            except Exception:
+                pass
+            return expr
+
+        def _vlookup(lookup_val, start_cell, end_cell, col_idx, is_approx, current_ws):
+            from openpyxl.utils import column_index_from_string as _cn
+            sc_col = re.match(r"^([A-Z]+)", start_cell).group(1)
+            sc_row = int(re.match(r"^[A-Z]+(\d+)", start_cell).group(1))
+            ec_col = re.match(r"^([A-Z]+)", end_cell).group(1)
+            ec_row = int(re.match(r"^[A-Z]+(\d+)", end_cell).group(1))
+            lookup_col = _cn(sc_col)
+            target_col = lookup_col + col_idx - 1
+            if target_col > _cn(ec_col):
+                return None
+            best_row, best_val = None, None
+            import pandas as pd
+            for r in range(sc_row, ec_row + 1):
+                lv = current_ws.cell(row=r, column=lookup_col).value
+                if lv is None:
+                    continue
+                if isinstance(lv, str):
+                    try:
+                        lv = float(lv)
+                    except ValueError:
+                        try:
+                            lv = pd.to_datetime(lv)
+                        except Exception:
+                            pass
+                if isinstance(lookup_val, pd.Timestamp) and not isinstance(lv, pd.Timestamp):
+                    try:
+                        lv = pd.to_datetime(lv)
+                    except Exception:
+                        pass
+                elif isinstance(lookup_val, (int, float)) and not isinstance(lv, (int, float)):
+                    try:
+                        lv = float(lv)
+                    except (ValueError, TypeError):
+                        pass
+                if not is_approx:
+                    if lv == lookup_val:
+                        v = current_ws.cell(row=r, column=target_col).value
+                        return float(v) if v is not None else None
+                else:
+                    if lv <= lookup_val:
+                        if best_val is None or lv > best_val:
+                            best_val = lv
+                            best_row = r
+            if best_row is not None:
+                v = current_ws.cell(row=best_row, column=target_col).value
+                if v is not None:
+                    try:
+                        return float(v)
+                    except (ValueError, TypeError):
+                        return v
+            return None
+
+        def _range_max(start_cell, end_cell, current_ws):
+            from openpyxl.utils import column_index_from_string as _cn
+            sc_col = re.match(r"^([A-Z]+)", start_cell).group(1)
+            sc_row = int(re.match(r"^[A-Z]+(\d+)", start_cell).group(1))
+            ec_col = re.match(r"^([A-Z]+)", end_cell).group(1)
+            ec_row = int(re.match(r"^[A-Z]+(\d+)", end_cell).group(1))
+            max_val = None
+            for r in range(sc_row, ec_row + 1):
+                for c in range(_cn(sc_col), _cn(ec_col) + 1):
+                    v = current_ws.cell(row=r, column=c).value
+                    if v is not None:
+                        try:
+                            fv = float(v)
+                            if max_val is None or fv > max_val:
+                                max_val = fv
+                        except (ValueError, TypeError):
+                            pass
+            return max_val
+
+        max_c = params.get('max_column', 13)
+        max_r = params.get('max_row', 50)
+        count = 0
+        import pandas as pd
+        for row in ws.iter_rows(min_row=1, max_row=max_r, max_col=max_c):
+            for cell in row:
+                if cell.value is None:
+                    continue
+                if isinstance(cell.value, str) and cell.value.startswith('='):
+                    val = _resolve_formula(cell.value, ws)
+                    if val is not None:
+                        cell.value = val
+                        if isinstance(val, (int, float)):
+                            cell.number_format = '0.00'
+                        elif isinstance(val, pd.Timestamp):
+                            cell.number_format = 'yyyy-mm-dd'
+                        count += 1
+
+        wb.save(filepath)
+        wb.close()
+        import pandas as pd
+        print(f"    [zuotu] filled {count} formula values")

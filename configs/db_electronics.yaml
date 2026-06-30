@@ -1,5 +1,5 @@
 industry: "电子-存储价格"
-source_file: "D:/SWS/new_pipeline/电子/电子20260513_dqk修正_【申万电子】存储价格数据库_20260518181932.xlsx"
+source_file: "D:/SWS/new_pipeline/电子/电子20260610_【申万电子】存储价格数据库_20260612091016.xlsx"
 target_file: "D:/SWS/new_pipeline/电子/申万电子目标文档1.xlsx"
 output_dir: "D:/SWS/new_pipeline/电子/output"
 

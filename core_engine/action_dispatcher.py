@@ -10,6 +10,8 @@ from plugins.macro_plugin import MacroPlugin
 from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.metal_plugin import MetalPlugin
+from plugins.chemical_plugin import ChemicalPlugin
+from plugins.pesticide_plugin import PesticidePlugin
 
 class PipelineEngine:
     def __init__(self, config_path):
@@ -45,9 +47,17 @@ class PipelineEngine:
             'electronics_update_chart_ranges': ElectronicsPlugin.electronics_update_chart_ranges,
             # 白酒动作
             'baijiu_write_sheet': BaijiuPlugin.baijiu_write_sheet,
+            'baijiu_write_sheet_by_code': BaijiuPlugin.baijiu_write_sheet_by_code,
+            'baijiu_fill_summary_rows': BaijiuPlugin.baijiu_fill_summary_rows,
+            'baijiu_fill_zuotu': BaijiuPlugin.baijiu_fill_zuotu,
             'baijiu_finalize_charts': BaijiuPlugin.baijiu_finalize_charts,
             # 有色金属动作
             'metal_write_sheet': MetalPlugin.metal_write_sheet,
+            # 化工动作
+            'chemical_write_sheet': ChemicalPlugin.chemical_write_sheet,
+            # 农药动作
+            'pesticide_write_sheet': PesticidePlugin.pesticide_write_sheet,
+            'pesticide_write_summary': PesticidePlugin.pesticide_write_summary,
         }
         
     def _create_backup(self):
