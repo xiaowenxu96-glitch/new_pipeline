@@ -24,3 +24,7 @@ _*.py
 # OS
 .DS_Store
 Thumbs.db
+
+# 虚拟环境
+.venv/
+venv/
