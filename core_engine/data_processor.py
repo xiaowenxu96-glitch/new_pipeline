@@ -5,7 +5,7 @@ import logging
 from datetime import datetime, timedelta
 from core_engine.data_reader import DataReader
 import openpyxl.styles
-from openpyxl.styles import Font, PatternFill
+from openpyxl.styles import Font, PatternFill, Alignment
 
 
 # 配置日志
@@ -359,7 +359,7 @@ class DataProcessor:
                                 yoy_col = column_number_to_letter(col_num + 1)  # 获取下一列作为同比列
                                 if last_year_data[col] != 0 and last_year_data[col] is not None:
                                     # 季度同比上年率计算逻辑：该季度同比上年率=（上一年季度指标/该年季度指标）-1
-                                    current_data[yoy_col] = (last_year_data[col] / current_data[col]) - 1
+                                    current_data[yoy_col] = (current_data[col] / last_year_data[col]) - 1
                                 else:
                                     current_data[yoy_col] = None
                     
@@ -442,6 +442,8 @@ class DataProcessor:
             month_count_formula = f'={latest_month}'
             month_count_cell = ws[f'A{month_count_row}']
             month_count_cell.value = month_count_formula
+            month_count_cell.number_format = '0'
+            month_count_cell.alignment = Alignment(horizontal='left')
             # 为month_count_formula所在单元格添加高亮处理
             month_count_cell.fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")  # 黄色高亮
             month_count_cell.font = Font(bold=True)  # 加粗字体
@@ -673,7 +675,7 @@ class DataProcessor:
                                     prev_value = yearly_totals[prev_year]['data'][col]
                                 
                                 if prev_value != 0:  # 避免除以零
-                                    yoy_value = prev_value / yearly_value - 1
+                                    yoy_value = (yearly_value - prev_value) / prev_value - 1
                                     ws[f'{yoy_col}{current_row}'] = yoy_value
                                     ws[f'{yoy_col}{current_row}'].number_format = '0.0%'
                             

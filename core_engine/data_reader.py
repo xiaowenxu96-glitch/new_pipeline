@@ -62,16 +62,13 @@ class DataReader:
             for i, row in metadata_rows.iterrows():
                 metadata[row.iloc[0]] = row.iloc[1:].tolist()
             
-            # 查找指标代码行（搜索所有列，不限于 A 列）
+            # 查找指标代码行
             indicator_code_row_index = None
             for i, row in metadata_rows.iterrows():
-                for c in range(len(row)):
-                    if row.iloc[c] == '指标代码':
-                        indicator_code_row_index = i
-                        break
-                if indicator_code_row_index is not None:
+                if row.iloc[0] == '指标代码':
+                    indicator_code_row_index = i
                     break
-
+                    
             if indicator_code_row_index is None:
                 raise ValueError(f"未找到指标代码行")
             

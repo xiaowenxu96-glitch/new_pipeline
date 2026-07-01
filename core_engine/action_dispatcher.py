@@ -12,6 +12,32 @@ from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.metal_plugin import MetalPlugin
 from plugins.chemical_plugin import ChemicalPlugin
 from plugins.pesticide_plugin import PesticidePlugin
+from plugins.macro_plugin import MacroPlugin
+from plugins.public_plugin import PublicPlugin
+from plugins.bank_plugin import BankPlugin
+from plugins.medical_plugin import MedicalPlugin
+from plugins.electronics_plugin import ElectronicsPlugin
+from plugins.baijiu_plugin import BaijiuPlugin
+# === Monkey-patch: 修复 openpyxl 无法读取含 ExternalData 图表的 bug ===
+# ExternalData.id 定义为 String() 但不支持命名空间属性 r:id，
+# 导致 id 解析为 None 时抛出 TypeError，图表被静默丢弃。
+# 修复: 重新创建 String 描述符，启用 allow_none 并设置 REL_NS 命名空间映射。
+# 详见: openpyxl/chart/chartspace.py 中 `id = String()  # Needs namespace`
+from openpyxl.chart.chartspace import ExternalData
+from openpyxl.descriptors.base import String
+from openpyxl.xml.constants import REL_NS
+
+_new_id = String(allow_none=True, namespace=REL_NS)
+_new_id.name = "id"  # 描述符的 name 属性必须设置，否则无法读写实例属性
+ExternalData.id = _new_id
+
+# 同步更新 __namespaced__，使 parse/serialize 时能正确处理 r:id 属性
+_ns_id = "{%s}%s" % (REL_NS, "id")
+_namespaced = [(k, ns) for k, ns in ExternalData.__namespaced__ if k != "id"]
+_namespaced.append(("id", _ns_id))
+ExternalData.__namespaced__ = tuple(_namespaced)
+# ==================================================================
+
 
 class PipelineEngine:
     def __init__(self, config_path):
@@ -35,6 +61,9 @@ class PipelineEngine:
             'aviation_adjust_format_after_full_year': AviationPlugin.aviation_adjust_format_after_full_year,
             'aviation_clear_ytd_2018_diff_data': AviationPlugin.aviation_clear_ytd_2018_diff_data,
             'aviation_clear_ax_ay_az_columns': AviationPlugin.aviation_clear_ax_ay_az_columns,
+            'aviation_write_monthly_report_header_info': AviationPlugin.aviation_write_monthly_report_header_info,
+            'aviation_write_quarterly_report_header_info': AviationPlugin.aviation_write_quarterly_report_header_info,
+            'aviation_write_report_data': AviationPlugin.aviation_write_report_data,
             # 宏观动作
             'write_indicator_group': MacroPlugin.macro_write_indicator_group,
             'create_pivot_table': MacroPlugin.macro_create_pivot_table,
@@ -58,6 +87,20 @@ class PipelineEngine:
             # 农药动作
             'pesticide_write_sheet': PesticidePlugin.pesticide_write_sheet,
             'pesticide_write_summary': PesticidePlugin.pesticide_write_summary,
+            # 公用事业动作
+            'public_write_data': PublicPlugin.public_write_data,
+            'public_elec_write_title': PublicPlugin.public_elec_write_title,
+            'public_t3_write_header': PublicPlugin.public_t3_write_header,
+            # 银行动作
+            'bank_write_data': BankPlugin.bank_write_data,
+
+            'bank_commercial_write_data': BankPlugin.bank_commercial_write_data,
+            'bank_commercial_formula': BankPlugin.bank_commercial_formula,
+            # 医疗健康动作
+            'medical_write_data': MedicalPlugin.medical_write_data,
+            'medical_write_quarter': MedicalPlugin.medical_write_quarter,
+            'medical_write_formula': MedicalPlugin.medical_write_formula,
+            'medical_merge_quarter_data': MedicalPlugin.medical_merge_quarter_data,
         }
         
     def _create_backup(self):

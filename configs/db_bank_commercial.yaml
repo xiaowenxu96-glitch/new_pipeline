@@ -1,0 +1,319 @@
+industry: "银行_各省银行业不良率"
+source_file: "D:/【交付审核】/_导出验收/Excel数据验收/银行/银行20260615_商业银行关键监管指标_20260616090415.xlsx"
+target_file: "D:/【交付审核】/_导出验收/Excel数据验收/银行/【申万宏源银行】商业银行关键监管指标.xlsx"
+output_file: "D:/【交付审核】/_导出验收/new_pipeline/output_files"
+
+defaults:
+  start_date: "2014-01-01"
+  date_format: "yyyy-mm"
+
+sheets:
+  - sheet_name: "总资产"
+    source_sheet: "总资产"
+    indicators:
+      "AA000356022600": "C"
+      "AA000104215300": "D"
+      "AA000356022800": "E"
+      "AA000356023400": "F"
+      "AA000356024000": "G"
+      "AA000104215100": "H"
+      "AA000058954800": "I"
+      
+      "AA000104215700": "L"
+      "AA000356023000": "M"
+      "AA000356023600": "N"
+      "AA000356024200": "O"
+      "AA000104215600": "P"
+      "AA000356024600": "Q"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "k", "S"]
+        start_date: "2011-01-01"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "={source_column}{row}/100"
+        target_column: ["T","U","V","W","X","Y"]
+        source_column: ["L","M","N","O","P","Q"]
+        format: "0.00%"
+  
+  - sheet_name: "资产增速及增量"
+    source_sheet: "资产增速及增量"
+    indicators:
+      "AA000104215500": "C"
+      "AA000104215400": "D"
+      "AA000356022900": "E"
+      "AA000356024100": "F"
+      "AA000356023500": "G"
+      "AA000104215200": "H"
+      "AA000058954900": "I"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "k", "T"]
+        start_date: "2011-01-01"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["L", "M", "N", "O", "P", "Q", "R"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "0.00%"
+
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({tname}!{source_column}{row-1}),\"aaa\",{tname}!{source_column}{row}-{tname}!{source_column}{row-1})"
+        tname: "总资产"
+        target_column: ["U", "V", "W", "X", "Y", "Z", "AA"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0.00;[Red](#,##0.00)"
+
+  - sheet_name: "净息差"
+    source_sheet: "净息差"
+    indicators:
+      "AA000115788100": "C"
+      "AA000090979800": "D"
+      "AA000090979900": "E"
+      "AA000090980000": "F"
+      "AA000090980200": "G"
+      "AA000090980100": "H"
+      "AA000090980300": "I"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "k", "T", "AC"]
+        start_date: "2011-01-01"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["L", "M", "N", "O", "P", "Q", "R"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-1})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["U", "V", "W", "X", "Y", "Z", "AA"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0.00\" bps\";[Red]-#,##0.00\" bps\""
+      - type: "bank_commercial_formula"
+        start_row: 10
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-4})),\"\",({source_column}{row}-{source_column}{row-4})*100)"
+        target_column: ["AD", "AE", "AF", "AG", "AH", "AI", "AJ"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0.00\" bps\";[Red]-#,##0.00\" bps\""
+
+  - sheet_name: "净利润"
+    source_sheet: "净利润"
+    indicators:
+      "AA000115787800": "C"
+      "AA000090979200": "D"
+      "AA000090979400": "E"
+      "AA000090979300": "F"
+      "AA000090979600": "G"
+      "AA000090979500": "H"
+      "AA000090979700": "I"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "k", "T", "AC"]
+        start_date: "2010-12-01"
+      - type: "bank_commercial_formula"
+        start_row: 10
+        target_formula: "=IF(ISBLANK({source_column}{row-4}),\"\",{source_column}{row}/{source_column}{row-4}-1)"
+        target_column: ["L", "M", "N", "O", "P", "Q", "R"] 
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 11
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",IF(MONTH(B{row})=3,{source_column}{row},{source_column}{row}-{source_column}{row-1}))"
+        target_column: ["U", "V", "W", "X", "Y", "Z", "AA"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0.00;[Red](#,##0.00)"
+      - type: "bank_commercial_formula"
+        start_row: 15
+        target_formula: "=IF(OR({source_column}{row}=\"\",{source_column}{row-4}=\"\"),\"\",{source_column}{row}/{source_column}{row-4}-1)"
+        target_column: ["AD", "AE", "AF", "AG", "AH", "AI", "AJ"]
+        source_column: ["U", "V", "W", "X", "Y", "Z", "AA"]
+        format: "0.00%"
+  
+  - sheet_name: "资产利润率（ROA）"
+    source_sheet: "资产利润率（ROA）"
+    indicators:
+      "AA000115787900": "C"
+      "AA000090976800": "D"
+      "AA000090976900": "E"
+      "AA000090977000": "F"
+      "AA000090977200": "G"
+      "AA000090977100": "H"
+      "AA000090977300": "I"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "k", "T", "AC"]
+        start_date: "2011-01-01"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["L", "M", "N", "O", "P", "Q", "R"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-1})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["U", "V", "W", "X", "Y", "Z", "AA"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0.00\" bps\";[Red]-#,##0.00\" bps\""
+      - type: "bank_commercial_formula"
+        start_row: 10
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-4})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["AD", "AE", "AF", "AG", "AH", "AI", "AJ"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0.00\" bps\";[Red]-#,##0.00\" bps\""
+
+  - sheet_name: "资本利润率（ROE）"
+    source_sheet: "资本利润率（ROE）"
+    indicators:
+      "AA000115788000": "C"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "E", "H", "K"]
+        start_date: "2011-01-01"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["F"]
+        source_column: ["C"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-1})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["I"]
+        source_column: ["C"]
+        format: "#,##0.00\" bps\";[Red]-#,##0.00\" bps\""
+      - type: "bank_commercial_formula"
+        start_row: 10
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-4})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["L"]
+        source_column: ["C"]
+        format: "#,##0.00\" bps\";[Red]-#,##0.00\" bps\""
+
+  - sheet_name: "非利息收入占比"
+    source_sheet: "非利息收入占比"
+    indicators:
+      "AA000115788200": "C"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "E", "H", "K"]
+        start_date: "2011-01-01"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["F"]
+        source_column: ["C"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-1})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["I"]
+        source_column: ["C"]
+        format: "[Red]#,##0.00\" bps\";-#,##0.00\" bps\""
+      - type: "bank_commercial_formula"
+        start_row: 10
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-4})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["L"]
+        source_column: ["C"]
+        format: "[Red]#,##0.00\" bps\";-#,##0.00\" bps\""
+  - sheet_name: "不良率"
+    source_sheet: "不良率"
+    indicators:
+      "AA000115786900": "D"
+      "AA000115786000": "E"
+      "AA000115786100": "F"
+      "AA000115786200": "G"
+      "AA000115786300": "H"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "J", "Q"]
+        start_date: "2004-06-29"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["K","L","M","N","O"]
+        source_column: ["D","E","F","G","H"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-4})),\"\",({source_column}{row}-{source_column}{row-4})*100)"
+        target_column: ["R","S","T","U","V"]
+        source_column: ["D","E","F","G","H"]
+        format: "[Red]#,##0.00\" bps\";-#,##0.00\" bps\""
+  # - sheet_name: "关注率"
+  #   source_sheet: "关注率"
+  - sheet_name: "拨备覆盖率"
+    source_sheet: "拨备覆盖率"
+    indicators:
+      "AA000115787400": "C"
+      "AA000090977400": "D"
+      "AA000090977500": "E"
+      "AA000090977600": "F"
+      "AA000090977700": "G"
+      "AA000090977800": "H"
+      "AA000090977900": "I"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "K", "T","AC"]
+        start_date: "2004-06-29"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["L","M","N","O","P","Q","R"]
+        source_column: ["C","D","E","F","G","H","I"]
+        format: "0.0%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-1})),\"\",({source_column}{row}-{source_column}{row-1}))"
+        target_column: ["U", "V", "W", "X", "Y", "Z", "AA"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0\" pct\";[Red]-#,##0\" pct\""
+      - type: "bank_commercial_formula"
+        start_row: 10
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-4})),\"\",({source_column}{row}-{source_column}{row-4}))"
+        target_column: ["AD", "AE", "AF", "AG", "AH", "AI", "AJ"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0\" pct\";[Red]-#,##0\" pct\""
+  - sheet_name: "资本"
+    source_sheet: "资本"
+    indicators:
+      "AA000115789200": "C"
+      "AA000090978000": "F"
+      "AA000090978100": "G"
+      "AA000090978200": "H"
+      "AA000090978400": "I"
+      "AA000090978300": "J"
+      "AA000090978500": "K"
+    actions:
+      - type: "bank_commercial_write_data"
+        start_row: 6
+        date_columns: ["B", "L", "U","AD"]
+        start_date: "2004-06-29"
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["M","N","O","P","Q","R","S"]
+        source_column: ["C","D","E","F","G","H","I"]
+        format: "0.00%"
+      - type: "bank_commercial_formula"
+        start_row: 7
+        target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-1})),\"\",({source_column}{row}-{source_column}{row-1})*100)"
+        target_column: ["V", "W", "X", "Y", "Z", "AA","AB"]
+        source_column: ["C", "D", "E", "F", "G", "H", "I"]
+        format: "#,##0\" bps\";[Red]-#,##0\" bps\""
+      - type: "bank_commercial_formula"
+        start_row: 6
+        target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
+        target_column: ["AE","AF","AG"]
+        source_column: ["C","D","E"]
+        format: "0.00%"
