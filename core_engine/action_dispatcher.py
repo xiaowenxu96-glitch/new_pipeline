@@ -18,6 +18,8 @@ from plugins.bank_plugin import BankPlugin
 from plugins.medical_plugin import MedicalPlugin
 from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
+from plugins.farm_plugin import FarmPlugin
+
 # === Monkey-patch: 修复 openpyxl 无法读取含 ExternalData 图表的 bug ===
 # ExternalData.id 定义为 String() 但不支持命名空间属性 r:id，
 # 导致 id 解析为 None 时抛出 TypeError，图表被静默丢弃。
@@ -101,6 +103,10 @@ class PipelineEngine:
             'medical_write_quarter': MedicalPlugin.medical_write_quarter,
             'medical_write_formula': MedicalPlugin.medical_write_formula,
             'medical_merge_quarter_data': MedicalPlugin.medical_merge_quarter_data,
+
+            # 农业动作
+            'farm_write_data': FarmPlugin.farm_write_data,
+            'farm_write_linechart': FarmPlugin.farm_write_linechart,
         }
         
     def _create_backup(self):
