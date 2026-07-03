@@ -1,0 +1,67 @@
+industry: "建材"
+source_file: "D:/【交付审核】/_导出验收/Excel数据验收/建材/建材20260702_建材数据库_20260702161515.xlsx"
+target_file: "D:/【交付审核】/_导出验收/Excel数据验收/建材/【申万建材】建材数据库模板.xlsx"
+output_file: "D:/【交付审核】/_导出验收/new_pipeline/output_files"
+
+defaults:
+  start_date: "2010-01-01"
+sheets:
+- sheet_name: 30城商品房成交-日频
+  source_sheet: 30城商品房成交-日频
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000077652900": "CD"
+      "AA000077652500": "CE"
+      "AA000077653000": "CF"
+      "AA000077652600": "CG"
+      "AA000077653100": "CH"
+      "AA000077652700": "CI"
+    start_row: 20
+    start_date: "2011-01-01"
+    date_columns: ["A", "CA"]
+
+  - type: building_write_formula
+    start_row: 20
+    start_column: "CA"
+    target_columns: ["CB", "CC"]
+    source_columns: ["CB", "CC"]
+    target_formula: "=SUM({source_column+2}{row}+{source_column+4}{row}+{source_column+6}{row})"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "A"
+    target_columns: ["B", "C", "D", "E", "F", "G", "H", "I"]
+    source_columns: ["CB", "CC", "CD", "CE", "CF", "CG", "CH", "CI"]
+    target_formula: "=IF(ISBLANK({source_column}{row}),\"\",IFERROR(AVERAGE({source_column}{row-6}:{source_column}{row}),\"\"))"
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "K"
+    latest_year_col: "AA"
+    source_column: "C"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "AB"
+    latest_year_col: "AR"
+    source_column: "E"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "AS"
+    latest_year_col: "BI"
+    source_column: "G"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "BJ"
+    latest_year_col: "BZ"
+    source_column: "I"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
