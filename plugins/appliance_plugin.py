@@ -1,0 +1,70 @@
+import pandas as pd
+from openpyxl.utils import column_index_from_string as col_letter_to_num
+
+
+class AppliancePlugin:
+    @staticmethod
+    def appliance_write_sheet(context, params):
+        """将源数据按 AA 代码读取后写入目标工作表，每个 section 有独立的日期列。"""
+        ws = context['ws']
+        reader = context['data_reader']
+        sheet_config = context['sheet_config']
+        source_sheet = sheet_config['source_sheet']
+
+        sections = sheet_config.get('sections', [])
+
+        for section in sections:
+            date_col = section['date_col']
+            date_col_num = col_letter_to_num(date_col)
+            data_start_row = section.get('data_start_row', 4)
+            indicators = section['indicators']
+
+            if isinstance(indicators, dict):
+                indicators = list(indicators.items())
+
+            # 收集所有指标数据
+            all_dates = set()
+            code_dfs = {}
+            for aa_code, _ in indicators:
+                ind_data = reader.read_indicator_data(source_sheet, aa_code)
+                df = ind_data["data"]
+                if df.empty:
+                    continue
+                value_col = df.columns[-1]
+                df = df.dropna(subset=['日期']).copy()
+                df = df[df[value_col].notna()].copy()
+                if df.empty:
+                    continue
+                df = df.sort_values('日期', ascending=True).reset_index(drop=True)
+                code_dfs[aa_code] = (df, value_col)
+                all_dates.update(df['日期'])
+
+            if not code_dfs:
+                continue
+
+            date_list = sorted(all_dates, reverse=True)
+
+            # 写入日期列
+            for i, date_val in enumerate(date_list):
+                row = data_start_row + i
+                cell = ws.cell(row=row, column=date_col_num)
+                cell.value = date_val.to_pydatetime() if isinstance(date_val, pd.Timestamp) else date_val
+                cell.number_format = 'yyyy-mm-dd'
+
+            # 写入各指标值
+            for aa_code, target_col in indicators:
+                pair = code_dfs.get(aa_code)
+                if pair is None:
+                    continue
+                df, value_col = pair
+                value_map = dict(zip(df['日期'], df[value_col]))
+                target_col_num = col_letter_to_num(target_col)
+                for i, date_val in enumerate(date_list):
+                    row = data_start_row + i
+                    val = value_map.get(date_val)
+                    if val is not None and pd.notna(val):
+                        cell = ws.cell(row=row, column=target_col_num)
+                        cell.value = float(val)
+                        cell.number_format = '0.00'
+
+            print(f"    - 完成 {source_sheet} section [{date_col}] 共 {len(indicators)} 个指标")

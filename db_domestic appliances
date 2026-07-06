@@ -1,4 +1,0 @@
-industry: "家电"
-source_file: "D:/SWS/new_pipeline/化工农药/化工农药20260610_【申万化工细分行业及重点公司一周概览】_20260612090616.xlsx"
-target_file: "D:/SWS/new_pipeline/化工农药/申万化工细分行业目标文档.xlsx"
-output_dir: "D:/SWS/new_pipeline/化工农药/output"
