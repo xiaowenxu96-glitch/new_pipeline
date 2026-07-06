@@ -1,0 +1,85 @@
+industry: "互联网传媒"
+source_file: "D:/SWS/new_pipeline/互联网传媒/互联网传媒20260630_互联网传媒数据库_20260701160615.xlsx"
+target_file: "D:/SWS/new_pipeline/互联网传媒/互联网传媒目标文档.xlsm"
+output_dir: "D:/SWS/new_pipeline/互联网传媒/output"
+
+defaults:
+  start_date: "2005-02-27"
+  date_format: "yyyy-mm-dd"
+
+sheets:
+  # ==================== Sheet 1: 电影====================
+  - sheet_name: "电影"
+    source_sheet: "电影"
+    data_start_row: 4
+    sections:
+      # 全国包含服务费的票房
+      - date_col: "A"
+        yoy_col: "C"
+        indicators:
+          "AA000342141000": "B"
+      # 全国不含服务费的票房
+      - date_col: "D"
+        yoy_col: "F"
+        indicators:
+          "AA000342085200": "E"
+      #全国观看电影人次
+      - date_col: "G"
+        yoy_col: "I"
+        indicators:
+          "AA000341885000": "H"
+      #中国银幕数量
+      - date_col: "M"
+        yoy_col: "O"
+        indicators:
+          "AA000094619400": "N"
+    actions:
+      - type: "media_internet_write_sheet"
+      - type: "media_internet_apply_yoy"
+
+  # ==================== Sheet 2: 游戏 ====================
+  - sheet_name: "游戏"
+    source_sheet: "游戏"
+    data_start_row: 4
+    sections:
+      # 市场规模 + 用户规模 (共享A列日期)
+      - date_col: "A"
+        indicators:
+          "AA000359538700": "B"
+          "AA000359538900": "C"
+      # 手游市场规模＋手游市场规模同比
+      - date_col: "D"
+        indicators:
+          "AA000359539300": "E"
+          "AA000359539400": "F"
+      # 版号发放数量
+      - date_col: "G"
+        indicators:
+          "AA000359537900": "H"
+    actions:
+      - type: "media_internet_write_sheet"
+
+  # ==================== Sheet 3: 广告 ====================
+  - sheet_name: "广告"
+    source_sheet: "广告"
+    data_start_row: 11
+    sections:
+      # 广告市场同比增长 + 广告刊例花费同比增长 
+      - date_col: "A"
+        indicators:
+          "AA000341863700": "B"
+          "AA000341991900": "C"
+    actions:
+      - type: "media_internet_write_sheet"
+
+  # ==================== Sheet 4: 出版 ====================
+  - sheet_name: "出版"
+    source_sheet: "出版"
+    data_start_row: 11
+    sections:
+      # 图书总金额
+      - date_col: "A"
+        indicators:
+          "AA000094717400": "C"
+    actions:
+      - type: "media_internet_write_sheet"

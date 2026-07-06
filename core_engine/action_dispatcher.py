@@ -16,6 +16,7 @@ from plugins.macro_plugin import MacroPlugin
 from plugins.public_plugin import PublicPlugin
 from plugins.bank_plugin import BankPlugin
 from plugins.medical_plugin import MedicalPlugin
+from plugins.media_internet_plugin import MediaInternetPlugin
 from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
@@ -104,7 +105,6 @@ class PipelineEngine:
             'medical_write_quarter': MedicalPlugin.medical_write_quarter,
             'medical_write_formula': MedicalPlugin.medical_write_formula,
             'medical_merge_quarter_data': MedicalPlugin.medical_merge_quarter_data,
-
             # 农业动作
             'farm_write_data': FarmPlugin.farm_write_data,
             'farm_write_linechart': FarmPlugin.farm_write_linechart,
@@ -116,6 +116,9 @@ class PipelineEngine:
             'building_calc_monthly_from_cumulative': BuildingPlugin.building_calc_monthly_from_cumulative,
             'building_update_latest_value': BuildingPlugin.update_latest_value,
 
+            # 互联网传媒动作
+            'media_internet_write_sheet': MediaInternetPlugin.media_internet_write_sheet,
+            'media_internet_apply_yoy': MediaInternetPlugin.media_internet_apply_yoy,
         }
         
     def _create_backup(self):
@@ -138,7 +141,11 @@ class PipelineEngine:
         
         # 2. 创建输出副本并在内存中打开
         backup_file = self._create_backup()
-        wb = openpyxl.load_workbook(backup_file)
+        have_vba = backup_file.lower().endswith('.xlsm')
+        load_kwargs = {}
+        if have_vba:
+            load_kwargs['keep_vba'] = True
+        wb = openpyxl.load_workbook(backup_file, **load_kwargs)
         
         # 3. 遍历并执行每个 sheet 的任务
         defaults = self.config.get('defaults', {})
