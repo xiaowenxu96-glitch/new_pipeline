@@ -30,12 +30,13 @@ class BuildingPlugin:
         sheet_config = context['sheet_config']
         source_sheet = sheet_config['source_sheet']
         indicator_col_map = params.get('indicators') or {}
-        start_row = params.get('start_row', 11)
+        start_row = params.get('start_row')
         start_date = params.get('start_date', '2014-01-01')
         date_format = params.get('date_format', 'yyyy-mm-dd')
         start_date_ts = pd.to_datetime(start_date)
         date_columns = params.get('date_columns', None)
         start_column = params.get('start_column', 1)
+        unit_conversion = params.get('unit_conversion') or {}
 
         # 1. 从缓存中获取所需所有指标数据
         indicator_dfs = {}
@@ -122,8 +123,14 @@ class BuildingPlugin:
                 print(f"    - 解析列号失败，跳过列 {col}: {e}")
                 continue
 
+            # 获取该列的单位转换因子（列字母 → 乘数）
+            conversion_factor = unit_conversion.get(col, None)
+
             for i, date in enumerate(base_date_list):
                 value = value_map.get(date, None)
+                # 应用单位转换（仅当 value 非空且配置了转换因子时）
+                if value is not None and conversion_factor is not None:
+                    value = value * conversion_factor
                 ws.cell(
                     row=start_row + i,
                     column=col_num,
@@ -156,26 +163,28 @@ class BuildingPlugin:
     def building_write_formula(context, params):
         """
         通用公式写入函数，支持自定义公式模板
-        
+
         参数说明：
-        - start_row: 起始行号
+        - start_row: 起始行号（可选，不提供时通过 start_date + date_col 自动定位）
         - target_formula: 公式模板字符串，支持 {source_column}, {row}, {tname} 等占位符
         - target_column: 目标列列表（写入公式的列）
         - source_column: 源列列表（公式中引用的列）
         - tname: 可选的工作表名称，用于跨表引用
         - format: 可选的数字格式字符串，如 "0.00%"、"#,##0.00"、"[Red](#,##0.00)" 等
-        
+        - date_col: 可选的停止检查列（默认为目标列的前一列，即 target_col_num - 1）
+        - start_date: 可选，当 start_row 未指定时，在 date_col 列中查找该日期所在行作为起始行
+
         """
         ws = context['ws']
-        
-        start_row = params.get('start_row', 6)
+
+        start_row = params.get('start_row', None)
         target_formula_template = params.get('target_formula', '')
         target_columns = params.get('target_columns', [])
         source_columns = params.get('source_columns', [])
         tname = params.get('tname', None)  # 可选的工作表名称
         custom_format = params.get('format', None)  # 可选的自定义格式
-        print(source_columns)
-        print(target_columns)
+        date_col = params.get('date_col', "B")  # 可选：停止检查列
+        start_date = params.get('start_date', None)  # 可选：起始日期，用于定位 start_row
         # 检查参数有效性
         if not target_formula_template:
             print("    - 缺少 target_formulas 配置，跳过公式写入")
@@ -189,6 +198,28 @@ class BuildingPlugin:
             print(f"    - target_columns 和 source_columns 数量不匹配，跳过公式写入")
             return
         
+        # 如果提供了 start_date，则查找起始行
+        if start_row is None and start_date is not None:
+            date_col_for_search = date_col if date_col else target_columns[0]  # 默认使用第一个目标列
+            date_col_num = column_letter_to_number(date_col_for_search) if isinstance(date_col_for_search, str) else int(date_col_for_search)
+            
+            # 在 date_col 列中查找 start_date
+            for row in range(1, ws.max_row + 1):
+                cell_value = ws.cell(row=row, column=date_col_num).value
+                if cell_value == start_date or (isinstance(cell_value, datetime) and cell_value.date() == start_date):
+                    start_row = row
+                    print(f"    - 在列 {date_col_for_search} 中找到起始日期 {start_date}，起始行为 {start_row}")
+                    break
+            
+            if start_row is None:
+                print(f"    - 未在列 {date_col_for_search} 中找到起始日期 {start_date}，跳过公式写入")
+                return
+        
+        # 如果 start_row 仍未指定，默认从第2行开始
+        if start_row is None:
+            start_row = 2
+            print(f"    - 未指定起始行，默认从第 {start_row} 行开始")
+        
         # 遍历每一对源列和目标列
         for target_col, source_col in zip(target_columns, source_columns):
             try:
@@ -200,20 +231,23 @@ class BuildingPlugin:
                     print(f"    - 跳过无效的列配置: target={target_col}, source={source_col}")
                     continue
                 
-                # 从start_row开始，逐行写入公式，直到target_col的前一列（时间列）没有值为止
+                # 确定停止检查列：优先使用 date_col，否则默认为目标列的前一列
+                if date_col is not None:
+                    stop_check_col = column_letter_to_number(date_col) if isinstance(date_col, str) else int(date_col)
+                    # print(f"    - 使用指定的停止检查列: {date_col}")
+                else:
+                    stop_check_col = target_col_num - 1
+                    if stop_check_col < 1:
+                        print(f"    - 警告: 目标列 {target_col} 为第1列，无法检查前一列，将检查目标列自身")
+                        stop_check_col = target_col_num
+                
+                # 从start_row开始，逐行写入公式
                 current_row = start_row
                 while True:
-                    # 检查target_column-1的列是否有值（用于判断是否停止）
-                    check_col_num = target_col_num - 1
-                    if check_col_num < 1:
-                        # 如果target是第1列，无法检查前一列，使用其他判断方式
-                        check_cell = ws.cell(row=current_row, column=target_col_num)
-                        if check_cell.value is None:
-                            break
-                    else:
-                        check_cell = ws.cell(row=current_row, column=check_col_num)
-                        if check_cell.value is None:
-                            break
+                    # 使用确定的停止检查列进行判断
+                    check_cell = ws.cell(row=current_row, column=stop_check_col)
+                    if check_cell.value is None:
+                        break
                     
                     # 构建公式：替换模板中的占位符
                     formula = target_formula_template
@@ -473,6 +507,208 @@ class BuildingPlugin:
         
         print(f"    - 所有年份列公式写入完成，共处理 {len(year_columns)} 列")
         return
+
+    @staticmethod
+    def building_calc_monthly_from_cumulative(context, params):
+        """
+        将累计值（月度累计）转换为当月值。支持批量处理多个列对。
+        
+        参数：
+        ----------
+        date_column : 日期列（默认"B"）
+        source_columns : 累计值列列表（必填）
+        target_columns : 输出列列表（必填）
+        start_date : 从指定日期开始计算（可选）
+        start_row : 从指定行开始计算（可选）
+        
+        计算逻辑：按月判断，当月份变化时，当月值 = 累计值（重新开始）
+        
+        示例配置：
+        - type: building_calc_monthly_from_cumulative
+        date_column: "B"
+        source_columns: ["C", "D", "E"]
+        target_columns: ["Q", "R", "S"]
+        start_date: 2020-01-01
+        """
+        
+        ws = context["ws"]
+        
+        date_column = params.get("date_column", "B")
+        source_columns = params["source_columns"]
+        target_columns = params["target_columns"]
+        start_date = params.get("start_date", None)
+        start_row = params.get("start_row", None)
+        
+        # 验证列数是否匹配
+        if len(source_columns) != len(target_columns):
+            print(f"    - 错误：source_columns({len(source_columns)}) 和 target_columns({len(target_columns)}) 数量不匹配")
+            return
+        
+        # 转换日期列号
+        date_col = (
+            column_letter_to_number(date_column)
+            if isinstance(date_column, str)
+            else int(date_column)
+        )
+        
+        # 转换所有源列和目标列号
+        source_cols = [column_letter_to_number(c) if isinstance(c, str) else int(c) for c in source_columns]
+        target_cols = [column_letter_to_number(c) if isinstance(c, str) else int(c) for c in target_columns]
+        
+        # 确定起始行
+        if start_row is None:
+            if start_date is None:
+                start_row = 2
+            else:
+                target_date = pd.to_datetime(start_date).date()
+                
+                start_row = None
+                for r in range(1, ws.max_row + 1):
+                    value = ws.cell(r, date_col).value
+                    
+                    if value is None:
+                        continue
+                    
+                    if isinstance(value, datetime):
+                        cell_date = value.date()
+                    else:
+                        try:
+                            cell_date = pd.to_datetime(value).date()
+                        except Exception:
+                            continue
+                    
+                    if cell_date >= target_date:
+                        start_row = r
+                        break
+                
+                if start_row is None:
+                    print(f"    - 未找到开始日期 {start_date}")
+                    return
+        
+        # ------------------------
+        # 对每组列对进行计算
+        # ------------------------
+        for idx, (source_col, target_col) in enumerate(zip(source_cols, target_cols)):
+            previous_value = None
+            previous_year = None
+            previous_month = None
+            
+            row = start_row
+            is_first_row = True
+            
+            while True:
+                date_value = ws.cell(row, date_col).value
+                
+                if date_value is None:
+                    break
+                
+                cumulative = ws.cell(row, source_col).value
+                
+                try:
+                    current_date = pd.to_datetime(date_value)
+                except Exception:
+                    row += 1
+                    continue
+                
+                if cumulative is None:
+                    previous_value = None
+                    previous_year = None
+                    previous_month = None
+                    row += 1
+                    continue
+                
+                try:
+                    cumulative = float(cumulative)
+                except Exception:
+                    previous_value = None
+                    previous_month = None
+                    row += 1
+                    continue
+                
+                current_year = current_date.strftime("%Y")
+                current_month = current_date.strftime("%m")
+                
+                if is_first_row or previous_month is None or current_year != previous_year:
+                    monthly = cumulative
+                    is_first_row = False
+                else:
+                    monthly = cumulative - previous_value
+                
+                target_cell = ws.cell(row=row, column=target_col)
+                target_cell.value = monthly
+                target_cell.number_format = ws.cell(row=row, column=source_col).number_format
+                
+                previous_value = cumulative
+                previous_month = current_month
+                previous_year = current_year
+                
+                row += 1
+
+            processed_count = row - start_row
+            print(f"    - 完成列 {target_columns[idx]} 的公式写入（共 {processed_count} 行）")
+
+    @staticmethod
+    def update_latest_value(context, params):
+        # params:date_column, target_row, start_row
+        # 从start_row开始，寻找到date_column列中最大的日期,并得到latest_row。
+        # 在target_rowz中的C列 - FA列，写入"={col}{latest_row}""
+
+        ws = context["ws"]
+
+        date_column = params["date_column"]
+        target_row = params["target_row"]
+        start_row = params["start_row"]
+
+        # 转换日期列号
+        date_col = (
+            column_letter_to_number(date_column)
+            if isinstance(date_column, str)
+            else int(date_column)
+        )
+
+        # 从 start_row 开始，寻找 date_column 列中最大的日期，并得到 latest_row
+        max_date = None
+        latest_row = None
+
+        for r in range(start_row, ws.max_row + 1):
+            date_value = ws.cell(r, date_col).value
+
+            if date_value is None:
+                continue
+
+            try:
+                if isinstance(date_value, datetime):
+                    current_date = date_value.date() if hasattr(date_value, 'date') else date_value
+                else:
+                    current_date = pd.to_datetime(date_value).date()
+            except Exception:
+                continue
+
+            if max_date is None or current_date > max_date:
+                max_date = current_date
+                latest_row = r
+
+        if latest_row is None:
+            print("    - 未找到有效日期数据，跳过 update_latest_value")
+            return
+
+        # 在 target_row 中的 C列 - FA列，写入 "={col}{latest_row}"
+        C_COL = column_letter_to_number("C")
+        FA_COL = column_letter_to_number("FA")
+
+        for col in range(C_COL, FA_COL + 1):
+            col_letter = column_number_to_letter(col)
+            formula = f"={col_letter}{latest_row}"
+            ws.cell(row=target_row, column=col).value = formula
+
+        print(f"    - 已在第{target_row}行 C-FA列写入公式，引用最新数据行: 第{latest_row}行（日期: {max_date}）")
+
+
+
+
+
+
+
 
 
 

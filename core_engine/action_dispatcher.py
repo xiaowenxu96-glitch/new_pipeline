@@ -113,6 +113,9 @@ class PipelineEngine:
             'building_write_data': BuildingPlugin.building_write_data,
             'building_write_formula': BuildingPlugin.building_write_formula,
             'building_write_formula_with_year_lookup': BuildingPlugin.building_write_formula_with_year_lookup,
+            'building_calc_monthly_from_cumulative': BuildingPlugin.building_calc_monthly_from_cumulative,
+            'building_update_latest_value': BuildingPlugin.update_latest_value,
+
         }
         
     def _create_backup(self):
