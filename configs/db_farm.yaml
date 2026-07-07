@@ -1,0 +1,246 @@
+industry: 农业
+source_file: D:/【交付审核】/_导出验收/Excel数据验收/农业/农业20260630_【申万农业】周度底稿_20260630120115.xlsx
+target_file: D:/【交付审核】/_导出验收/Excel数据验收/农业/【申万农业】周度底稿.xlsx
+output_dir: D:/【交付审核】/_导出验收/new_pipeline/output_files
+defaults:
+  start_date: '2014-01-01'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: 白羽肉鸡
+  source_sheet: 白羽肉鸡
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000277110500": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 5
+    y_axis_max: 12
+    year_range: 3
+
+- sheet_name: 肉鸡苗
+  source_sheet: 肉鸡苗
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260016600": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    year_range: 5
+
+- sheet_name: 玉米现货
+  source_sheet: 玉米现货
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811400": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 1600
+    y_axis_max: 3400
+    year_range: 3
+
+- sheet_name: 小麦现货
+  source_sheet: 小麦现货
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811100": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 2100
+    y_axis_max: 3300
+    year_range: 3
+
+- sheet_name: 大豆现货
+  source_sheet: 大豆现货
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811300": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 3300
+    y_axis_max: 5300
+    year_range: 3
+
+- sheet_name: 高粱现货
+  source_sheet: 高粱现货
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000267934300": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 1500
+    y_axis_max: 4500
+    year_range: 3
+
+- sheet_name: 豆粕
+  source_sheet: 豆粕
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811200": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 2500
+    y_axis_max: 5000
+    year_range: 3
+
+- sheet_name: 白砂糖
+  source_sheet: 白砂糖
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260782200": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 4000
+    y_axis_max: 8000
+    year_range: 3
+
+- sheet_name: 豆油
+  source_sheet: 豆油
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811500": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 5000
+    y_axis_max: 10000
+    year_range: 3
+
+- sheet_name: 菜籽油
+  source_sheet: 菜籽油
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000277113700": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 5000
+    y_axis_max: 12000
+    year_range: 3
+
+- sheet_name: CBOT稻谷
+  source_sheet: CBOT稻谷
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259971700": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 8
+    year_range: 3
+
+- sheet_name: CBOT小麦
+  source_sheet: CBOT小麦
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259970700": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 400
+    y_axis_max: 1000
+    year_range: 3
+
+- sheet_name: CBOT玉米
+  source_sheet: CBOT玉米
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259970800": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 300
+    y_axis_max: 1000
+    year_range: 3
+
+- sheet_name: CBOT大豆
+  source_sheet: CBOT大豆
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259971000": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 800
+    y_axis_max: 1800
+    year_range: 3
+
+- sheet_name: NYBOT11号糖
+  source_sheet: NYBOT11号糖
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259974500": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 8
+    y_axis_max: 33
+    year_range: 3
+
+- sheet_name: NYBOT2号棉花
+  source_sheet: NYBOT2号棉花
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000254056100": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 40
+    y_axis_max: 160
+    year_range: 3
+
+- sheet_name: 山东肉鸡苗 肉毛鸡价格
+  source_sheet: 山东肉鸡苗 肉毛鸡价格
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000254042100": "B"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A8:B800"
+    year_range: 5
+
+- sheet_name: 农业部-仔猪生猪猪肉
+  source_sheet: 农业部-仔猪生猪猪肉
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259925100": "B"
+      "AA000259924900": "C"
+      "AA000259925000": "D"
+    start_row: 5
+  - type: farm_write_linechart
+    data_range: "A2:D800"
+    year_range: 5
+
+- sheet_name: 全国饲料价格
+  source_sheet: 全国饲料价格
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000259926200": "B"
+      "AA000259926300": "C"
+      "AA000259926400": "D"
+    start_row: 5
