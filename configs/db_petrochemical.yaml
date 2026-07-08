@@ -1,0 +1,59 @@
+industry: "石油化工"
+source_file: "D:/SWS/new_pipeline/石油化工/石油化工20260630_申万宏源石化行业数据库_20260706121915.xlsx"
+target_file: "D:/SWS/new_pipeline/石油化工/申万宏源石化行业数据库目标文档2.xlsx"
+output_dir: "D:/SWS/new_pipeline/石油化工/output"
+
+defaults:
+  start_date: "1983-03-30"
+  date_format: "yyyy-mm-dd"
+
+sheets:
+# ==================== Sheet 1: 布伦特 ====================
+  - sheet_name: "布伦特"
+    source_sheet: "布伦特"
+    sections:
+      - date_col: "A"
+        data_start_row: 2
+        indicators:
+          "AA000083507000": "B"
+    actions:
+      - type: "petrochemical_write_sheet"
+      - type: "petrochemical_apply_weekly_formulas"
+        price_col: "B"
+        avg_col: "C"
+        wow_col: "D"
+      - type: "petrochemical_apply_monthly_formulas"
+        price_col: "B"
+        month_col: "F"
+        month_avg_col: "G"
+        month_mom_col: "H"
+      - type: "petrochemical_apply_yearly_formulas"
+        price_col: "B"
+        year_col: "J"
+        year_avg_col: "K"
+        year_yoy_col: "L"
+
+# ==================== Sheet 2: WTI ====================
+  - sheet_name: "WTI"
+    source_sheet: "WTI"
+    sections:
+      - date_col: "A"
+        data_start_row: 2
+        indicators:
+          "AA000302353900": "B"
+    actions:
+      - type: "petrochemical_write_sheet"
+      - type: "petrochemical_apply_weekly_formulas"
+        price_col: "B"
+        avg_col: "C"
+        wow_col: "D"
+      - type: "petrochemical_apply_monthly_formulas"
+        price_col: "B"
+        month_col: "F"
+        month_avg_col: "G"
+        month_mom_col: "H"
+      - type: "petrochemical_apply_yearly_formulas"
+        price_col: "B"
+        year_col: "J"
+        year_avg_col: "K"
+        year_yoy_col: "L"

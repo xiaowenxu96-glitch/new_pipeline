@@ -13,6 +13,35 @@ class AppliancePlugin:
 
         sections = sheet_config.get('sections', [])
 
+        # Pre-scan: unmerge all merged cells that overlap with write area
+        for section in sections:
+            date_col = section['date_col']
+            date_col_num = col_letter_to_num(date_col)
+            data_start_row = section.get('data_start_row', 4)
+            indicators = section['indicators']
+            if isinstance(indicators, dict):
+                indicators = list(indicators.items())
+
+            # Determine the write range and unmerge
+            min_col = date_col_num
+            max_col = date_col_num
+            for _, target_col in indicators:
+                c = col_letter_to_num(target_col)
+                min_col = min(min_col, c)
+                max_col = max(max_col, c)
+            # Estimate max data rows (~70)
+            max_data_row = data_start_row + 75
+
+            to_unmerge = []
+            for mc in ws.merged_cells.ranges:
+                if (mc.min_row <= max_data_row and mc.max_row >= data_start_row
+                    and mc.min_col <= max_col and mc.max_col >= min_col):
+                    to_unmerge.append(str(mc))
+            for mc_str in to_unmerge:
+                ws.unmerge_cells(mc_str)
+            if to_unmerge:
+                print(f"    - 取消合并 {len(to_unmerge)} 个单元格区域")
+
         for section in sections:
             date_col = section['date_col']
             date_col_num = col_letter_to_num(date_col)
@@ -32,11 +61,11 @@ class AppliancePlugin:
                     continue
                 value_col = df.columns[-1]
                 df = df.dropna(subset=['日期']).copy()
-                df = df[df[value_col].notna()].copy()
                 if df.empty:
                     continue
                 df = df.sort_values('日期', ascending=True).reset_index(drop=True)
                 code_dfs[aa_code] = (df, value_col)
+                # Include ALL date rows to ensure consistent alignment
                 all_dates.update(df['日期'])
 
             if not code_dfs:

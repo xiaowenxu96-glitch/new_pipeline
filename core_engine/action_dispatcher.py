@@ -18,6 +18,7 @@ from plugins.bank_plugin import BankPlugin
 from plugins.medical_plugin import MedicalPlugin
 from plugins.media_internet_plugin import MediaInternetPlugin
 from plugins.appliance_plugin import AppliancePlugin
+from plugins.petrochemical_plugin import PetrochemicalPlugin
 from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
@@ -122,6 +123,11 @@ class PipelineEngine:
             'media_internet_apply_yoy': MediaInternetPlugin.media_internet_apply_yoy,
             # 家电动作
             'appliance_write_sheet': AppliancePlugin.appliance_write_sheet,
+            # 石油化工动作
+            'petrochemical_write_sheet': PetrochemicalPlugin.petrochemical_write_sheet,
+            'petrochemical_apply_weekly_formulas': PetrochemicalPlugin.petrochemical_apply_weekly_formulas,
+            'petrochemical_apply_monthly_formulas': PetrochemicalPlugin.petrochemical_apply_monthly_formulas,
+            'petrochemical_apply_yearly_formulas': PetrochemicalPlugin.petrochemical_apply_yearly_formulas,
         }
         
     def _create_backup(self):
