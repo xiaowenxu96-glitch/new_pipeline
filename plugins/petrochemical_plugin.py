@@ -101,10 +101,9 @@ class PetrochemicalPlugin:
     @staticmethod
     def petrochemical_apply_weekly_formulas(context, params):
         """
-        按 ISO 自然周精确分组，写区间公式（不受节假日缺数据影响）：
-        - C 列：=AVERAGE(B{min}:B{max})  该周所有交易日
-        - D 列第1行：=B{r}/B{prev_r}-1  与上周同日比
-        - D 列第2行：=C{r}/C{prev_r}-1  周均价环比
+        以「上周日 + 本周一二三四」为一周，按锚定周四分组。
+        区间从该周的 Thursday(最小行号) 到 Sunday(最大行号)，
+        保证覆盖完整 5 天（节假日缺失的天恰好不在区间内）。
         """
         ws = context['ws']
         date_to_row_map = context.get('_petro_date_to_row', {})
@@ -117,42 +116,49 @@ class PetrochemicalPlugin:
             print("    - [周公式] 无日期映射，跳过")
             return
 
-        # 按 ISO 自然周分组
+        # 自定义周：上周日 + 本周一二三四 = 一周
+        # 周键 = 锚定周四日期
         week_groups = OrderedDict()
         for d, row in date_to_row_map.items():
-            iso = d.isocalendar()
-            key = (iso[0], iso[1])
+            wd = d.weekday()
+            if wd == 6:    # 周日 -> 下周周四
+                anchor_thu = d + timedelta(days=4)
+            elif wd <= 3:  # 周一~周四 -> 本周周四
+                anchor_thu = d + timedelta(days=3 - wd)
+            else:          # 周五~周六 -> 下周四
+                anchor_thu = d + timedelta(days=3 - wd + 7)
+            key = anchor_thu.strftime('%Y-%m-%d')
             if key not in week_groups:
                 week_groups[key] = []
             week_groups[key].append(row)
 
+        # 按周降序
         sorted_weeks = sorted(week_groups.items(), key=lambda x: x[0], reverse=True)
-
-        # 找到每周 label_row 用于放 C 和 D 公式
-        week_records = []  # [(label_row, start_row, end_row)]
+        week_records = []  # [(thu_row, sun_row)]
         for key, rows in sorted_weeks:
             rows_sorted = sorted(rows)
-            start_r = rows_sorted[0]   # 最小行号
-            end_r = rows_sorted[-1]    # 最大行号
-            label_row = end_r          # 该周最早日期行 = 周日
-            week_records.append((label_row, start_r, end_r))
+            thu_row = rows_sorted[0]   # 最小行号 = Thursday (降序Thu在上)
+            sun_row = rows_sorted[-1]  # 最大行号 = Sunday (降序Sun在下)
+            week_records.append((thu_row, sun_row))
 
         # 写 C/D 公式
-        for idx, (label_row, start_r, end_r) in enumerate(week_records):
-            # C 列：周均价区间公式
-            ws.cell(row=label_row, column=avg_col).value = f"=AVERAGE({price_col}{start_r}:{price_col}{end_r})"
-            ws.cell(row=label_row, column=avg_col).number_format = '0.00'
+        # 降序：idx=0 最新，idx 越大越旧
+        # D 列：本周/上周-1，所以分母是下一周(idx+1)
+        for idx, (thu_row, sun_row) in enumerate(week_records):
+            # C 列：周均价 = AVERAGE(Thu行:Sun行)
+            ws.cell(row=thu_row, column=avg_col).value = f"=AVERAGE({price_col}{thu_row}:{price_col}{sun_row})"
+            ws.cell(row=thu_row, column=avg_col).number_format = '0.00'
 
-            # D 列第1行：与上周同日比（用 label_row 比）
-            if idx > 0:
-                prev_label, _, _ = week_records[idx - 1]
-                ws.cell(row=label_row, column=wow_col).value = f"={price_col}{label_row}/{price_col}{prev_label}-1"
-                ws.cell(row=label_row, column=wow_col).number_format = '0.00%'
+            if idx + 1 < len(week_records):
+                next_thu, _ = week_records[idx + 1]  # 下一周 = 更旧 = 行号更大
+                # D 列第1行(周四行)：日价格周同比 = B{本周}/B{下周}-1
+                ws.cell(row=thu_row, column=wow_col).value = f"={price_col}{thu_row}/{price_col}{next_thu}-1"
+                ws.cell(row=thu_row, column=wow_col).number_format = '0.00%'
 
-                # D 列第2行：周均价环比（在 label_row+1 行）
-                if label_row + 1 <= ws.max_row:
-                    ws.cell(row=label_row + 1, column=wow_col).value = f"={avg_col_letter}{label_row}/{avg_col_letter}{prev_label}-1"
-                    ws.cell(row=label_row + 1, column=wow_col).number_format = '0.00%'
+                # D 列第2行(周三行)：周均价环比 = C{本周}/C{下周}-1
+                if thu_row + 1 <= ws.max_row:
+                    ws.cell(row=thu_row + 1, column=wow_col).value = f"={avg_col_letter}{thu_row}/{avg_col_letter}{next_thu}-1"
+                    ws.cell(row=thu_row + 1, column=wow_col).number_format = '0.00%'
 
         print(f"    - [周公式] 写入 {len(week_records)} 周均价/环比")
 
@@ -190,34 +196,33 @@ class PetrochemicalPlugin:
                 month_groups[key]['first_row'] = row
 
         sorted_months = sorted(month_groups.items(), key=lambda x: (x[0][0], x[0][1]), reverse=True)
+        month_records = [(info['first_date'], sorted(info['rows'])[0], sorted(info['rows'])[-1])
+                         for key, info in sorted_months]
 
+        # 集中写入：从 row 2 开始连续排列
+        base_row = 2
         written = 0
-        prev_label_row = None
-        for key, info in sorted_months:
-            rows = sorted(info['rows'])
-            label_row = info['first_row']
-            start_r = rows[0]   # 最小行号 = 该月最新日期
-            end_r = rows[-1]    # 最大行号 = 该月最早日期
-            first_date = info['first_date']
+        for idx, (first_date, start_r, end_r) in enumerate(month_records):
+            row = base_row + idx
 
-            # F：月日期（Excel serial），用该月第一天
+            # F：月日期
             month_first = datetime(first_date.year, first_date.month, 1)
-            ws.cell(row=label_row, column=month_date_col).value = PetrochemicalPlugin._excel_serial(month_first)
-            ws.cell(row=label_row, column=month_date_col).number_format = 'yyyy-mm-dd'
+            ws.cell(row=row, column=month_date_col).value = PetrochemicalPlugin._excel_serial(month_first)
+            ws.cell(row=row, column=month_date_col).number_format = 'yyyy-mm-dd'
 
             # G：月均价
-            ws.cell(row=label_row, column=avg_col).value = f"=AVERAGE({price_col}{start_r}:{price_col}{end_r})"
-            ws.cell(row=label_row, column=avg_col).number_format = '0.00'
+            ws.cell(row=row, column=avg_col).value = f"=AVERAGE({price_col}{start_r}:{price_col}{end_r})"
+            ws.cell(row=row, column=avg_col).number_format = '0.00'
 
-            # H：月环比
-            if prev_label_row is not None:
-                ws.cell(row=label_row, column=mom_col).value = f"={avg_col_letter}{label_row}/{avg_col_letter}{prev_label_row}-1"
-                ws.cell(row=label_row, column=mom_col).number_format = '0.00%'
+            # H：月环比 = G{本月}/G{下月}-1
+            if idx + 1 < len(month_records):
+                next_row = base_row + idx + 1
+                ws.cell(row=row, column=mom_col).value = f"={avg_col_letter}{row}/{avg_col_letter}{next_row}-1"
+                ws.cell(row=row, column=mom_col).number_format = '0.00%'
 
-            prev_label_row = label_row
             written += 1
 
-        print(f"    - [月公式] 写入 {written} 月均价/环比")
+        print(f"    - [月公式] 写入 {written} 月均价/环比 (rows {base_row}-{base_row+written-1})")
 
     # ---- 年均价 / 年同比 ----
 
@@ -253,28 +258,28 @@ class PetrochemicalPlugin:
                 year_groups[yr]['first_row'] = row
 
         sorted_years = sorted(year_groups.items(), key=lambda x: x[0], reverse=True)
+        year_records = [(info['first_date'], sorted(info['rows'])[0], sorted(info['rows'])[-1])
+                        for yr, info in sorted_years]
 
+        # 集中写入：从 row 2 开始连续排列
+        base_row = 2
         written = 0
-        prev_label_row = None
-        for yr, info in sorted_years:
-            rows = sorted(info['rows'])
-            label_row = info['first_row']
-            start_r = rows[0]
-            end_r = rows[-1]
+        for idx, (first_date, start_r, end_r) in enumerate(year_records):
+            row = base_row + idx
 
             # J：年份
-            ws.cell(row=label_row, column=year_col).value = yr
+            ws.cell(row=row, column=year_col).value = first_date.year
 
             # K：年均价
-            ws.cell(row=label_row, column=avg_col).value = f"=AVERAGE({price_col}{start_r}:{price_col}{end_r})"
-            ws.cell(row=label_row, column=avg_col).number_format = '0.00'
+            ws.cell(row=row, column=avg_col).value = f"=AVERAGE({price_col}{start_r}:{price_col}{end_r})"
+            ws.cell(row=row, column=avg_col).number_format = '0.00'
 
-            # L：年同比
-            if prev_label_row is not None:
-                ws.cell(row=label_row, column=yoy_col).value = f"={avg_col_letter}{label_row}/{avg_col_letter}{prev_label_row}-1"
-                ws.cell(row=label_row, column=yoy_col).number_format = '0.00%'
+            # L：年同比 = K{本年}/K{下年}-1
+            if idx + 1 < len(year_records):
+                next_row = base_row + idx + 1
+                ws.cell(row=row, column=yoy_col).value = f"={avg_col_letter}{row}/{avg_col_letter}{next_row}-1"
+                ws.cell(row=row, column=yoy_col).number_format = '0.00%'
 
-            prev_label_row = label_row
             written += 1
 
-        print(f"    - [年公式] 写入 {written} 年均价/同比")
+        print(f"    - [年公式] 写入 {written} 年均价/同比 (rows {base_row}-{base_row+written-1})")
