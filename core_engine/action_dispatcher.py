@@ -19,6 +19,7 @@ from plugins.medical_plugin import MedicalPlugin
 from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
+from plugins.building_plugin import BuildingPlugin
 
 # === Monkey-patch: 修复 openpyxl 无法读取含 ExternalData 图表的 bug ===
 # ExternalData.id 定义为 String() 但不支持命名空间属性 r:id，
@@ -107,6 +108,14 @@ class PipelineEngine:
             # 农业动作
             'farm_write_data': FarmPlugin.farm_write_data,
             'farm_write_linechart': FarmPlugin.farm_write_linechart,
+
+            # 建筑动作
+            'building_write_data': BuildingPlugin.building_write_data,
+            'building_write_formula': BuildingPlugin.building_write_formula,
+            'building_write_formula_with_year_lookup': BuildingPlugin.building_write_formula_with_year_lookup,
+            'building_calc_monthly_from_cumulative': BuildingPlugin.building_calc_monthly_from_cumulative,
+            'building_update_latest_value': BuildingPlugin.update_latest_value,
+
         }
         
     def _create_backup(self):
@@ -139,6 +148,7 @@ class PipelineEngine:
             
             if sheet_name not in wb.sheetnames:
                 print(f"!! 警告：模板中不存在工作表 {sheet_name}，跳过。")
+                print(f"   模板中可用的工作表: {wb.sheetnames}")
                 continue
                 
             ws = wb[sheet_name]

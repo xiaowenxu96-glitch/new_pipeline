@@ -1,0 +1,624 @@
+industry: "建材"
+source_file: "D:/【交付审核】/_导出验收/Excel数据验收/建材/建材20260702_建材数据库_20260702161515.xlsx"
+target_file: "D:/【交付审核】/_导出验收/Excel数据验收/建材/【申万建材】建材数据库模板.xlsx"
+output_file: "D:/【交付审核】/_导出验收/new_pipeline/output_files"
+
+defaults:
+  start_date: "1998-01-01"
+sheets:
+- sheet_name: 30城商品房成交-日频
+  source_sheet: 30城商品房成交-日频
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000077652900": "CD"
+      "AA000077652500": "CE"
+      "AA000077653000": "CF"
+      "AA000077652600": "CG"
+      "AA000077653100": "CH"
+      "AA000077652700": "CI"
+    start_row: 20
+    start_date: "2011-01-01"
+    date_columns: ["A", "CA"]
+
+  - type: building_write_formula
+    start_row: 20
+    start_column: "CA"
+    target_columns: ["CB", "CC"]
+    source_columns: ["CB", "CC"]
+    target_formula: "=SUM({source_column+2}{row}+{source_column+4}{row}+{source_column+6}{row})"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "A"
+    target_columns: ["B", "C", "D", "E", "F", "G", "H", "I"]
+    source_columns: ["CB", "CC", "CD", "CE", "CF", "CG", "CH", "CI"]
+    target_formula: "=IF(ISBLANK({source_column}{row}),\"\",IFERROR(AVERAGE({source_column}{row-6}:{source_column}{row}),\"\"))"
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "K"
+    latest_year_col: "AA"
+    source_column: "C"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "AB"
+    latest_year_col: "AR"
+    source_column: "E"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "AS"
+    latest_year_col: "BI"
+    source_column: "G"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+  - type: building_write_formula_with_year_lookup
+    start_row: 20
+    year_row: 19
+    date_col: "BJ"
+    latest_year_col: "BZ"
+    source_column: "I"
+    source_date_col: "A"
+    target_formula: '=IF({date_col}{row}="", "", IFERROR(VLOOKUP(DATE({year_value}, MONTH({date_col}{row}), DAY({date_col}{row})), ${source_date_col}:${source_column}, {source_col_index}, FALSE), ""))'
+
+
+- sheet_name: 地产资金
+  source_sheet: 地产资金
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000084866400": "C"
+      "AA000084867400": "D"
+      "AA000084867200": "E"
+      "AA000084867000": "F"
+      "AA000084866600": "G"
+      "AA000085081300": "H"
+      "AA000084866500": "J"
+      "AA000084867500": "K"
+      "AA000084867300": "L"
+      "AA000084867100": "M"
+      "AA000084866700": "N"
+      "AA000085088000": "O"
+    start_row: 19
+    unit_conversion:  
+      "D": 0.00000001
+      "E": 0.00000001
+      "F": 0.00000001
+      "G": 0.00000001
+      "H": 0.00000001
+      "J": 0.01
+      "K": 0.01
+      "L": 0.01
+      "M": 0.01
+      "N": 0.01
+      "O": 0.01
+    date_columns: "B"
+  - type: building_calc_monthly_from_cumulative
+    date_column: "B"
+    source_columns: ["C", "D", "E", "F", "G", "H"]
+    target_columns: ["Q", "R", "S", "T", "U", "V"]
+    start_date: 2020-01-01
+  - type: building_write_formula
+    start_row: 272
+    start_column: "B"
+    source_columns: ["Q", "R", "S", "T", "U", "V"]
+    target_columns: ["X", "Y", "Z", "AA", "AB", "AC"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row-11}),{source_column}{row-11}=0),\"\",{source_column}{row}/{source_column}{row-11}-1)"
+
+
+- sheet_name: 房地产开发投资（分科目）
+  source_sheet: 房地产开发投资（分科目）
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000085698100": "C"
+      "AA000115869700": "D"
+      "AA000115869800": "E"
+      "AA000115869900": "F"
+      "AA000115870000": "G"
+      "AA000084859000": "H"
+      "AA000085698200": "J"
+      "AA000115870100": "K"
+      "AA000115870200": "L"
+      "AA000115870300": "M"
+      "AA000115870400": "N"
+      "AA000084859100": "O"
+    start_row: 19
+    unit_conversion:
+      "H": 0.00000001
+      "J": 0.01
+      "K": 0.01
+      "L": 0.01
+      "M": 0.01
+      "N": 0.01
+      "O": 0.01
+    date_columns: "B"
+    start_date: 2002-01-01
+  - type: building_calc_monthly_from_cumulative
+    date_column: "B"
+    source_columns: ["C", "D", "E", "F", "G", "H"]
+    target_columns: ["Q", "R", "S", "T", "U", "V"]
+    start_row: 19
+  - type: building_write_formula
+    start_row: 30
+    start_column: "B"
+    source_columns: ["Q", "R", "S", "T", "U", "V"]
+    target_columns: ["X", "Y", "Z", "AA", "AB", "AC"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row-11}),{source_column}{row-11}=0),\"\",{source_column}{row}/{source_column}{row-11}-1)"
+
+- sheet_name: 房地产投资（面积指标）
+  source_sheet: 房地产投资（面积指标）
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000083594900": "C"
+      "AA000083596500": "D"
+      "AA000083596300": "F"
+      "AA000083595800": "G"
+      "AA000083595400": "H"
+      "AA000115640900": "I"
+      "AA000083595000": "K"
+      "AA000083596600": "L"
+      "AA000083596400": "N"
+      "AA000083595900": "O"
+      "AA000083595500": "P"
+      "AA000094755800": "Q"
+    start_row: 19
+    unit_conversion:
+      "C": 0.0001
+      "D": 0.0001
+      "F": 0.0001
+      "G": 0.0001
+      "H": 0.0001
+      # "K": 0.01
+      # "L": 0.01
+      # "N": 0.01
+      # "O": 0.01
+      # "P": 0.01
+      # "Q": 0.01
+    date_columns: "B"
+    start_date: 2000-01-01
+  - type: building_calc_monthly_from_cumulative
+    date_column: "B"
+    source_columns: ["C", "D", "F", "G", "H", "I"]
+    target_columns: ["S", "T", "V", "W", "X", "Y"]
+    start_row: 19
+  - type: building_write_formula
+    start_row: 30
+    start_column: "B"
+    source_columns: ["S", "T", "V", "W", "X", "Y"]
+    target_columns: ["AA", "AB", "AD", "AE", "AF", "AG"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row-11}),{source_column}{row-11}=0),\"\",({source_column}{row}/{source_column}{row-11}-1)*100)"
+
+- sheet_name: 固定资产投资（分科目）
+  source_sheet: 固定资产投资（分科目）
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000085698100": "D"
+      "AA000085698200": "H"
+    start_row: 19
+    date_columns: "B"
+    start_date: 2003-01-01
+  - type: building_calc_monthly_from_cumulative
+    date_column: "B"
+    source_columns: ["D"]
+    target_columns: ["L",]
+    start_row: 19
+  - type: building_write_formula
+    start_row: 30
+    start_column: "B"
+    source_columns: ["L"]
+    target_columns: ["P"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-11}),{source_column}{row-11}=1),\"\",{source_column}{row}/({source_column}{row-11}-1)*100)"
+
+- sheet_name: 固定资产投资（分区域）
+  source_sheet: 固定资产投资（分区域）
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000084851600": "J"
+      "AA000084851400": "K"
+      "AA000084851200": "L"
+      "AA000084851000": "M"
+      "AA000084850800": "N"
+      "AA000084850700": "O"
+      "AA000084850500": "P"
+      "AA000084850300": "Q"
+      "AA000084850100": "R"
+      "AA000084849900": "S"
+      "AA000084849700": "T"
+      "AA000084849500": "U"
+      "AA000084849300": "V"
+      "AA000084849100": "W"
+      "AA000084848900": "X"
+      "AA000084848700": "Y"
+      "AA000084848500": "Z"
+      "AA000084848300": "AA"
+      "AA000084848100": "AB"
+      "AA000084847900": "AC"
+      "AA000084847700": "AD"
+    start_row: 20
+    date_columns: "B"
+    start_date: 2000-01-01
+    unit_conversion:
+      "J": 0.00000001
+      "K": 0.00000001
+      "L": 0.00000001
+      "M": 0.00000001
+      "N": 0.00000001
+      "O": 0.00000001
+      "P": 0.00000001
+      "Q": 0.00000001
+      "R": 0.00000001
+      "S": 0.00000001
+      "T": 0.00000001
+      "U": 0.00000001
+      "V": 0.00000001
+      "W": 0.00000001
+      "X": 0.00000001
+      "Y": 0.00000001
+      "Z": 0.00000001
+      "AA": 0.00000001
+      "AB": 0.00000001
+      "AC": 0.00000001
+      "AD": 0.00000001
+  - type: building_write_formula
+    start_row: 20
+    source_columns: ["C"]
+    target_columns: ["C"]
+    target_formula: "=SUM(J{row}:AN{row})"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["D"]
+    target_columns: ["D"]
+    target_formula: "=SUM(J{row}:N{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["D"]
+    target_columns: ["D"]
+    target_formula: "=SUM(O{row}:Q{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["E"]
+    target_columns: ["E"]
+    target_formula: "=SUM(R{row}:X{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["F"]
+    target_columns: ["F"]
+    target_formula: "=SUM(Y{row}:AD{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["G"]
+    target_columns: ["G"]
+    target_formula: "=SUM(AE{row}:AI{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["H"]
+    target_columns: ["H"]
+    target_formula: "=SUM(AJ{row}:AN{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 32
+    start_column: "B"
+    source_columns : ["C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN"]
+    target_columns : ["AP", "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BV", "BW", "BX", "BY", "BZ", "CA"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-12}),{source_column}{row-12}=0),\"\",({source_column}{row}/{source_column}{row-12}-1)*100)"
+
+  - type: building_calc_monthly_from_cumulative
+    date_column: "B"
+    start_row: 20
+    source_columns : ["J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN"]
+    target_columns : ["CJ", "CK", "CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT", "CU", "CV", "CW", "CX", "CY", "CZ", "DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN"]
+  - type: building_write_formula
+    start_row: 20
+    source_columns: ["CC"]
+    target_columns: ["CC"]
+    target_formula: "=SUM(CJ{row}:BN{row})"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["CD"]
+    target_columns: ["CD"]
+    target_formula: "=SUM(CJ{row}:CN{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["CE"]
+    target_columns: ["CE"]
+    target_formula: "=SUM(CR{row}:CX{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["CF"]
+    target_columns: ["CF"]
+    target_formula: "=SUM(CY{row}:DD{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["CG"]
+    target_columns: ["CG"]
+    target_formula: "=SUM(DE{row}:DI{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["CH"]
+    target_columns: ["CH"]
+    target_formula: "=SUM(DJ{row}:DN{row})"
+    format: "0.00"
+
+  - type: building_write_formula
+    start_row: 32
+    start_column: "B"
+    source_columns : ["CC", "CD", "CE", "CF", "CG", "CH", "CI", "CJ", "CK", "CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT", "CU", "CV", "CW", "CX", "CY", "CZ", "DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN"]
+    target_columns : ["DP", "DQ", "DR", "DS", "DT", "DU", "DV", "DW", "DX", "DY", "DZ", "EA", "EB", "EC", "ED", "EE", "EF", "EG", "EH", "EI", "EJ", "EK", "EL", "EM", "EN", "EO", "EP", "EQ", "ER", "ES", "ET", "EU", "EV", "EW", "EX", "EY", "EZ", "FA"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-12}),{source_column}{row-12}=0),\"\",({source_column}{row}/{source_column}{row-12}-1)*100)"
+
+  - type: building_update_latest_value
+    start_row: 20
+    date_column: "B"
+    target_row: 19
+    formula_template: "=IF({col}{latest_row}=\"\",NA(),{col}{latest_row})"
+    start_column: "C"
+    end_column: "FA"
+
+
+- sheet_name: 基础设施建设投资（分科目）
+  source_sheet: 基础设施建设投资（分科目）
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000103293900": "Y"
+      "AA000103294700": "Z"
+      "AA000103295000": "AA"
+      "AA000085700200": "AB"
+      "AA000103295100": "AC"
+      "AA000085701400": "AD"
+      "AA000084665700": "AE"
+      "AA000103295200": "AF"
+      "AA000085701600": "AG"
+      "AA000103298100": "AH"
+      "AA000103298800": "AI"
+      "AA000103299100": "AJ"
+      "AA000085700800": "AK"
+      "AA000115663800": "AL"
+      "AA000103292700": "AM"
+      "AA000085700100": "AN"
+      "AA000103292800": "AO"
+    start_row: 20
+    date_columns: "B"
+    start_date: 2003-01-01
+
+- sheet_name: 进出口
+  source_sheet: 进出口
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000104226400": "H"
+      "AA000109752100": "J"
+      "AA000109740000": "K"
+      "AA000315627600": "N"
+      "AA000314892800": "Q"
+      "AA000314478800": "R"
+      "AA000314932600": "T"
+      "AA000314518700": "U"
+      "AA000314892700": "X"
+      "AA000314643800": "Y"
+      "AA000314932500": "AA"
+      "AA000314518600": "AB"
+    start_row: 5
+    date_columns: "G"
+    start_date: 2015-01-01
+  - type: building_write_formula
+    start_row: 7
+    start_column: "G"
+    source_columns : ["L", "O", "S", "V", "Z", "AC"]
+    target_columns : ["L", "O", "S", "V", "Z", "AC"]
+    target_formula: "=IF(OR(ISBLANK({source_column-1}{row}),{source_column-1}{row}=0),\"\",H{row}*{source_column-2}{row}/{source_column-1}{row}*10000)"
+
+
+- sheet_name: 期货价格及基差
+  source_sheet: 期货价格及基差
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000312381900": "D"
+    start_row: 22
+    date_columns: "B"
+    start_date: 2012-01-01   
+
+- sheet_name: 社会融资规模
+  source_sheet: 社会融资规模
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000102860600": "AP"
+      "AA000102904600": "AQ"
+      "AA000102904700": "AR"
+      "AA000102904800": "AS"
+      "AA000102905000": "AT"
+      "AA000102905100": "AU"
+      "AA000102905200": "AV"
+      "AA000102905300": "AW"
+      "AA000102926500": "AX"
+      "AA000102926600": "AY"
+      "AA000102922700": "AZ"
+
+      "AA000102905400": "BD"
+      "AA000102905500": "BE"
+      "AA000102905600": "BF"
+      "AA000102905700": "BG"
+      "AA000102905800": "BH"
+      "AA000102905900": "BI"
+      "AA000102906000": "BJ"
+      "AA000102906100": "BK"
+      "AA000102926700": "BL"
+      "AA000102926800": "BM"
+      "AA000102922800": "BN"
+
+      "AA000104316400": "BS"
+      "AA000104316500": "BT"
+      "AA000104316600": "BU"
+      "AA000104316700": "BV"
+      "AA000104316800": "BW"
+      "AA000104316900": "BX"
+      "AA000104317000": "BY"
+      "AA000104317100": "BZ"
+
+    start_row: 21
+    date_columns: ["B", "AO", "BC", "BR", ]
+    start_date: 2016-01-01
+    date_format: "yyyy-mm"
+    unit_conversion:  
+      ""
+
+  - type: building_update_latest_value
+    start_row: 21
+    date_column: "B"
+    target_row: 19
+    formula_template: "={col}{latest_row-1}/{col}{latest_row-2}-1"
+    start_column: "C"
+    end_column: "O"
+
+  - type: building_update_latest_value
+    start_row: 21
+    date_column: "B"
+    target_row: 20
+    formula_template: "={col}{latest_row-1}/{col}{latest_row-13}-1"
+    start_column: "C"
+    end_column: "O"
+
+- sheet_name: 水泥月度产量
+  source_sheet: 水泥月度产量
+  actions:
+  - type: building_write_data
+    indicators:
+      "AA000083550700": "CL"
+      "AA000084038500": "CM"
+      "AA000084053500": "CN"
+      "AA000084101000": "CU"
+      "AA000084422400": "DH"
+
+      "AA000084071000": "DW"
+      "AA000084267800": "DX"
+      "AA000084282400": "DY"
+      "AA000084299200": "EA"
+      "AA000084122100": "ED"
+      "AA000084331800": "EF"
+      "AA000084158800": "EG"
+      "AA000084177500": "EI"
+      "AA000084370300": "EJ"
+      "AA000084388600": "EK"
+      "AA000084211500": "EM"
+      "AA000084237700": "EN"
+      "AA000084250000": "EO"
+      "AA000084422500": "EP"
+      "AA000084441800": "EQ"
+      "AA000084461500": "ER"
+      "AA000084477500": "ES"
+      "AA000084512400": "EV"
+      "AA000084526600": "EW"
+      "AA000084539600": "EX"
+    start_row: 22
+    date_columns: ["B", "CK"]
+    start_date: 1997-01-01   
+
+  - type: building_write_formula
+    start_row: 22
+    start_column: "B"
+    target_columns : ["C", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN"]
+    source_columns : ["CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT", "CU", "CV", "CW", "CX", "CY", "CZ", "DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN", "DO", "DP", "DQ"]
+    target_formula: "=IFERROR(IF(OR(MONTH(B{row})=1, ISBLANK({source_column}{row-1})), {source_column}{row}/10000, ({source_column}{row}-{source_column}{row-1})/10000), \"\")"
+  - type: building_write_formula
+    start_row: 22
+    start_column: "B"
+    source_columns : ["C", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN"]
+    target_columns : ["AP", "AW", "AX", "AY", "AZ", "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BV", "BW", "BX", "BY", "BZ", "CA"]
+    target_formula: "=IF(OR(ISBLANK({source_column}{row}),ISBLANK({source_column}{row-12}),{source_column}{row-12}=0),\"\",({source_column}{row}/{source_column}{row-12}-1)*100)"
+
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["D"]
+    target_columns: ["D"]
+    target_formula: "=SUM(J{row}:N{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["E"]
+    target_columns: ["E"]
+    target_formula: "=SUM(O{row}:Q{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["F"]
+    target_columns: ["F"]
+    target_formula: "=SUM(R{row}:X{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["G"]
+    target_columns: ["G"]
+    target_formula: "=SUM(Y{row}:AD{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["H"]
+    target_columns: ["H"]
+    target_formula: "=SUM(AE{row}:AI{row})"
+    format: "0.00"
+  - type: building_write_formula
+    start_row: 20
+    start_column: "B"
+    source_columns: ["I"]
+    target_columns: ["I"]
+    target_formula: "=SUM(AJ{row}:AN{row})"
+    format: "0.00"
+
+
+  - type: building_update_latest_value
+    start_row: 22
+    date_column: "B"
+    target_row: 19
+    formula_template: "=IF({col}{latest_row}=\"\",NA(),{col}{latest_row})"
+    start_column: "C"
+    end_column: "AN"
+  - type: building_update_latest_value
+    start_row: 22
+    date_column: "B"
+    target_row: 20
+    formula_template: "=IFERROR({col}{latest_row}/{col}{latest_row-1}-1,\"\")"
+    start_column: "C"
+    end_column: "AN"
+  - type: building_update_latest_value
+    start_row: 22
+    date_column: "B"
+    target_row: 21
+    formula_template: "=IFERROR({col}{latest_row}/{col}{latest_row-12}-1,\"\")"
+    start_column: "C"
+    end_column: "AN"
