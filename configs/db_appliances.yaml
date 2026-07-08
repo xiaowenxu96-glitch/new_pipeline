@@ -1421,13 +1421,13 @@ sheets:
         data_start_row: 325
         indicators:
           "AA000280676300": "CP"
-      # 除湿机 分产品类型均价 (source无数据)
+      # 加湿器 分产品类型均价 (source无数据)
       - date_col: "CR"
         data_start_row: 325
         indicators: 
           "AA000280741000": "CS"
           "AA000280741100": "CT"
-      # 除湿机 分容积均价 (source无数据)
+      # 加湿器 分容积均价 (source无数据)
       - date_col: "CW"
         data_start_row: 325
         indicators: 
@@ -1447,11 +1447,11 @@ sheets:
           "AA000280411900": "E"
           "AA000280412000": "F"
           "AA000280412200": "G"
-          "AA000280412300": "I"
-          "AA000280412900": "L"
-          "AA000280412100": "M"
-          "AA000280391500": "N"
-      # 扫地机器人 零售量同比
+          "AA000280412300": "J"
+          "AA000280412900": "M"
+          "AA000280412100": "N"
+          "AA000280391500": "O"
+      # 机器人吸尘器 零售量同比
       - date_col: "Q"
         data_start_row: 461
         indicators:
@@ -1461,11 +1461,11 @@ sheets:
           "AA000280418700": "U"
           "AA000280418800": "V"
           "AA000280419000": "W"
-          "AA000280419100": "Y"
-          "AA000280419700": "AB"
-          "AA000280418900": "AC"
-          "AA000280391600": "AD"
-      # 扫地机器人 零售额份额
+          "AA000280419100": "Z"
+          "AA000280419700": "AC"
+          "AA000280418900": "AD"
+          "AA000280391600": "AE"
+      # 机器人吸尘器 零售额份额
       - date_col: "AG"
         data_start_row: 461
         indicators:
@@ -1475,10 +1475,10 @@ sheets:
           "AA000280415300": "AK"
           "AA000280415400": "AL"
           "AA000280415600": "AM"
-          "AA000280415700": "AO"
-          "AA000280416300": "AR"
-          "AA000280415500": "AS"
-      # 扫地机器人 零售量份额
+          "AA000280415700": "AP"
+          "AA000280416300": "AS"
+          "AA000280415500": "AT"
+      # 机器人吸尘器 零售量份额
       - date_col: "AW"
         data_start_row: 461
         indicators:
@@ -1488,34 +1488,35 @@ sheets:
           "AA000280422100": "BA"
           "AA000280422200": "BB"
           "AA000280422400": "BC"
-          "AA000280422500": "BE"
-          "AA000280423100": "BH"
-          "AA000280422300": "BI"
-      # 扫地机器人 分产品类型零售额份额 (source无数据)
-      - date_col: "BO"
+          "AA000280422500": "BF"
+          "AA000280423100": "BI"
+          "AA000280422300": "BJ"
+      # 机器人吸尘器 分产品类型零售额份额 (source无数据)
+      - date_col: "BM"
         data_start_row: 461
         indicators: []
-      # 扫地机器人 分产品类型零售量份额 (source无数据)
-      - date_col: "BT"
+      # 机器人吸尘器 分产品类型零售量份额 (source无数据)
+      - date_col: "BR"
         data_start_row: 461
         indicators: []
-      # 扫地机器人 分遥控方式零售额份额 (source无数据)
+      # 机器人吸尘器 分遥控方式零售额份额 (source无数据)
       - date_col: "BY"
         data_start_row: 461
         indicators: []
-      # 扫地机器人 分遥控方式零售量份额 (source无数据)
+      # 机器人吸尘器 分遥控方式零售量份额 (source无数据)
       - date_col: "CC"
         data_start_row: 461
         indicators: []
-      # 扫地机器人 品牌均价
-      - date_col: "CG"
+      # 机器人吸尘器 品牌均价
+      - date_col: "CE"
         data_start_row: 461
         indicators:
-          "AA000280391400": "CH"
-      # 扫地机器人 产品结构-分产品类型 (source无数据)
-      - date_col: "CX"
+          "AA000280391400": "CS"
+      # 机器人吸尘器 产品结构-分产品类型 (source无数据)
+      - date_col: "CU"
         data_start_row: 461
-        indicators: []
+        indicators: 
+
     actions:
       - type: "appliance_write_sheet"
 
