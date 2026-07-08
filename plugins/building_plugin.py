@@ -649,21 +649,55 @@ class BuildingPlugin:
 
     @staticmethod
     def update_latest_value(context, params):
-        # params:date_column, target_row, start_row
-        # 从start_row开始，寻找到date_column列中最大的日期,并得到latest_row。
-        # 在target_rowz中的C列 - FA列，写入"={col}{latest_row}""
+        """
+        通用最新值引用函数。
 
+        参数说明：
+        - date_column: str/int — 日期列，用于查找最新日期所在行。
+        - target_row: int — 公式写入的目标行号。
+        - start_row: int — 从该行开始搜索最新日期。
+        - start_column: str/int (默认 "C") — 写入公式的起始列。
+        - end_column: str/int (默认 "FA") — 写入公式的结束列。
+        - formula_template: str (默认 "={col}{latest_row}") — 公式模板，支持以下占位符：
+            {col}       — 当前列的字母（如 C、D、E...）
+            {latest_row} — 最新日期所在的行号
+            {target_row} — 目标行号（等于 target_row 参数值）
+            {row}       — 同 {target_row}
+
+        示例：
+            - 默认行为：在 C-FA 列写入 =C{latest_row}、=D{latest_row}...
+            - 自定义公式：formula_template: "=IF({col}{latest_row}=\"\",NA(),{col}{latest_row})"
+        """
         ws = context["ws"]
 
-        date_column = params["date_column"]
-        target_row = params["target_row"]
-        start_row = params["start_row"]
+        date_column = params.get("date_column", "B")
+        target_row = params.get("target_row", None)
+        start_row = params.get("start_row", 2)
+        start_column = params.get("start_column", "C")
+        end_column = params.get("end_column", "FA")
+        formula_template = params.get("formula_template", "={col}{latest_row}")
+
+        # target_row 未指定时，默认使用 start_row - 1（数据区域上方一行）
+        if target_row is None:
+            target_row = start_row - 1
 
         # 转换日期列号
         date_col = (
             column_letter_to_number(date_column)
             if isinstance(date_column, str)
             else int(date_column)
+        )
+
+        # 转换起止列号
+        start_col_num = (
+            column_letter_to_number(start_column)
+            if isinstance(start_column, str)
+            else int(start_column)
+        )
+        end_col_num = (
+            column_letter_to_number(end_column)
+            if isinstance(end_column, str)
+            else int(end_column)
         )
 
         # 从 start_row 开始，寻找 date_column 列中最大的日期，并得到 latest_row
@@ -681,6 +715,9 @@ class BuildingPlugin:
                     current_date = date_value.date() if hasattr(date_value, 'date') else date_value
                 else:
                     current_date = pd.to_datetime(date_value).date()
+                # 排除 NaT（Not a Time）—— pd.NaT 是 datetime 的子类，会绕过上述判断
+                if pd.isna(current_date):
+                    continue
             except Exception:
                 continue
 
@@ -692,16 +729,22 @@ class BuildingPlugin:
             print("    - 未找到有效日期数据，跳过 update_latest_value")
             return
 
-        # 在 target_row 中的 C列 - FA列，写入 "={col}{latest_row}"
-        C_COL = column_letter_to_number("C")
-        FA_COL = column_letter_to_number("FA")
-
-        for col in range(C_COL, FA_COL + 1):
+        # 在 target_row 中的 start_column ~ end_column，按 formula_template 写入公式
+        for col in range(start_col_num, end_col_num + 1):
             col_letter = column_number_to_letter(col)
-            formula = f"={col_letter}{latest_row}"
+            formula = formula_template
+            formula = formula.replace("{col}", col_letter)
+            # 处理 {latest_row+N} 和 {latest_row-N} 行偏移（放在 {latest_row} 之前）
+            formula = re.sub(r'\{latest_row-(\d+)\}', lambda m: str(latest_row - int(m.group(1))), formula)
+            formula = re.sub(r'\{latest_row\+(\d+)\}', lambda m: str(latest_row + int(m.group(1))), formula)
+            formula = formula.replace("{latest_row}", str(latest_row))
+            formula = formula.replace("{target_row}", str(target_row))
+            formula = formula.replace("{row}", str(target_row))
             ws.cell(row=target_row, column=col).value = formula
 
-        print(f"    - 已在第{target_row}行 C-FA列写入公式，引用最新数据行: 第{latest_row}行（日期: {max_date}）")
+        start_col_letter = column_number_to_letter(start_col_num)
+        end_col_letter = column_number_to_letter(end_col_num)
+        print(f"    - 已在第{target_row}行 {start_col_letter}-{end_col_letter}列写入公式，引用最新数据行: 第{latest_row}行（日期: {max_date}）")
 
 
 

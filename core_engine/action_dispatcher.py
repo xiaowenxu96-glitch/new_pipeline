@@ -148,6 +148,7 @@ class PipelineEngine:
             
             if sheet_name not in wb.sheetnames:
                 print(f"!! 警告：模板中不存在工作表 {sheet_name}，跳过。")
+                print(f"   模板中可用的工作表: {wb.sheetnames}")
                 continue
                 
             ws = wb[sheet_name]
