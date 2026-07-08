@@ -25,6 +25,8 @@ class AppliancePlugin:
             # Determine the write range and unmerge
             min_col = date_col_num
             max_col = date_col_num
+            if indicators is None or len(indicators) == 0:
+                continue
             for _, target_col in indicators:
                 c = col_letter_to_num(target_col)
                 min_col = min(min_col, c)
@@ -46,10 +48,23 @@ class AppliancePlugin:
             date_col = section['date_col']
             date_col_num = col_letter_to_num(date_col)
             data_start_row = section.get('data_start_row', 4)
-            indicators = section['indicators']
-
-            if isinstance(indicators, dict):
+            indicators = section.get('indicators') or {}
+            if isinstance(indicators, list):
+                # Empty list means no indicators, skip
+                if not indicators:
+                    continue
+                # Convert list of dicts/codes to (code, col) pairs
+                pairs = []
+                for item in indicators:
+                    if isinstance(item, dict):
+                        pairs.extend(item.items())
+                    else:
+                        pairs.append((item[0], item[1]) if isinstance(item, (list, tuple)) else (item, None))
+                indicators = pairs
+            elif isinstance(indicators, dict):
                 indicators = list(indicators.items())
+            else:
+                continue
 
             # 收集所有指标数据
             all_dates = set()
@@ -81,6 +96,8 @@ class AppliancePlugin:
                 cell.number_format = 'yyyy-mm-dd'
 
             # 写入各指标值
+            if indicators is None or len(indicators) == 0:
+                continue
             for aa_code, target_col in indicators:
                 pair = code_dfs.get(aa_code)
                 if pair is None:

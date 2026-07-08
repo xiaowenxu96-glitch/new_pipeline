@@ -420,7 +420,7 @@ sheets:
           "AA000278889800": "DQ"
     actions:
       - type: "appliance_write_sheet"
-sheets:
+
   # ==================== Sheet 5: 厨卫电器7 ====================
   - sheet_name: "厨卫电器7"
     source_sheet: "厨卫电器7"
@@ -530,7 +530,6 @@ sheets:
           "AA000279007300": "AA"
           "AA000279007400": "AB"
           "AA000279007100": "AC"
-    sections:
       # 燃气热水器分品牌零售额份额																					
       - date_col: "AE"
         data_start_row: 92
@@ -547,7 +546,6 @@ sheets:
           "AA000279001300": "AO"
           "AA000279001400": "AP"
           "AA000279001100": "AQ"
-    sections:
       # 燃气热水器分品牌零售量份额																					
       - date_col: "AT"
         data_start_row: 92
@@ -564,13 +562,11 @@ sheets:
           "AA000279013300": "BD"
           "AA000279013400": "BE"
           "AA000279013100": "BF"
-    sections:
       # 燃气热水器分品牌市场均价——整体																																	
       - date_col: "BI"
         data_start_row: 92
         indicators:
           "AA000356891700": "BJ"
-    sections:
       # 油烟机分品牌零售额同比增速																																											
       - date_col: "A"
         data_start_row: 178
@@ -588,7 +584,6 @@ sheets:
           "AA000278783800": "L"
           "AA000278783400": "M"
           "AA000278370500": "N"
-    sections:
       # 油烟机分品牌零售量同比增速																																											
       - date_col: "P"
         data_start_row: 178
@@ -606,7 +601,6 @@ sheets:
           "AA000278788600": "AA"
           "AA000278788200": "AB"
           "AA000278375200": "AC"
-    sections:
       # 油烟机分品牌零售额份额																																										
       - date_col: "AE"
         data_start_row: 178
@@ -623,7 +617,6 @@ sheets:
           "AA000278781400": "AO"
           "AA000278781000": "AP"
           "AA000278368900": "AQ"
-    sections:
       # 油烟机分品牌零售量份额																																										
       - date_col: "AT"
         data_start_row: 178
@@ -640,7 +633,6 @@ sheets:
           "AA000278786200": "BD"
           "AA000278785800": "BE"
           "AA000278373600": "BF"
-    sections:
       # 油烟机分产品类型零售额份额																																												
       - date_col: "BI"
         data_start_row: 178
@@ -648,7 +640,6 @@ sheets:
           "AA000278387700": "BJ"
           "AA000278387800": "BK"
           "AA000278387900": "BL"
-    sections:
       # 油烟机分规格尺寸零售量份额																																														
       - date_col: "BN"
         data_start_row: 178
@@ -656,13 +647,11 @@ sheets:
           "AA000278391300": "BO"
           "AA000278391400": "BP"
           "AA000278391500": "BQ"
-    sections:
       # 油烟机分品牌市场均价——整体																																																										
       - date_col: "BS"
         data_start_row: 178
         indicators:
           "AA000278354800": "BT"
-    sections:
       # 油烟机分规格尺寸均价																																																													
       - date_col: "CI"
         data_start_row: 178
@@ -670,7 +659,6 @@ sheets:
           "AA000278394900": "CJ"
           "AA000278395000": "CK"
           "AA000278395100": "CL"
-    sections:
       # 燃气灶分品牌零售额同比增速																																																																							
       - date_col: "A"
         data_start_row: 308
@@ -688,7 +676,6 @@ sheets:
           "AA000279406800": "L"
           "AA000279406900": "M"
           "AA000279406700": "N"
-    sections:
       # 燃气灶分品牌零售量同比增速																																																																							
       - date_col: "P"
         data_start_row: 308
@@ -706,7 +693,6 @@ sheets:
           "AA000279418800": "AA"
           "AA000279418900": "AB"
           "AA000279415700": "AC"
-    sections:
       # 燃气灶分品牌零售额份额																																																																																		
       - date_col: "AE"
         data_start_row: 308
@@ -723,7 +709,6 @@ sheets:
           "AA000279412800": "AO"
           "AA000279412900": "AP"
           "AA000279412700": "AQ"
-    sections:
       # 燃气灶分品牌零售量份额																																																																																		
       - date_col: "AT"
         data_start_row: 308
@@ -740,28 +725,23 @@ sheets:
           "AA000279424800": "BD"
           "AA000279424900": "BE"
           "AA000279424700": "BF"
-    sections:
       # 燃气灶分产品类型零售额份额																																																																																				
       - date_col: "BI"
         data_start_row: 308
         indicators:
-    sections:
       # 燃气灶分产品类型零售量份额																																																																																				
       - date_col: "BM"
         data_start_row: 308
         indicators:
-    sections:
       # 燃气灶分品牌市场均价——整体																																																																																															
       - date_col: "BQ"
         data_start_row: 308
         indicators:
           "AA000279378200": "BR"
-    sections:
       # 燃气灶分产品类型结构均价																																																																																																	
       - date_col: "CF"
         data_start_row: 308
         indicators:
-    sections:
       # 消毒柜分品牌零售额同比增速																																																																																																												
       - date_col: "A"
         data_start_row: 438
@@ -779,7 +759,6 @@ sheets:
           "AA000279504400": "L"
           "AA000279504900": "M"
           "AA000279505000": "N"
-    sections:
       # 消毒柜分品牌零售量同比增速																																																																																																												
       - date_col: "P"
         data_start_row: 438
@@ -797,7 +776,6 @@ sheets:
           "AA000279516400": "AA"
           "AA000279516900": "AB"
           "AA000279517000": "AC"
-    sections:
       # 消毒柜分品牌零售额份额																																																																																																																							
       - date_col: "AE"
         data_start_row: 438
@@ -814,7 +792,6 @@ sheets:
           "AA000279510400": "AO"
           "AA000279510900": "AP"
           "AA000279511000": "AQ"
-    sections:
       # 消毒柜分品牌零售量份额																																																																																																																							
       - date_col: "AT"
         data_start_row: 438
@@ -831,7 +808,6 @@ sheets:
           "AA000279522400": "BD"
           "AA000279522900": "BE"
           "AA000279523000": "BF"
-    sections:
       # 消毒柜分产品类型零售额份额																																																																																																																											
       - date_col: "BI"
         data_start_row: 438
@@ -840,7 +816,6 @@ sheets:
           "AA000279558800": "BK"
           "AA000279558900": "BL"
           "AA000279559000": "BM"
-    sections:
       # 消毒柜分产品类型零售量份额																																																																																																																											
       - date_col: "BO"
         data_start_row: 438
@@ -849,13 +824,11 @@ sheets:
           "AA000279575600": "BQ"
           "AA000279575700": "BR"
           "AA000279575800": "BS"
-    sections:
       # 消毒柜分品牌市场均价——整体																																																																																																																																						
       - date_col: "BV"
         data_start_row: 438
         indicators:
           "AA000279476800": "BW"
-    sections:
       # 消毒柜分产品类型均价																																																																																																																																										
       - date_col: "CK"
         data_start_row: 438
@@ -864,7 +837,6 @@ sheets:
           "AA000279561200": "CM"
           "AA000279561300": "CN"
           "AA000279561400": "CO"
-    sections:
       # 洗碗机分品牌零售额同比增速																																																																																																																																																					
       - date_col: "A"
         data_start_row: 568
@@ -882,7 +854,6 @@ sheets:
           "AA000279776900": "M"
           "AA000279778400": "N"
           "AA000279776800": "O"
-    sections:
       # 洗碗机分品牌零售量同比增速																																																																																																																																																					
       - date_col: "Q"
         data_start_row: 568
@@ -900,7 +871,6 @@ sheets:
           "AA000279788900": "AC"
           "AA000279790400": "AD"
           "AA000279788800": "AE"
-    sections:
       # 洗碗机分品牌零售额份额																																																																																																																																																																			
       - date_col: "AG"
         data_start_row: 568
@@ -917,7 +887,6 @@ sheets:
           "AA000279782900": "AR"
           "AA000279784400": "AS"
           "AA000279782800": "AT"
-    sections:
       # 洗碗机分品牌零售量份额																																																																																																																																																																			
       - date_col: "AW"
         data_start_row: 568
@@ -934,34 +903,29 @@ sheets:
           "AA000279794900": "BH"
           "AA000279796400": "BI"
           "AA000279794800": "BJ"
-    sections:
       # 洗碗机分产品类型零售额份额																																																																																																																																																																				
       - date_col: "BM"
         data_start_row: 568
         indicators:
           "AA000279818200": "BN"
           "AA000279818300": "BO"
-    sections:
       # 洗碗机分产品类型零售量份额																																																																																																																																																																				
       - date_col: "BQ"
         data_start_row: 568
         indicators:
           "AA000279828700": "BR"
           "AA000279828800": "BS"
-    sections:
       # 洗碗机分品牌市场均价——整体																																																																																																																																																																																		
       - date_col: "BV"
         data_start_row: 568
         indicators:
           "AA000279748400": "BW"
-    sections:
       # 洗碗机分产品类型均价																																																																																																																																																																																				
       - date_col: "CL"
         data_start_row: 568
         indicators:
           "AA000279819800": "CM"
           "AA000279819700": "CN"
-    sections:
       # 饮水设备分品牌零售额同比增速																																																																																																																																																																																														
       - date_col: "A"
         data_start_row: 698
@@ -977,7 +941,6 @@ sheets:
           "AA000280524000": "K"
           "AA000280522000": "L"
           "AA000280521700": "M"
-    sections:
       # 饮水设备分品牌零售量同比增速																																																																																																																																																																																														
       - date_col: "P"
         data_start_row: 698
@@ -993,7 +956,6 @@ sheets:
           "AA000280536000": "Z"
           "AA000280534000": "AA"
           "AA000280533700": "AB"
-    sections:
       # 饮水设备分品牌零售额份额																																																																																																																																																																																																									
       - date_col: "AE"
         data_start_row: 698
@@ -1009,7 +971,6 @@ sheets:
           "AA000280528000": "AO"
           "AA000280527700": "AP"
           "AA000280528300": "AR"
-    sections:
       # 饮水设备分品牌零售量份额																																																																																																																																																																																																									
       - date_col: "AU"
         data_start_row: 698
@@ -1025,29 +986,24 @@ sheets:
           "AA000280540000": "BE"
           "AA000280539700": "BF"
           "AA000280540300": "BH"
-    sections:
       # 饮水设备分产品类型零售额份额																																																																																																																																																																																																											
       - date_col: "BK"
         data_start_row: 698
         indicators:
-    sections:
       # 饮水设备分产品类型零售量份额																																																																																																																																																																																																											
       - date_col: "BO"
         data_start_row: 698
         indicators:
           "AA000280550900": "BQ"
-    sections:
       # 饮水设备分品牌市场均价——整体																																																																																																																																																																																																																							
       - date_col: "BS"
         data_start_row: 698
         indicators:
           "AA000280493500": "BT"
-    sections:
       # 饮水设备分产品类型均价																																																																																																																																																																																																																								
       - date_col: "CJ"
         data_start_row: 698
         indicators:
-    sections:
       # 集成灶分品牌零售额同比增速																																																																																																																																																																																																																																			
       - date_col: "A"
         data_start_row: 829
@@ -1063,7 +1019,6 @@ sheets:
           "AA000279681300": "K"
           "AA000279682100": "L"
           "AA000279682000": "M"
-    sections:
       # 集成灶分品牌零售量同比增速																																																																																																																																																																																																																																			
       - date_col: "O"
         data_start_row: 829
@@ -1080,7 +1035,6 @@ sheets:
           "AA000279693300": "Y"
           "AA000279694100": "Z"
           "AA000279694000": "AA"
-    sections:
       # 集成灶分品牌零售额份额																																																																																																																																																																																																																																														
       - date_col: "AC"
         data_start_row: 829
@@ -1096,7 +1050,6 @@ sheets:
           "AA000279687300": "AL"
           "AA000279688100": "AM"
           "AA000279688000": "AN"
-    sections:
       # 集成灶分品牌零售量份额																																																																																																																																																																																																																																														
       - date_col: "AQ"
         data_start_row: 829
@@ -1112,18 +1065,465 @@ sheets:
           "AA000279699300": "AZ"
           "AA000279700100": "BA"
           "AA000279700000": "BB"
-    sections:
       # 集成灶分品牌市场均价——整体																																																																																																																																																																																																																																																										
       - date_col: "BE"
         data_start_row: 829
         indicators:
           "AA000279653800": "BF"
-sheets:
-  # ==================== Sheet 5: 厨卫电器4 ====================
-  - sheet_name: "厨卫电器4"
-    source_sheet: "厨卫电器4"
+    actions:
+      - type: "appliance_write_sheet"
+    actions:
+      - type: "appliance_write_sheet"
+
+  # ==================== Sheet 7: 环境家居家电5 ====================
+  - sheet_name: "环境家居电器5"
+    source_sheet: "环境家居电器5"
     sections:
-      # 电饭煲分品牌零售额同比																						
+      # 1. 净水系统
+      # 净水系统 零售额同比 (col A-M, start R4)
+      - date_col: "A"
+        data_start_row: 5
+        indicators:
+          "AA000279309100": "B"
+          "AA000279309300": "C"
+          "AA000279309500": "D"
+          "AA000279309400": "E"
+          "AA000279309200": "F"
+          "AA000279309600": "G"
+          "AA000279310000": "H"
+          "AA000279309700": "I"
+          "AA000279309900": "J"
+          "AA000279309800": "K"
+          "AA000279281500": "L"
+          "AA000279281200": "M"
+      # 净水系统 零售量同比 (col O-AA, start R4)
+      - date_col: "O"
+        data_start_row: 5
+        indicators:
+          "AA000279321100": "P"
+          "AA000279321300": "Q"
+          "AA000279321500": "R"
+          "AA000279321400": "S"
+          "AA000279321200": "T"
+          "AA000279321600": "U"
+          "AA000279322000": "V"
+          "AA000279321700": "W"
+          "AA000279321900": "X"
+          "AA000279321800": "Y"
+          "AA000279281600": "Z"
+          "AA000279281300": "AA"
+      # 净水系统 零售额份额 (col AC-AM, start R4)
+      - date_col: "AC"
+        data_start_row: 5
+        indicators:
+          "AA000279315100": "AD"
+          "AA000279315300": "AE"
+          "AA000279315500": "AF"
+          "AA000279315400": "AG"
+          "AA000279315200": "AH"
+          "AA000279315600": "AI"
+          "AA000279316000": "AJ"
+          "AA000279315700": "AK"
+          "AA000279315900": "AL"
+          "AA000279315800": "AM"
+      # 净水系统 零售量份额 (col AP-AZ, start R4)
+      - date_col: "AQ"
+        data_start_row: 5
+        indicators:
+          "AA000279327100": "AR"
+          "AA000279327300": "AS"
+          "AA000279327500": "AT"
+          "AA000279327400": "AU"
+          "AA000279327200": "AV"
+          "AA000279327600": "AW"
+          "AA000279328000": "AX"
+          "AA000279327700": "AY"
+          "AA000279327900": "AZ"
+          "AA000279327800": "BA"
+      # 净水系统 品牌均价 (col BC-BD, start R4)
+      - date_col: "BE"
+        data_start_row: 5
+        indicators:
+          "AA000279281400": "BP"
+      # ===== 2. 空气净化器 (R89-R183, Date R91, data_start=92) =====
+      # 空气净化器 零售额同比
+      - date_col: "A"
+        data_start_row: 92
+        indicators:
+          "AA000280608600": "B"
+          "AA000280609300": "C"
+          "AA000280608700": "D"
+          "AA000280608800": "E"
+          "AA000280609100": "F"
+          "AA000280608900": "H"
+          "AA000280609700": "I"
+          "AA000280609500": "G"
+          "AA000280609000": "K"
+          "AA000280609200": "L"
+          "AA000280610200": "M"
+          "AA000280581000": "N"
+          "AA000280580700": "O"
+      # 空气净化器 零售量同比
+      - date_col: "P"
+        data_start_row: 92
+        indicators:
+          "AA000280620600": "Q"
+          "AA000280621300": "R"
+          "AA000280620700": "S"
+          "AA000280620800": "T"
+          "AA000280621100": "U"
+          "AA000280620900": "W"
+          "AA000280621700": "X"
+          "AA000280622800": "Y"
+          "AA000280621000": "Z"
+          "AA000280621900": "AA"
+          "AA000280621400": "AB"
+          "AA000280581100": "AC"
+      # 空气净化器 零售额份额
+      - date_col: "AE"
+        data_start_row: 92
+        indicators:
+          "AA000280614600": "AF"
+          "AA000280615300": "AG"
+          "AA000280614700": "AH"
+          "AA000280614800": "AI"
+          "AA000280615100": "AJ"
+          "AA000280614900": "AL"
+          "AA000280615700": "AM"
+          "AA000280615500": "AN"
+          "AA000280615000": "AO"
+          "AA000280615200": "AP"
+          "AA000280616200": "AQ"
+      # 空气净化器 零售量份额
+      - date_col: "AT"
+        data_start_row: 92
+        indicators:
+          "AA000280626600": "AU"
+          "AA000280627300": "AV"
+          "AA000280626700": "AW"
+          "AA000280626800": "AX"
+          "AA000280627100": "AY"
+          "AA000280626900": "BA"
+          "AA000280627700": "BB"
+          "AA000280628800": "BC"
+          "AA000280627000": "BD"
+          "AA000280627900": "BE"
+          "AA000280627400": "BF"
+      # 空气净化器 零售额份额-CADR (source无数据)
+      - date_col: "BF"
+        data_start_row: 92
+        indicators: 
+          "AA000280646400": "BJ"
+          "AA000280646500": "BK"
+          "AA000280646600": "BL"
+          "AA000280646700": "BM"
+          "AA000280646800": "BN"
+          "AA000280646900": "BO"
+          "AA000280647000": "BP"
+          "AA000280647100": "BQ"
+      # 空气净化器 零售量份额-CADR (source无数据)
+      - date_col: "BS"
+        data_start_row: 92
+        indicators: 
+          "AA000280654800": "BT"
+          "AA000280654900": "BU"
+          "AA000280655000": "BV"
+          "AA000280655100": "BW"
+          "AA000280655200": "BX"
+          "AA000280655300": "BY"
+          "AA000280655400": "BZ"
+          "AA000280655500": "CA"
+      # 空气净化器 品牌均价
+      - date_col: "CC"
+        data_start_row: 92
+        indicators:
+          "AA000280580900": "CD"
+      # 空气净化器 产品结构-分产品类型 (source无数据)
+      - date_col: "CN"
+        data_start_row: 92
+        indicators: 
+          "AA000280647600": "CO"
+          "AA000280647700": "CP"
+          "AA000280647800": "CQ"
+          "AA000280647900": "CR"
+          "AA000280648000": "CS"
+          "AA000280648100": "CT"
+          "AA000280648200": "CU"
+          "AA000280648300": "CV"
+      # ===== 3. 挂烫机 (R184-R321, Date R186, data_start=187) =====
+      # 挂烫机 零售额同比
+      - date_col: "A"
+        data_start_row: 187
+        indicators:
+          "AA000357026400": "B"
+          "AA000357025700": "C"
+          "AA000357026100": "D"
+          "AA000357026000": "E"
+          "AA000357025800": "F"
+          "AA000357025900": "G"
+          "AA000357027400": "J"
+          "AA000357026600": "K"
+          "AA000357005100": "L"
+      # 挂烫机 零售量同比
+      - date_col: "N"
+        data_start_row: 187
+        indicators:
+          "AA000357034200": "O"
+          "AA000357033500": "P"
+          "AA000357033900": "Q"
+          "AA000357033800": "R"
+          "AA000357033600": "S"
+          "AA000357033700": "T"
+          "AA000357035200": "W"
+          "AA000357034400": "X"
+          "AA000357005200": "Y"
+      # 挂烫机 零售额份额
+      - date_col: "AA"
+        data_start_row: 187
+        indicators:
+          "AA000357030200": "AB"
+          "AA000357029500": "AC"
+          "AA000357029900": "AD"
+          "AA000357029800": "AE"
+          "AA000357029600": "AF"
+          "AA000357029700": "AG"
+          "AA000357031300": "AJ"
+          "AA000357030400": "AK"
+      # 挂烫机 零售量份额
+      - date_col: "AN"
+        data_start_row: 187
+        indicators:
+          "AA000357038000": "AO"
+          "AA000357037300": "AP"
+          "AA000357037700": "AQ"
+          "AA000357037600": "AR"
+          "AA000357037400": "AS"
+          "AA000357037500": "AT"
+          "AA000357039100": "AW"
+          "AA000357038200": "AX"
+      # 挂烫机 分产品类型零售额份额
+      - date_col: "BA"
+        data_start_row: 187
+        indicators:
+          "AA000357053300": "BB"
+          "AA000357053400": "BC"
+          "AA000357053500": "BD"
+      # 挂烫机 分产品类型零售量份额
+      - date_col: "BF"
+        data_start_row: 187
+        indicators:
+          "AA000280782600": "BG"
+          "AA000280782700": "BH"
+          "AA000280782800": "BI"
+      # 挂烫机 品牌均价
+      - date_col: "BS"
+        data_start_row: 187
+        indicators:
+          "AA000357005000": "CD"
+      # 挂烫机市场结构均价-分产品类型			
+      - date_col: "CF"
+        data_start_row: 187
+        indicators: 
+          "AA000280776600": "CG"
+          "AA000280776700": "CH"
+          "AA000280776800": "CI"
+      # 挂烫机市场结构均价-分调节方式		
+      - date_col: "CK"
+        data_start_row: 187
+        indicators: 
+      # ===== 4. 加湿器 (R322-R457, Date R324, data_start=325) =====
+      # 加湿器 零售额同比
+      - date_col: "A"
+        data_start_row: 325
+        indicators:
+          "AA000280704200": "B"
+          "AA000280704400": "C"
+          "AA000280704300": "D"
+          "AA000280704000": "E"
+          "AA000280705200": "F"
+          "AA000280706000": "G"
+          "AA000280704700": "H"
+          "AA000280706800": "I"
+          "AA000280705500": "J"
+          "AA000280676400": "L"
+      # 加湿器 零售量同比
+      - date_col: "N"
+        data_start_row: 325
+        indicators:
+          "AA000280716200": "O"
+          "AA000280716400": "P"
+          "AA000280716300": "Q"
+          "AA000280716000": "R"
+          "AA000280717200": "S"
+          "AA000280718000": "T"
+          "AA000280716700": "U"
+          "AA000280718800": "V"
+          "AA000280717500": "W"
+          "AA000280676500": "Y"
+      # 加湿器 零售额份额
+      - date_col: "AA"
+        data_start_row: 325
+        indicators:
+          "AA000280710200": "AB"
+          "AA000280710400": "AC"
+          "AA000280710300": "AD"
+          "AA000280710000": "AE"
+          "AA000280711200": "AF"
+          "AA000280712000": "AG"
+          "AA000280710700": "AH"
+          "AA000280712800": "AI"
+          "AA000280711500": "AJ"
+      # 加湿器 零售量份额
+      - date_col: "AN"
+        data_start_row: 325
+        indicators:
+          "AA000280722200": "AO"
+          "AA000280722400": "AP"
+          "AA000280722300": "AQ"
+          "AA000280722000": "AR"
+          "AA000280723200": "AS"
+          "AA000280724000": "AT"
+          "AA000280722700": "AU"
+          "AA000280724800": "AV"
+          "AA000280723500": "AW"
+      # 加湿器 分产品类型零售额份额
+      - date_col: "BA"
+        data_start_row: 325
+        indicators:
+          "AA000280739900": "BB"
+          "AA000280740000": "BC"
+      # 加湿器 分产品类型零售量份额
+      - date_col: "BF"
+        data_start_row: 325
+        indicators:
+          "AA000280747300": "BG"
+          "AA000280747400": "BH"
+    # 加湿器零售额市场份额-分容积								
+      - date_col: "BK"
+        data_start_row: 325
+        indicators:
+          "AA000280740500": "BL"
+          "AA000280740600": "BM"
+          "AA000280740700": "BN"
+          "AA000280740800": "BO"
+          "AA000280740900": "BP"
+    # 加湿器零售量市场份额-分容积								
+      - date_col: "BU"
+        data_start_row: 325
+        indicators:
+          "AA000280747900": "BV"
+          "AA000280748000": "BW"
+          "AA000280748100": "BX"
+          "AA000280748200": "BY"
+          "AA000280748300": "BZ"
+      # 加湿器 品牌均价
+      - date_col: "CE"
+        data_start_row: 325
+        indicators:
+          "AA000280676300": "CP"
+      # 除湿机 分产品类型均价 (source无数据)
+      - date_col: "CR"
+        data_start_row: 325
+        indicators: 
+          "AA000280741000": "CS"
+          "AA000280741100": "CT"
+      # 除湿机 分容积均价 (source无数据)
+      - date_col: "CW"
+        data_start_row: 325
+        indicators: 
+          "AA000280741600": "CX"
+          "AA000280741700": "CY"
+          "AA000280741800": "CZ"
+          "AA000280741900": "DA"
+          "AA000280742000": "DB"
+      # ===== 5. 机器人吸尘器 (R458-R567, Date R460, data_start=461) =====
+      # 机器人吸尘器 零售额同比
+      - date_col: "A"
+        data_start_row: 461
+        indicators:
+          "AA000280411700": "B"
+          "AA000280411800": "C"
+          "AA000280412600": "D"
+          "AA000280411900": "E"
+          "AA000280412000": "F"
+          "AA000280412200": "G"
+          "AA000280412300": "I"
+          "AA000280412900": "L"
+          "AA000280412100": "M"
+          "AA000280391500": "N"
+      # 扫地机器人 零售量同比
+      - date_col: "Q"
+        data_start_row: 461
+        indicators:
+          "AA000280418500": "R"
+          "AA000280418600": "S"
+          "AA000280419400": "T"
+          "AA000280418700": "U"
+          "AA000280418800": "V"
+          "AA000280419000": "W"
+          "AA000280419100": "Y"
+          "AA000280419700": "AB"
+          "AA000280418900": "AC"
+          "AA000280391600": "AD"
+      # 扫地机器人 零售额份额
+      - date_col: "AG"
+        data_start_row: 461
+        indicators:
+          "AA000280415100": "AH"
+          "AA000280415200": "AI"
+          "AA000280416000": "AJ"
+          "AA000280415300": "AK"
+          "AA000280415400": "AL"
+          "AA000280415600": "AM"
+          "AA000280415700": "AO"
+          "AA000280416300": "AR"
+          "AA000280415500": "AS"
+      # 扫地机器人 零售量份额
+      - date_col: "AW"
+        data_start_row: 461
+        indicators:
+          "AA000280421900": "AX"
+          "AA000280422000": "AY"
+          "AA000280422800": "AZ"
+          "AA000280422100": "BA"
+          "AA000280422200": "BB"
+          "AA000280422400": "BC"
+          "AA000280422500": "BE"
+          "AA000280423100": "BH"
+          "AA000280422300": "BI"
+      # 扫地机器人 分产品类型零售额份额 (source无数据)
+      - date_col: "BO"
+        data_start_row: 461
+        indicators: []
+      # 扫地机器人 分产品类型零售量份额 (source无数据)
+      - date_col: "BT"
+        data_start_row: 461
+        indicators: []
+      # 扫地机器人 分遥控方式零售额份额 (source无数据)
+      - date_col: "BY"
+        data_start_row: 461
+        indicators: []
+      # 扫地机器人 分遥控方式零售量份额 (source无数据)
+      - date_col: "CC"
+        data_start_row: 461
+        indicators: []
+      # 扫地机器人 品牌均价
+      - date_col: "CG"
+        data_start_row: 461
+        indicators:
+          "AA000280391400": "CH"
+      # 扫地机器人 产品结构-分产品类型 (source无数据)
+      - date_col: "CX"
+        data_start_row: 461
+        indicators: []
+    actions:
+      - type: "appliance_write_sheet"
+
+  # ==================== Sheet 6: 厨房小家电4 ====================
+  - sheet_name: "厨房小家电4"
+    source_sheet: "厨房小家电4"
+    sections:
+      # 电饭煲分品牌零售额同比
       - date_col: "A"
         data_start_row: 6
         indicators:
@@ -1140,7 +1540,6 @@ sheets:
           "AA000280832100": "L"
           "AA000280833100": "N"
           "AA000280832200": "O"
-    sections:
       # 电饭煲分品牌零售量同比																						
       - date_col: "Q"
         data_start_row: 6
@@ -1156,7 +1555,6 @@ sheets:
           "AA000280844100": "AB"
           "AA000280845100": "AD"
           "AA000280844200": "AE"
-    sections:
       # 电饭煲分品牌零售额份额																																		
       - date_col: "AH"
         data_start_row: 6
@@ -1173,7 +1571,6 @@ sheets:
         "AA000280838100": "AR"
         "AA000280839100": "AT"
         "AA000280838200": "AU"
-    sections:
       # 电饭煲分品牌零售量份额																																		
       - date_col: "AX"
         data_start_row: 6
@@ -1190,7 +1587,6 @@ sheets:
           "AA000280850100": "BH"
           "AA000280851100": "BJ"
           "AA000280850200": "BK"
-    sections:
       # 分产品类型零售额份额																																					
       - date_col: "BN"
         data_start_row: 6
@@ -1199,7 +1595,6 @@ sheets:
           "AA000280859800": "BP"
           "AA000280859900": "BQ"
           "AA000280860000": "BR"
-    sections:
       # 分产品类型零售量份额																																					
       - date_col: "BT"
         data_start_row: 6
@@ -1208,69 +1603,240 @@ sheets:
           "AA000280863300": "BV"
           "AA000280863400": "BW"
           "AA000280863500": "BX"
-    sections:
-      # 分产品类型零售量份额																																					
-      - date_col: "BT"
+      # 电饭煲分容积零售额份额 (source无数据)
+      - date_col: "BZ"
+        data_start_row: 6
+        indicators: []
+      # 电饭煲分容积零售量份额 (source无数据)
+      - date_col: "CN"
+        data_start_row: 6
+        indicators: []
+      # 电饭煲分品牌市场均价 
+      - date_col: "CN"
         data_start_row: 6
         indicators:
+        "AA000280803900": "CO"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      # ===== 电磁炉 (R113-R221, Date=R115, data_start=116) =====
+      # 电磁炉分品牌零售额同比
+      - date_col: "A"
+        data_start_row: 116
+        indicators:
+          "AA000280884000": "B"
+          "AA000280911600": "C"
+          "AA000280911700": "D"
+          "AA000280911800": "E"
+          "AA000280912500": "F"
+          "AA000280912600": "G"
+          "AA000280911900": "H"
+          "AA000280914300": "I"
+          "AA000280914000": "J"
+          "AA000280913300": "L"
+          "AA000280912400": "M"
+      # 电磁炉分品牌零售量同比
+      - date_col: "O"
+        data_start_row: 116
+        indicators:
+          "AA000280883800": "P"
+          "AA000280923600": "Q"
+          "AA000280923700": "R"
+          "AA000280923800": "S"
+          "AA000280924500": "T"
+          "AA000280924600": "U"
+          "AA000280923900": "V"
+          "AA000280926300": "W"
+          "AA000280926000": "X"
+          "AA000280925300": "Z"
+          "AA000280924400": "AA"
+      # 电磁炉分品牌零售额份额
+      - date_col: "AD"
+        data_start_row: 116
+        indicators:
+          "AA000280917600": "AE"
+          "AA000280917700": "AF"
+          "AA000280917800": "AG"
+          "AA000280918500": "AH"
+          "AA000280918600": "AI"
+          "AA000280917900": "AJ"
+          "AA000280920300": "AK"
+          "AA000280920000": "AL"
+          "AA000280919300": "AN"
+          "AA000280918400": "AO"
+      # 电磁炉分品牌零售量份额
+      - date_col: "AR"
+        data_start_row: 116
+        indicators:
+          "AA000280929600": "AS"
+          "AA000280929700": "AT"
+          "AA000280929800": "AU"
+          "AA000280930500": "AV"
+          "AA000280930600": "AW"
+          "AA000280929900": "AX"
+          "AA000280932300": "AY"
+          "AA000280932000": "AZ"
+          "AA000280931300": "BB"
+          "AA000280930400": "BC"
+      # 电磁炉分能效等级零售额份额 (source无数据)
+      - date_col: "BF"
+        data_start_row: 116
+        indicators: []
+      # 电磁炉分能效等级零售量份额 (source无数据)
+      - date_col: "BL"
+        data_start_row: 116
+        indicators: []
+      # 电磁炉分产品类型零售额份额 (source无数据)
+      - date_col: "BR"
+        data_start_row: 116
+        indicators: []
+      # 电磁炉分产品类型零售量份额 (source无数据)
+      - date_col: "BX"
+        data_start_row: 116
+        indicators: []
+      # 电磁炉分品牌零售均价											
+      - date_col: "CD"
+        data_start_row: 116
+        indicators:
+          "AA000280883900": "CE"
+      # 电磁炉产品结构-能效 (source无数据)
+      - date_col: "CR"
+        data_start_row: 116
+        indicators: []
+      # 电磁炉产品结构-分产品 (source无数据)
+      - date_col: "CX"
+        data_start_row: 116
+        indicators: []
+      # ===== 搅拌机 (R223-R315, Date=R225, data_start=226) =====
+      # 搅拌机分品牌零售额同比
+      - date_col: "A"
+        data_start_row: 226
+        indicators:
+          "AA000281116500": "B"
+          "AA000281144200": "C"
+          "AA000281144300": "D"
+          "AA000281144600": "E"
+          "AA000281144400": "F"
+          "AA000281145200": "G"
+          "AA000281144500": "H"
+          "AA000281146100": "I"
+      # 搅拌机分品牌零售量同比
+      - date_col: "J"
+        data_start_row: 226
+        indicators:
+          "AA000281116900": "K"
+          "AA000281156200": "L"
+          "AA000281156300": "M"
+          "AA000281156600": "N"
+          "AA000281156400": "O"
+          "AA000281157200": "P"
+          "AA000281156500": "Q"
+          "AA000281116900": "R"
+      # 搅拌机分品牌零售额份额
+      - date_col: "S"
+        data_start_row: 226
+        indicators:
+          "AA000281150200": "T"
+          "AA000281150300": "U"
+          "AA000281150600": "V"
+          "AA000281150400": "W"
+          "AA000281151200": "X"
+          "AA000281150500": "Y"
+      # 搅拌机分品牌零售量份额
+      - date_col: "AB"
+        data_start_row: 226
+        indicators:
+          "AA000281162200": "AC"
+          "AA000281162300": "AD"
+          "AA000281162600": "AE"
+          "AA000281162400": "AF"
+          "AA000281163200": "AG"
+          "AA000281162500": "AH"
+      # 搅拌机分品牌市场均价
+      - date_col: "AK"
+        data_start_row: 226
+        indicators:
+          "AA000281116700": "AL"
+      # ===== 豆浆机 (R316-R424, Date=R318, data_start=319) =====
+      # 豆浆机分品牌零售额同比
+      - date_col: "A"
+        data_start_row: 319
+        indicators:
+          "AA000281198800": "B"
+          "AA000281226200": "C"
+          "AA000281226300": "D"
+          "AA000281226400": "E"
+          "AA000281227300": "F"
+          "AA000281227000": "G"
+          "AA000281226600": "H"
+          "AA000281228600": "I"
+          "AA000281228400": "K"
+          "AA000281229100": "M"
+          "AA000281229000": "N"
+          "AA000281228800": "P"
+          "AA000281198800": "Q"
+      # 豆浆机分品牌零售量同比
+      - date_col: "R"
+        data_start_row: 319
+        indicators:
+          "AA000281198900": "S"
+          "AA000281238200": "T"
+          "AA000281238300": "U"
+          "AA000281238400": "V"
+          "AA000281239300": "W"
+          "AA000281239000": "X"
+          "AA000281238600": "Y"
+          "AA000281240600": "Z"
+          "AA000281240400": "AB"
+          "AA000281241100": "AD"
+          "AA000281241000": "AE"
+          "AA000281240800": "AG"
+      # 豆浆机分品牌零售额份额
+      - date_col: "AI"
+        data_start_row: 319
+        indicators:
+          "AA000281232200": "AJ"
+          "AA000281232300": "AK"
+          "AA000281232400": "AL"
+          "AA000281233300": "AM"
+          "AA000281233000": "AN"
+          "AA000281232600": "AO"
+          "AA000281234600": "AP"
+          "AA000281234400": "AR"
+          "AA000281235100": "AT"
+          "AA000281235000": "AU"
+          "AA000281234800": "AW"
+      # 豆浆机分品牌零售量份额
+      - date_col: "AZ"
+        data_start_row: 319
+        indicators:
+          "AA000281244200": "BA"
+          "AA000281244300": "BB"
+          "AA000281244400": "BC"
+          "AA000281245300": "BD"
+          "AA000281245000": "BE"
+          "AA000281244600": "BF"
+          "AA000281246600": "BG"
+          "AA000281246400": "BI"
+          "AA000281247100": "BJ"
+          "AA000281247000": "BL"
+          "AA000281246800": "BN"
+      # 豆浆机分容积零售额份额 (source无数据)
+      - date_col: "BQ"
+        data_start_row: 319
+        indicators: []
+      # 豆浆机分容积零售量份额 (source无数据)
+      - date_col: "BY"
+        data_start_row: 319
+        indicators: []
+      # 豆浆机分品牌市场均价
+      - date_col: "CG"
+        data_start_row: 319
+        indicators:
+          "AA000281198700": "CH"
+      # 豆浆机产品结构 (source无数据)
+      - date_col: "CX"
+        data_start_row: 319
+        indicators: []
+    actions:
+      - type: "appliance_write_sheet"
