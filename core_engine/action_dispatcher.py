@@ -90,6 +90,7 @@ class PipelineEngine:
             'metal_write_sheet': MetalPlugin.metal_write_sheet,
             # 化工动作
             'chemical_write_sheet': ChemicalPlugin.chemical_write_sheet,
+            'chemical_write_formulas': ChemicalPlugin.chemical_write_formulas,
             # 农药动作
             'pesticide_write_sheet': PesticidePlugin.pesticide_write_sheet,
             'pesticide_write_summary': PesticidePlugin.pesticide_write_summary,
