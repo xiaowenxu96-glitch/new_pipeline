@@ -4,7 +4,7 @@
 lines = []
 lines.append('industry: "化工农药"')
 lines.append('source_file: "D:/SWS/new_pipeline/化工农药/化工农药20260610_【申万化工细分行业及重点公司一周概览】_20260713090615.xlsx"')
-lines.append('target_file: "D:/SWS/new_pipeline/化工农药/申万化工细分行业目标文档2.xlsx"')
+lines.append('target_file: "D:/SWS/new_pipeline/化工农药/申万化工细分行业目标文档.xlsx"')
 lines.append('output_dir: "D:/SWS/new_pipeline/化工农药/output"')
 lines.append('')
 lines.append('defaults:')
@@ -185,6 +185,37 @@ for i, idx in enumerate(ak_indices):
     slines.append(f'            formula: "=VLOOKUP(AL5,B44:AA6000,{idx},FALSE)"')
     slines.append(f'          - cell: "AM{r}"')
     slines.append(f'            formula: "=VLOOKUP(AM5,B44:AA6000,{idx},FALSE)"')
+
+# N6:U22 — 历史均价 (AVERAGEIFS per year)
+# N5=2024, O5=2023, ..., U5=2017
+# Each row uses a different data column (same as M column)
+year_col_map = {
+    "N": "YEAR(N$5)",
+    "O": "YEAR(O$5)",
+    "P": "YEAR(P$5)",
+    "Q": "YEAR(Q$5)",
+    "R": "YEAR(R$5)",
+    "S": "YEAR(S$5)",
+    "T": "YEAR(T$5)",
+    "U": "YEAR(U$5)",
+}
+for year_col_letter, year_formula in year_col_map.items():
+    for i, mc in enumerate(m_data_cols):
+        r = 6 + i
+        slines.append(f'          - cell: "{year_col_letter}{r}"')
+        slines.append(f'            formula: \'=IFERROR(AVERAGEIFS(${mc}$44:${mc}$10000,$AD$44:$AD$10000,">="&DATE({year_formula},1,1),$AD$44:$AD$10000,"<="&DATE({year_formula},12,31)),"")\'')
+
+# V6:AD22 — 历史分位数: (年历史均价 - AI) / (AJ - AI)
+# V→M, W→N, X→O, Y→P, Z→Q, AA→R, AB→S, AC→T, AD→U
+year_letter_map = {
+    "V": "M", "W": "N", "X": "O", "Y": "P",
+    "Z": "Q", "AA": "R", "AB": "S", "AC": "T", "AD": "U"
+}
+for col_letter, avg_col in year_letter_map.items():
+    for i in range(17):
+        r = 6 + i
+        slines.append(f'          - cell: "{col_letter}{r}"')
+        slines.append(f'            formula: "=({avg_col}{r}-AI{r})/(AJ{r}-AI{r})"')
 
 all_lines = lines + clines + slines
 

@@ -187,7 +187,7 @@ class PipelineEngine:
                     params = {**defaults, **action_cfg}
                     self.actions_registry[action_type](context, params)
                 else:
-                    print(f"!! 未知动作: {action_type}")
+                        print(f"!! 未知动作: {action_type}")
                     
             # 执行后处理 post_processes
             for post_cfg in sheet_config.get('post_processes', []):

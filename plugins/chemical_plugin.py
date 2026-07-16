@@ -276,6 +276,10 @@ class ChemicalPlugin:
         for i in range(formula_count):
             row = start_row + i
             cell = ws.cell(row=row, column=date_col_num)
+            # 跳过合并单元格
+            from openpyxl.cell.cell import MergedCell
+            if isinstance(cell, MergedCell):
+                continue
             if i == 0:
                 cell.value = f'={anchor_cell}'
             else:
@@ -284,6 +288,7 @@ class ChemicalPlugin:
         print(f"    - [{source_sheet}] {date_col_cfg}列写入 {formula_count} 行 [锚定: ={anchor_cell}]")
 
         # ---- 各公式列 ----
+        cols_written = []
         for col_cfg in columns:
             target_col = col_cfg['col']
             target_num = col_letter_to_num(target_col)
@@ -293,6 +298,11 @@ class ChemicalPlugin:
             for i in range(formula_count):
                 row = start_row + i
                 cell = ws.cell(row=row, column=target_num)
+
+                # 跳过合并单元格
+                from openpyxl.cell.cell import MergedCell
+                if isinstance(cell, MergedCell):
+                    continue
 
                 if lookup:
                     # VLOOKUP 模式

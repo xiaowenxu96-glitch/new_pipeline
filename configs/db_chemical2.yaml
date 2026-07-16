@@ -1,6 +1,6 @@
 industry: "化工农药"
 source_file: "D:/SWS/new_pipeline/化工农药/化工农药20260610_【申万化工细分行业及重点公司一周概览】_20260713090615.xlsx"
-target_file: "D:/SWS/new_pipeline/化工农药/申万化工细分行业目标文档2.xlsx"
+target_file: "D:/SWS/new_pipeline/化工农药/申万化工细分行业目标文档3.xlsx"
 output_dir: "D:/SWS/new_pipeline/化工农药/output"
 
 defaults:
@@ -39,6 +39,111 @@ sheets:
     actions:
       - type: "chemical_write_sheet"
       - type: "chemical_write_formulas"
+  - sheet_name: "石化衍生物"
+    source_sheet: "石化衍生物"
+    sections:
+      - date_col: "CM"
+        data_start_row: 62
+        indicators:
+          "AA000293721300": "CN"
+    sections:
+      - date_col: "CT"
+        data_start_row: 62
+        indicators:
+          "AA000293686800": "CU"
+    sections:
+      - date_col: "CW"
+        data_start_row: 62
+        indicators:
+          "AA000294806500": "CX"
+    sections:
+      - date_col: "DC"
+        data_start_row: 62
+        indicators:
+          "AA000294850600": "DD"
+    sections:
+      - date_col: "DF"
+        data_start_row: 62
+        indicators:
+          "AA000294806500": "DG"
+    sections:
+      - date_col: "DI"
+        data_start_row: 62
+        indicators:
+          "AA000294809100": "DJ"
+    sections:
+      - date_col: "DL"
+        data_start_row: 62
+        indicators:
+          "AA000294809600": "DM"
+    sections:
+      - date_col: "DO"
+        data_start_row: 62
+        indicators:
+          "AA000294808300": "DP"
+    sections:
+      - date_col: "DR"
+        data_start_row: 62
+        indicators:
+          "AA000294767300": "DS"
+    sections:
+      - date_col: "DU"
+        data_start_row: 62
+        indicators:
+          "AA000295858100": "DV"
+          "AA000295864700": "DW"
+    sections:
+      - date_col: "DX"
+        data_start_row: 62
+        indicators:
+          "AA000295872900": "DY"
+    sections:
+      - date_col: "EA"
+        data_start_row: 62
+        indicators:
+          "AA000295903300": "EB"
+    sections:
+      - date_col: "ED"
+        data_start_row: 62
+        indicators:
+          "AA000254185400": "EE"
+    sections:
+      - date_col: "EG"
+        data_start_row: 62
+        indicators:
+          "AA000295921700": "EH"
+    sections:
+      - date_col: "EJ"
+        data_start_row: 62
+        indicators:
+          "AA000295847500": "EK"
+    sections:
+      - date_col: "EM"
+        data_start_row: 62
+        indicators:
+          "AA000295942200": "EN"
+    sections:
+      - date_col: "EP"
+        data_start_row: 62
+        indicators:
+          "AA000295847200": "EQ"
+    sections:
+      - date_col: "ES"
+        data_start_row: 62
+        indicators:
+          "AA000301906900": "ET"
+    sections:
+      - date_col: "EV"
+        data_start_row: 62
+        indicators:
+          "AA000301911200": "EW"
+    sections:
+      - date_col: "FB"
+        data_start_row: 62
+        indicators:
+          "AA000295873100": "FC"
+    actions:
+      - type: "chemical_write_sheet"
         start_row: 44
         anchor_cell: "AG4"
         reference_col: "AD"
@@ -619,3 +724,581 @@ sheets:
             formula: "=VLOOKUP(AL5,B44:AA6000,26,FALSE)"
           - cell: "AM22"
             formula: "=VLOOKUP(AM5,B44:AA6000,26,FALSE)"
+          - cell: "N6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "N22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(N$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(N$5),12,31)),"")'
+          - cell: "O6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "O22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(O$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(O$5),12,31)),"")'
+          - cell: "P6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "P22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(P$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(P$5),12,31)),"")'
+          - cell: "Q6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "Q22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(Q$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(Q$5),12,31)),"")'
+          - cell: "R6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "R22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(R$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(R$5),12,31)),"")'
+          - cell: "S6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "S22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(S$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(S$5),12,31)),"")'
+          - cell: "T6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "T22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(T$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(T$5),12,31)),"")'
+          - cell: "U6"
+            formula: '=IFERROR(AVERAGEIFS($AE$44:$AE$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U7"
+            formula: '=IFERROR(AVERAGEIFS($AF$44:$AF$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U8"
+            formula: '=IFERROR(AVERAGEIFS($AH$44:$AH$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U9"
+            formula: '=IFERROR(AVERAGEIFS($AI$44:$AI$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U10"
+            formula: '=IFERROR(AVERAGEIFS($AJ$44:$AJ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U11"
+            formula: '=IFERROR(AVERAGEIFS($AL$44:$AL$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U12"
+            formula: '=IFERROR(AVERAGEIFS($AM$44:$AM$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U13"
+            formula: '=IFERROR(AVERAGEIFS($AN$44:$AN$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U14"
+            formula: '=IFERROR(AVERAGEIFS($AO$44:$AO$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U15"
+            formula: '=IFERROR(AVERAGEIFS($AS$44:$AS$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U16"
+            formula: '=IFERROR(AVERAGEIFS($AT$44:$AT$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U17"
+            formula: '=IFERROR(AVERAGEIFS($AU$44:$AU$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U18"
+            formula: '=IFERROR(AVERAGEIFS($AV$44:$AV$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U19"
+            formula: '=IFERROR(AVERAGEIFS($AZ$44:$AZ$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U20"
+            formula: '=IFERROR(AVERAGEIFS($BA$44:$BA$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U21"
+            formula: '=IFERROR(AVERAGEIFS($BB$44:$BB$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "U22"
+            formula: '=IFERROR(AVERAGEIFS($BC$44:$BC$10000,$AD$44:$AD$10000,">="&DATE(YEAR(U$5),1,1),$AD$44:$AD$10000,"<="&DATE(YEAR(U$5),12,31)),"")'
+          - cell: "V6"
+            formula: "=(M6-AI6)/(AJ6-AI6)"
+          - cell: "V7"
+            formula: "=(M7-AI7)/(AJ7-AI7)"
+          - cell: "V8"
+            formula: "=(M8-AI8)/(AJ8-AI8)"
+          - cell: "V9"
+            formula: "=(M9-AI9)/(AJ9-AI9)"
+          - cell: "V10"
+            formula: "=(M10-AI10)/(AJ10-AI10)"
+          - cell: "V11"
+            formula: "=(M11-AI11)/(AJ11-AI11)"
+          - cell: "V12"
+            formula: "=(M12-AI12)/(AJ12-AI12)"
+          - cell: "V13"
+            formula: "=(M13-AI13)/(AJ13-AI13)"
+          - cell: "V14"
+            formula: "=(M14-AI14)/(AJ14-AI14)"
+          - cell: "V15"
+            formula: "=(M15-AI15)/(AJ15-AI15)"
+          - cell: "V16"
+            formula: "=(M16-AI16)/(AJ16-AI16)"
+          - cell: "V17"
+            formula: "=(M17-AI17)/(AJ17-AI17)"
+          - cell: "V18"
+            formula: "=(M18-AI18)/(AJ18-AI18)"
+          - cell: "V19"
+            formula: "=(M19-AI19)/(AJ19-AI19)"
+          - cell: "V20"
+            formula: "=(M20-AI20)/(AJ20-AI20)"
+          - cell: "V21"
+            formula: "=(M21-AI21)/(AJ21-AI21)"
+          - cell: "V22"
+            formula: "=(M22-AI22)/(AJ22-AI22)"
+          - cell: "W6"
+            formula: "=(N6-AI6)/(AJ6-AI6)"
+          - cell: "W7"
+            formula: "=(N7-AI7)/(AJ7-AI7)"
+          - cell: "W8"
+            formula: "=(N8-AI8)/(AJ8-AI8)"
+          - cell: "W9"
+            formula: "=(N9-AI9)/(AJ9-AI9)"
+          - cell: "W10"
+            formula: "=(N10-AI10)/(AJ10-AI10)"
+          - cell: "W11"
+            formula: "=(N11-AI11)/(AJ11-AI11)"
+          - cell: "W12"
+            formula: "=(N12-AI12)/(AJ12-AI12)"
+          - cell: "W13"
+            formula: "=(N13-AI13)/(AJ13-AI13)"
+          - cell: "W14"
+            formula: "=(N14-AI14)/(AJ14-AI14)"
+          - cell: "W15"
+            formula: "=(N15-AI15)/(AJ15-AI15)"
+          - cell: "W16"
+            formula: "=(N16-AI16)/(AJ16-AI16)"
+          - cell: "W17"
+            formula: "=(N17-AI17)/(AJ17-AI17)"
+          - cell: "W18"
+            formula: "=(N18-AI18)/(AJ18-AI18)"
+          - cell: "W19"
+            formula: "=(N19-AI19)/(AJ19-AI19)"
+          - cell: "W20"
+            formula: "=(N20-AI20)/(AJ20-AI20)"
+          - cell: "W21"
+            formula: "=(N21-AI21)/(AJ21-AI21)"
+          - cell: "W22"
+            formula: "=(N22-AI22)/(AJ22-AI22)"
+          - cell: "X6"
+            formula: "=(O6-AI6)/(AJ6-AI6)"
+          - cell: "X7"
+            formula: "=(O7-AI7)/(AJ7-AI7)"
+          - cell: "X8"
+            formula: "=(O8-AI8)/(AJ8-AI8)"
+          - cell: "X9"
+            formula: "=(O9-AI9)/(AJ9-AI9)"
+          - cell: "X10"
+            formula: "=(O10-AI10)/(AJ10-AI10)"
+          - cell: "X11"
+            formula: "=(O11-AI11)/(AJ11-AI11)"
+          - cell: "X12"
+            formula: "=(O12-AI12)/(AJ12-AI12)"
+          - cell: "X13"
+            formula: "=(O13-AI13)/(AJ13-AI13)"
+          - cell: "X14"
+            formula: "=(O14-AI14)/(AJ14-AI14)"
+          - cell: "X15"
+            formula: "=(O15-AI15)/(AJ15-AI15)"
+          - cell: "X16"
+            formula: "=(O16-AI16)/(AJ16-AI16)"
+          - cell: "X17"
+            formula: "=(O17-AI17)/(AJ17-AI17)"
+          - cell: "X18"
+            formula: "=(O18-AI18)/(AJ18-AI18)"
+          - cell: "X19"
+            formula: "=(O19-AI19)/(AJ19-AI19)"
+          - cell: "X20"
+            formula: "=(O20-AI20)/(AJ20-AI20)"
+          - cell: "X21"
+            formula: "=(O21-AI21)/(AJ21-AI21)"
+          - cell: "X22"
+            formula: "=(O22-AI22)/(AJ22-AI22)"
+          - cell: "Y6"
+            formula: "=(P6-AI6)/(AJ6-AI6)"
+          - cell: "Y7"
+            formula: "=(P7-AI7)/(AJ7-AI7)"
+          - cell: "Y8"
+            formula: "=(P8-AI8)/(AJ8-AI8)"
+          - cell: "Y9"
+            formula: "=(P9-AI9)/(AJ9-AI9)"
+          - cell: "Y10"
+            formula: "=(P10-AI10)/(AJ10-AI10)"
+          - cell: "Y11"
+            formula: "=(P11-AI11)/(AJ11-AI11)"
+          - cell: "Y12"
+            formula: "=(P12-AI12)/(AJ12-AI12)"
+          - cell: "Y13"
+            formula: "=(P13-AI13)/(AJ13-AI13)"
+          - cell: "Y14"
+            formula: "=(P14-AI14)/(AJ14-AI14)"
+          - cell: "Y15"
+            formula: "=(P15-AI15)/(AJ15-AI15)"
+          - cell: "Y16"
+            formula: "=(P16-AI16)/(AJ16-AI16)"
+          - cell: "Y17"
+            formula: "=(P17-AI17)/(AJ17-AI17)"
+          - cell: "Y18"
+            formula: "=(P18-AI18)/(AJ18-AI18)"
+          - cell: "Y19"
+            formula: "=(P19-AI19)/(AJ19-AI19)"
+          - cell: "Y20"
+            formula: "=(P20-AI20)/(AJ20-AI20)"
+          - cell: "Y21"
+            formula: "=(P21-AI21)/(AJ21-AI21)"
+          - cell: "Y22"
+            formula: "=(P22-AI22)/(AJ22-AI22)"
+          - cell: "Z6"
+            formula: "=(Q6-AI6)/(AJ6-AI6)"
+          - cell: "Z7"
+            formula: "=(Q7-AI7)/(AJ7-AI7)"
+          - cell: "Z8"
+            formula: "=(Q8-AI8)/(AJ8-AI8)"
+          - cell: "Z9"
+            formula: "=(Q9-AI9)/(AJ9-AI9)"
+          - cell: "Z10"
+            formula: "=(Q10-AI10)/(AJ10-AI10)"
+          - cell: "Z11"
+            formula: "=(Q11-AI11)/(AJ11-AI11)"
+          - cell: "Z12"
+            formula: "=(Q12-AI12)/(AJ12-AI12)"
+          - cell: "Z13"
+            formula: "=(Q13-AI13)/(AJ13-AI13)"
+          - cell: "Z14"
+            formula: "=(Q14-AI14)/(AJ14-AI14)"
+          - cell: "Z15"
+            formula: "=(Q15-AI15)/(AJ15-AI15)"
+          - cell: "Z16"
+            formula: "=(Q16-AI16)/(AJ16-AI16)"
+          - cell: "Z17"
+            formula: "=(Q17-AI17)/(AJ17-AI17)"
+          - cell: "Z18"
+            formula: "=(Q18-AI18)/(AJ18-AI18)"
+          - cell: "Z19"
+            formula: "=(Q19-AI19)/(AJ19-AI19)"
+          - cell: "Z20"
+            formula: "=(Q20-AI20)/(AJ20-AI20)"
+          - cell: "Z21"
+            formula: "=(Q21-AI21)/(AJ21-AI21)"
+          - cell: "Z22"
+            formula: "=(Q22-AI22)/(AJ22-AI22)"
+          - cell: "AA6"
+            formula: "=(R6-AI6)/(AJ6-AI6)"
+          - cell: "AA7"
+            formula: "=(R7-AI7)/(AJ7-AI7)"
+          - cell: "AA8"
+            formula: "=(R8-AI8)/(AJ8-AI8)"
+          - cell: "AA9"
+            formula: "=(R9-AI9)/(AJ9-AI9)"
+          - cell: "AA10"
+            formula: "=(R10-AI10)/(AJ10-AI10)"
+          - cell: "AA11"
+            formula: "=(R11-AI11)/(AJ11-AI11)"
+          - cell: "AA12"
+            formula: "=(R12-AI12)/(AJ12-AI12)"
+          - cell: "AA13"
+            formula: "=(R13-AI13)/(AJ13-AI13)"
+          - cell: "AA14"
+            formula: "=(R14-AI14)/(AJ14-AI14)"
+          - cell: "AA15"
+            formula: "=(R15-AI15)/(AJ15-AI15)"
+          - cell: "AA16"
+            formula: "=(R16-AI16)/(AJ16-AI16)"
+          - cell: "AA17"
+            formula: "=(R17-AI17)/(AJ17-AI17)"
+          - cell: "AA18"
+            formula: "=(R18-AI18)/(AJ18-AI18)"
+          - cell: "AA19"
+            formula: "=(R19-AI19)/(AJ19-AI19)"
+          - cell: "AA20"
+            formula: "=(R20-AI20)/(AJ20-AI20)"
+          - cell: "AA21"
+            formula: "=(R21-AI21)/(AJ21-AI21)"
+          - cell: "AA22"
+            formula: "=(R22-AI22)/(AJ22-AI22)"
+          - cell: "AB6"
+            formula: "=(S6-AI6)/(AJ6-AI6)"
+          - cell: "AB7"
+            formula: "=(S7-AI7)/(AJ7-AI7)"
+          - cell: "AB8"
+            formula: "=(S8-AI8)/(AJ8-AI8)"
+          - cell: "AB9"
+            formula: "=(S9-AI9)/(AJ9-AI9)"
+          - cell: "AB10"
+            formula: "=(S10-AI10)/(AJ10-AI10)"
+          - cell: "AB11"
+            formula: "=(S11-AI11)/(AJ11-AI11)"
+          - cell: "AB12"
+            formula: "=(S12-AI12)/(AJ12-AI12)"
+          - cell: "AB13"
+            formula: "=(S13-AI13)/(AJ13-AI13)"
+          - cell: "AB14"
+            formula: "=(S14-AI14)/(AJ14-AI14)"
+          - cell: "AB15"
+            formula: "=(S15-AI15)/(AJ15-AI15)"
+          - cell: "AB16"
+            formula: "=(S16-AI16)/(AJ16-AI16)"
+          - cell: "AB17"
+            formula: "=(S17-AI17)/(AJ17-AI17)"
+          - cell: "AB18"
+            formula: "=(S18-AI18)/(AJ18-AI18)"
+          - cell: "AB19"
+            formula: "=(S19-AI19)/(AJ19-AI19)"
+          - cell: "AB20"
+            formula: "=(S20-AI20)/(AJ20-AI20)"
+          - cell: "AB21"
+            formula: "=(S21-AI21)/(AJ21-AI21)"
+          - cell: "AB22"
+            formula: "=(S22-AI22)/(AJ22-AI22)"
+          - cell: "AC6"
+            formula: "=(T6-AI6)/(AJ6-AI6)"
+          - cell: "AC7"
+            formula: "=(T7-AI7)/(AJ7-AI7)"
+          - cell: "AC8"
+            formula: "=(T8-AI8)/(AJ8-AI8)"
+          - cell: "AC9"
+            formula: "=(T9-AI9)/(AJ9-AI9)"
+          - cell: "AC10"
+            formula: "=(T10-AI10)/(AJ10-AI10)"
+          - cell: "AC11"
+            formula: "=(T11-AI11)/(AJ11-AI11)"
+          - cell: "AC12"
+            formula: "=(T12-AI12)/(AJ12-AI12)"
+          - cell: "AC13"
+            formula: "=(T13-AI13)/(AJ13-AI13)"
+          - cell: "AC14"
+            formula: "=(T14-AI14)/(AJ14-AI14)"
+          - cell: "AC15"
+            formula: "=(T15-AI15)/(AJ15-AI15)"
+          - cell: "AC16"
+            formula: "=(T16-AI16)/(AJ16-AI16)"
+          - cell: "AC17"
+            formula: "=(T17-AI17)/(AJ17-AI17)"
+          - cell: "AC18"
+            formula: "=(T18-AI18)/(AJ18-AI18)"
+          - cell: "AC19"
+            formula: "=(T19-AI19)/(AJ19-AI19)"
+          - cell: "AC20"
+            formula: "=(T20-AI20)/(AJ20-AI20)"
+          - cell: "AC21"
+            formula: "=(T21-AI21)/(AJ21-AI21)"
+          - cell: "AC22"
+            formula: "=(T22-AI22)/(AJ22-AI22)"
+          - cell: "AD6"
+            formula: "=(U6-AI6)/(AJ6-AI6)"
+          - cell: "AD7"
+            formula: "=(U7-AI7)/(AJ7-AI7)"
+          - cell: "AD8"
+            formula: "=(U8-AI8)/(AJ8-AI8)"
+          - cell: "AD9"
+            formula: "=(U9-AI9)/(AJ9-AI9)"
+          - cell: "AD10"
+            formula: "=(U10-AI10)/(AJ10-AI10)"
+          - cell: "AD11"
+            formula: "=(U11-AI11)/(AJ11-AI11)"
+          - cell: "AD12"
+            formula: "=(U12-AI12)/(AJ12-AI12)"
+          - cell: "AD13"
+            formula: "=(U13-AI13)/(AJ13-AI13)"
+          - cell: "AD14"
+            formula: "=(U14-AI14)/(AJ14-AI14)"
+          - cell: "AD15"
+            formula: "=(U15-AI15)/(AJ15-AI15)"
+          - cell: "AD16"
+            formula: "=(U16-AI16)/(AJ16-AI16)"
+          - cell: "AD17"
+            formula: "=(U17-AI17)/(AJ17-AI17)"
+          - cell: "AD18"
+            formula: "=(U18-AI18)/(AJ18-AI18)"
+          - cell: "AD19"
+            formula: "=(U19-AI19)/(AJ19-AI19)"
+          - cell: "AD20"
+            formula: "=(U20-AI20)/(AJ20-AI20)"
+          - cell: "AD21"
+            formula: "=(U21-AI21)/(AJ21-AI21)"
+          - cell: "AD22"
+            formula: "=(U22-AI22)/(AJ22-AI22)"
