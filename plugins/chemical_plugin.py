@@ -39,7 +39,7 @@ class ChemicalPlugin:
             code_dfs[aa_code] = (df, value_col)
             all_dates.update(df['日期'])
 
-        # 即便没有指标，也把日期列清一下（用户可能后续手动填）
+        # 即便没有指标，也把日期列清一下
         if not indicators or not code_dfs:
             return 0, 0
 
@@ -79,7 +79,7 @@ class ChemicalPlugin:
         source_sheet = sheet_config['source_sheet']
         start_row = sheet_config.get('data_start_row') or sheet_config.get('start_row') or defaults.get('start_row', 44)
 
-        # ---- sections 模式（推荐：每个 section 独立指定 date_col）----
+        # ---- sections 模式
         sections = sheet_config.get('sections')
         if sections:
             total_rows = 0
