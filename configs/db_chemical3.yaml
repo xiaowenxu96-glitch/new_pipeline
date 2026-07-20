@@ -1,0 +1,310 @@
+industry: "化工农药"
+source_file: "D:/SWS/new_pipeline/化工农药/化工农药20260610_【申万化工细分行业及重点公司一周概览】_20260713090615.xlsx"
+target_file: "D:/SWS/new_pipeline/化工农药/申万化工细分行业目标文档.xlsx"
+output_dir: "D:/SWS/new_pipeline/化工农药/output"
+
+defaults:
+  start_date: "2016-01-03"
+  date_format: "yyyy/mm/dd"
+  start_row: 44
+
+sheets:
+  # ============================================================
+  # 原油与成品油
+  # ============================================================
+  - sheet_name: "原油与成品油"
+    source_sheet: "原油与成品油"
+    sections:
+      - date_col: "AD"
+        data_start_row: 44
+        indicators:
+          "AA000301905700": "AE"
+          "AA000302354000": "AF"
+      - date_col: "AG"
+        data_start_row: 44
+        indicators:
+          "AA000293892000": "AL"
+          "AA000293806300": "AM"
+      - date_col: "AK"
+        data_start_row: 44
+        indicators:
+          "AA000293860500": "AN"
+      - date_col: "AR"
+        data_start_row: 44
+        indicators:
+          "AA000293757300": "AO"
+      - date_col: "AY"
+        data_start_row: 44
+        indicators: {}
+    actions:
+      - type: "chemical_write_sheet"
+  # ============================================================
+  #  石化衍生物
+  # ============================================================
+  - sheet_name: "石化衍生物"
+    source_sheet: "石化衍生物"
+    sections:
+      - date_col: "CM"
+        data_start_row: 62
+        indicators:
+          "AA000293721300": "CN"
+      - date_col: "CT"
+        data_start_row: 62
+        indicators:
+          "AA000293686800": "CU"
+      - date_col: "CW"
+        data_start_row: 62
+        indicators:
+          "AA000294806500": "CX"
+      - date_col: "DC"
+        data_start_row: 62
+        indicators:
+          "AA000294850600": "DD"
+      - date_col: "DF"
+        data_start_row: 62
+        indicators:
+          "AA000294806500": "DG"
+      - date_col: "DI"
+        data_start_row: 62
+        indicators:
+          "AA000294809100": "DJ"
+      - date_col: "DL"
+        data_start_row: 62
+        indicators:
+          "AA000294809600": "DM"
+      - date_col: "DO"
+        data_start_row: 62
+        indicators:
+          "AA000294808300": "DP"
+      - date_col: "DR"
+        data_start_row: 62
+        indicators:
+          "AA000294767300": "DS"
+      - date_col: "DU"
+        data_start_row: 62
+        indicators:
+          "AA000295858100": "DV"
+          "AA000295864700": "DW"
+      - date_col: "DX"
+        data_start_row: 62
+        indicators:
+          "AA000295872900": "DY"
+      - date_col: "EA"
+        data_start_row: 62
+        indicators:
+          "AA000295903300": "EB"
+      - date_col: "ED"
+        data_start_row: 62
+        indicators:
+          "AA000254185400": "EE"
+      - date_col: "EG"
+        data_start_row: 62
+        indicators:
+          "AA000295921700": "EH"
+      - date_col: "EJ"
+        data_start_row: 62
+        indicators:
+          "AA000295847500": "EK"
+      - date_col: "EM"
+        data_start_row: 62
+        indicators:
+          "AA000295942200": "EN"
+      - date_col: "EP"
+        data_start_row: 62
+        indicators:
+          "AA000295847200": "EQ"
+      - date_col: "ES"
+        data_start_row: 62
+        indicators:
+          "AA000301906900": "ET"
+      - date_col: "EV"
+        data_start_row: 62
+        indicators:
+          "AA000301911200": "EW"
+      - date_col: "FB"
+        data_start_row: 62
+        indicators:
+          "AA000295873100": "FC"
+    actions:
+      - type: "chemical_write_sheet"
+  # ============================================================
+  #  石化烯烃与芳烃
+  # ============================================================
+  - sheet_name: "石化烯烃与芳烃"
+    source_sheet: "石化烯烃与芳烃"
+    sections:
+      - date_col: "AM"
+        data_start_row: 46
+        indicators:
+          "AA000294728600": "AN"
+          "AA000294736100": "AO"
+          "AA000294741000": "AP"
+      - date_col: "BC"
+        data_start_row: 46
+        indicators:
+          "AA000294641500": "BD"
+          "AA000294209900": "BE"
+      - date_col: "BI"
+        data_start_row: 46
+        indicators:
+          "AA000294348800": "BJ"
+          "AA000294399800": "BK"
+          "AA000294285100": "BL"
+      - date_col: "BT"
+        data_start_row: 46
+        indicators:
+          "AA000294734300": "BU"
+    actions:
+      - type: "chemical_write_sheet"
+  # ============================================================
+  #  聚氨酯
+  # ============================================================
+  - sheet_name: "聚氨酯"
+    source_sheet: "聚氨酯"
+    sections:
+      - date_col: "BZ"
+        data_start_row: 53
+        indicators:
+          "AA000295242600": "CA"
+      - date_col: "CI"
+        data_start_row: 53
+        indicators:
+          "AA000294842200": "CJ"
+          "AA000294754300": "CK"
+      - date_col: "CL"
+        data_start_row: 53
+        indicators:
+          "AA000295234700": "CM"
+      - date_col: "CR"
+        data_start_row: 53
+        indicators:
+          "AA000295237300": "CS"
+          "AA000357671300": "CT"
+      - date_col: "CX"
+        data_start_row: 53
+        indicators:
+          "AA000295246300": "CZ"
+      - date_col: "DA"
+        data_start_row: 53
+        indicators:
+          "AA000295246300": "DB"
+      - date_col: "DD"
+        data_start_row: 53
+        indicators:
+          "AA000294863300": "DE"
+      - date_col: "DJ"
+        data_start_row: 53
+        indicators:
+          "AA000254185200": "DK"
+      - date_col: "DP"
+        data_start_row: 53
+        indicators:
+          "AA000296131900": "DQ"
+      - date_col: "DS"
+        data_start_row: 53
+        indicators:
+          "AA000295843700": "DT"
+      - date_col: "DV"
+        data_start_row: 53
+        indicators:
+          "AA000296113300": "DW"
+      - date_col: "DY"
+        data_start_row: 53
+        indicators:
+          "AA000295843800": "DZ"
+      - date_col: "EB"
+        data_start_row: 53
+        indicators:
+          "AA000254184800": "EC"
+    actions:
+      - type: "chemical_write_sheet"
+  # ============================================================
+  #  农药
+  # ============================================================
+  - sheet_name: "农药"
+    source_sheet: "农药"
+    sections:
+      - date_col: "DF"
+        data_start_row: 62
+        indicators:
+          "AA000301672300": "DG"
+      - date_col: "DI"
+        data_start_row: 62
+        indicators:
+          "AA000355417000": "DJ"
+      - date_col: "DL"
+        data_start_row: 62
+        indicators:
+          "AA000303609500": "DM"
+      - date_col: "DO"
+        data_start_row: 62
+        indicators:
+          "AA000301674300": "DP"
+      - date_col: "DR"
+        data_start_row: 62
+        indicators:
+          "AA000301679200": "DS"
+          "AA000301680100": "DT"
+      - date_col: "DU"
+        data_start_row: 62
+        indicators:
+          "AA000357754000": "DV"
+          "AA000301681400": "DW"
+      - date_col: "DX"
+        data_start_row: 62
+        indicators:
+          "AA000301679100": "DY"
+          "AA000357751000": "DZ"
+      - date_col: "EA"
+        data_start_row: 62
+        indicators:
+          "AA000301679300": "EB"
+      - date_col: "ED"
+        data_start_row: 62
+        indicators:
+          "AA000301687000": "EE"
+      - date_col: "EG"
+        data_start_row: 62
+        indicators:
+          "AA000301687200": "EH"
+      - date_col: "EJ"
+        data_start_row: 62
+        indicators:
+          "AA000301687700": "EK"
+      - date_col: "EP"
+        data_start_row: 62
+        indicators:
+          "AA000301688200": "EQ"
+      - date_col: "ES"
+        data_start_row: 62
+        indicators:
+          "AA000357738000": "ET"
+      - date_col: "FB"
+        data_start_row: 62
+        indicators:
+          "AA000301693100": "FC"
+          "AA000301693300": "FD"
+          "AA000301693400": "FE"
+      - date_col: "FF"
+        data_start_row: 62
+        indicators:
+          "AA000301672300": "FG"
+      - date_col: "FI"
+        data_start_row: 62
+        indicators:
+          "AA000301679200": "FJ"
+      - date_col: "FL"
+        data_start_row: 62
+        indicators:
+          "AA000301680100": "FM"
+      - date_col: "FO"
+        data_start_row: 62
+        indicators:
+          "AA000357754000": "FP"
+      - date_col: "FR"
+        data_start_row: 62
+        indicators:
+          "AA000301681400": "FS"
+    actions:
+      - type: "chemical_write_sheet"
+

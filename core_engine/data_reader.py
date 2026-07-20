@@ -65,8 +65,11 @@ class DataReader:
             # 查找指标代码行
             indicator_code_row_index = None
             for i, row in metadata_rows.iterrows():
-                if row.iloc[0] == '指标代码':
-                    indicator_code_row_index = i
+                for col_idx in range(len(row)):
+                    if row.iloc[col_idx] == '指标代码':
+                        indicator_code_row_index = i
+                        break
+                if indicator_code_row_index is not None:
                     break
                     
             if indicator_code_row_index is None:

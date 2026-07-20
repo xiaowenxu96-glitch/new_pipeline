@@ -7,6 +7,6 @@ sys.path.append(BASE_DIR)
 from core_engine.action_dispatcher import PipelineEngine
 
 if __name__ == "__main__":
-    config_path = os.path.join(BASE_DIR, "configs", "db_chemical2.yaml")
+    config_path = os.path.join(BASE_DIR, "configs", "db_chemical3.yaml")
     engine = PipelineEngine(config_path)
     engine.run()
