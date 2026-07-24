@@ -1,14 +1,28 @@
 import pandas as pd
 from openpyxl.utils import get_column_letter, column_index_from_string
-import openpyxl
 from datetime import datetime, timedelta
 from zhdate import ZhDate
+
 
 class MacroPlugin:
     
     @staticmethod
     def macro_write_indicator_group(context, config):
-        """写入一组指标及参考日期列"""
+        """
+        功能说明：
+            写入一组指标数据及参考日期列到目标工作表。
+            以第一个指标的日期为基准日期列，后续指标按相同行数依次写入相邻列。
+            支持数据排序和日期格式自定义。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
+            config: dict — 宏指标配置，包含：
+                - indicators: list[str] — 指标名称列表。
+                - start_row: int — 数据写入的起始行号。
+                - start_col: str | int — 数据写入的起始列（列字母或列号）。
+                - date_format: str (默认 'yyyy-mm-dd') — 日期列的数字格式。
+                - ascending: bool (默认 False) — 日期排序方式，True 为升序，False 为降序。
+        """
         ws = context['ws']
         reader = context['data_reader']
         source_sheet = context['sheet_config']['source_sheet']
@@ -44,7 +58,6 @@ class MacroPlugin:
             else:
                 target_col = start_col_num + i + 1
                 for row_idx, row in df.iterrows():
-                    # 这里为了简化，假设日期是对齐的。旧逻辑里也做了检查。
                     target_row = start_row + row_idx
                     val = row[df.columns[-1]]
                     if val == 0: val = None
@@ -53,7 +66,19 @@ class MacroPlugin:
 
     @staticmethod
     def macro_create_pivot_table(context, config):
-        """创建基础透视表"""
+        """
+        功能说明：
+            创建基础透视表，将日期数据按"月-日"为行、年份为列进行透视。
+            自动处理闰年 2月29日 到 2月28日 的映射，并支持限定最近 N 年的数据。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
+            config: dict — 透视表配置，包含：
+                - indicator_code: str — 指标代码。
+                - start_row: int — 透视表写入的起始行号。
+                - start_col: str | int — 透视表写入的起始列（列字母或列号）。
+                - years: int (默认 7) — 包含的最近年份数量。
+        """
         ws = context['ws']
         reader = context['data_reader']
         source_sheet = context['sheet_config']['source_sheet']
@@ -111,6 +136,17 @@ class MacroPlugin:
     # ==================================
     @staticmethod
     def add_global_spring_festival_tags(df: pd.DataFrame):
+        """
+        功能说明：
+            为包含农历日期和星期的 DataFrame 添加"春节标签"列。
+            根据农历"正月初一"定位春节日期，计算每一行相对于春节的周数位置，
+            生成"节前N周"、"春节当周"、"节后N周"等标签。
+
+        params:
+            df: pd.DataFrame — 必须包含以下列：
+                - 农历: str — 农历日期字符串（如"正月初一"）。
+                - 星期: str — 英文星期名称（如"Monday"）。
+        """
         weekday_mapping = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
         df["春节标签"] = ""
         anchor_weeks = []
@@ -146,6 +182,16 @@ class MacroPlugin:
 
     @staticmethod
     def generate_lunar_table_with_tags(start_year, end_year):
+        """
+        功能说明：
+            生成指定年份范围内的农历日期对照表，并添加春节标签。
+            遍历每一天，使用 ZhDate 库将阳历转换为农历日期，
+            然后调用 add_global_spring_festival_tags 生成春节标签。
+
+        params:
+            start_year: int — 起始年份。
+            end_year: int — 结束年份（包含）。
+        """
         all_dates = []
         for year in range(start_year, end_year + 1):
             dt = datetime(year, 1, 1)
@@ -168,7 +214,22 @@ class MacroPlugin:
 
     @staticmethod
     def macro_create_festival_pivot(context, config):
-        """生成春节标签的透视表"""
+        """
+        功能说明：
+            生成基于春节标签的透视表。
+            从工作表中读取日期和数值数据，结合农历日期计算春节相对周数，
+            按"春节标签"为行、年份为列生成透视表，用于分析春节前后数据变化趋势。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws。
+            config: dict — 春节透视表配置，包含：
+                - base_col: str | int — 日期列（列字母或列号）。
+                - value_col: str | int — 数值列（列字母或列号）。
+                - target_start_col: str | int — 透视表写入的起始列。
+                - target_start_row: int — 透视表写入的起始行。
+                - recent_years: int (默认 7) — 包含的最近年份数量。
+                - start_row: int (默认 10) — 数据读取的起始行号。
+        """
         ws = context['ws']
         base_col = config['base_col']
         value_col = config['value_col']
@@ -223,6 +284,17 @@ class MacroPlugin:
 
     @staticmethod
     def build_festival_pivot_table(df_table, recent_years=7, value_col='数值'):
+        """
+        功能说明：
+            构建春节标签透视表的核心逻辑。
+            将带有春节标签的日期数据按标签和年份进行透视，
+            处理跨年数据（10月之后的标签取前一年同标签数据）。
+
+        params:
+            df_table: pd.DataFrame — 包含日期、春节标签、数值的 DataFrame。
+            recent_years: int (默认 7) — 包含的最近年份数量。
+            value_col: str (默认 '数值') — 数值列名称。
+        """
         df_table = df_table.copy()
         df_table['春节标签'] = df_table['春节标签'].str.strip()
         df_table['年份'] = pd.to_datetime(df_table['日期']).dt.year.astype(int)
@@ -287,6 +359,16 @@ class MacroPlugin:
     # ==================================
     @staticmethod
     def generate_chuxi_relative_table(start_year, end_year):
+        """
+        功能说明：
+            生成指定年份范围内的除夕相对天数对照表。
+            计算每一天相对于当年除夕（农历腊月三十或廿九）的天数差，
+            生成"t-N"（除夕前N天）、"t"（除夕当天）、"t+N"（除夕后N天）等标签。
+
+        params:
+            start_year: int — 起始年份。
+            end_year: int — 结束年份（包含）。
+        """
         all_rows = []
         for year in range(start_year, end_year + 1):
             try:
@@ -313,6 +395,21 @@ class MacroPlugin:
 
     @staticmethod
     def macro_create_chuxi_pivot(context, config):
+        """
+        功能说明：
+            生成基于除夕相对天数的透视表。
+            从工作表中读取日期和数值数据，结合农历日期计算除夕相对天数，
+            按"除夕相对天数"为行、年份为列生成透视表。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws。
+            config: dict — 除夕透视表配置，包含：
+                - date_col: str | int — 日期列（列字母或列号）。
+                - value_col: str | int — 数值列（列字母或列号）。
+                - target_start_col: str | int — 透视表写入的起始列。
+                - target_start_row: int — 透视表写入的起始行。
+                - start_row: int (默认 11) — 数据读取的起始行号。
+        """
         ws = context['ws']
         date_col = config['date_col']
         value_col = config['value_col']
@@ -371,6 +468,23 @@ class MacroPlugin:
 
     @staticmethod
     def macro_create_weekly_pivot(context, config):
+        """
+        功能说明：
+            生成按 ISO 周统计的数据透视表。
+            从工作表中读取日期和数值数据，提取 ISO 年份和周数，
+            按"周数"为行、年份为列生成透视表。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws。
+            config: dict — 周度透视表配置，包含：
+                - date_col: str | int — 日期列（列字母或列号）。
+                - value_col: str | int — 数值列（列字母或列号）。
+                - target_start_col: str | int — 透视表写入的起始列。
+                - target_start_row: int — 透视表写入的起始行。
+                - start_year: int (默认 2015) — 数据起始年份。
+                - end_year: int (默认 2024) — 数据结束年份。
+                - start_row: int (默认 2) — 数据读取的起始行号。
+        """
         ws = context['ws']
         date_col = config['date_col']
         value_col = config['value_col']
@@ -418,6 +532,21 @@ class MacroPlugin:
 
     @staticmethod
     def macro_create_yearly_date_scaffold(context, config):
+        """
+        功能说明：
+            生成按年分列的日期脚手架（日期框架）。
+            为指定年份范围内的每一天生成日期行，每年占用两列（一列日期，一列预留数值），
+            用于后续填充数据。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws。
+            config: dict — 日期脚手架配置，包含：
+                - start_year: int — 起始年份。
+                - end_year: int — 结束年份（包含）。
+                - pivot_start_col: str | int — 透视表写入的起始列。
+                - pivot_start_row: int — 透视表写入的起始行。
+                - row: int — 年份标题所在行号。
+        """
         ws = context['ws']
         start_year = config['start_year']
         end_year = config['end_year']
@@ -442,6 +571,18 @@ class MacroPlugin:
 
     @staticmethod
     def write_df_to_ws(ws, df, start_col, start_row, header=True):
+        """
+        功能说明：
+            将 DataFrame 写入工作表的指定位置。
+            支持写入表头和数据行，自动将 0 值替换为 None（空单元格）。
+
+        params:
+            ws: openpyxl.Worksheet — 目标工作表对象。
+            df: pd.DataFrame — 要写入的 DataFrame。
+            start_col: str | int — 写入的起始列（列字母或列号）。
+            start_row: int — 写入的起始行号。
+            header: bool (默认 True) — 是否写入表头行。
+        """
         col_num = column_index_from_string(start_col) if isinstance(start_col, str) else start_col
         df = df.replace(0, None)
         

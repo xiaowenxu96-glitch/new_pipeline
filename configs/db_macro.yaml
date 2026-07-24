@@ -1,7 +1,7 @@
 industry: 宏观
-source_file: D:/【交付审核】/_导出验收/Excel数据验收/宏观/宏观20250513_【申万宏源宏观】中观景气跟踪数据库_20250522120540.xlsx
-target_file: D:/【交付审核】/_导出验收/Excel数据验收/宏观/宏观目标文档.xlsx
-output_dir: D:/【交付审核】/_导出验收/new_pipeline/output_files
+source_file: D:/SWS/new_pipeline/宏观/宏观20260723_【申万宏源宏观】中观景气跟踪数据库_20260724104628.xlsx
+target_file: D:/SWS/new_pipeline/宏观/宏观目标文档.xlsx
+output_dir: D:/SWS/new_pipeline/宏观/output_files
 defaults:
   start_date: '2014-01-01'
   date_format: yyyy-mm-dd
@@ -11,9 +11,9 @@ sheets:
   actions:
   - type: write_indicator_group
     indicators:
-    - AA000061778900
-    start_row: 10
-    start_col: I
+    - AF000000156100
+    start_row: 11
+    start_col: B
   - type: create_pivot_table
     indicator_code: AA000061778900
     start_row: 9
