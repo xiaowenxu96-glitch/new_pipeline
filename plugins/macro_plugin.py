@@ -137,11 +137,11 @@ class MacroPlugin:
                 dt = row_entry['date']
                 val = row_entry['values'][val_col]
                 key = dt.strftime('%Y-%m')
-                monthly.setdefault(key, []).append(val if val else None)
+                monthly.setdefault(key, []).append(val if pd.notna(val) else None)
 
             monthly_avg = {}
             for key, vals in monthly.items():
-                valid = [v for v in vals if v is not None]
+                valid = [v for v in vals if pd.notna(v)]
                 monthly_avg[key] = sum(valid) / len(valid) if valid else None
 
             sorted_months = sorted(monthly_avg.keys())
@@ -170,14 +170,14 @@ class MacroPlugin:
 
                 # 同比 = (今年值 - 去年同日值) / 去年同日值
                 prev_val = last_year_val.get((year, md))
-                if curr_val and prev_val and prev_val != 0:
+                if pd.notna(curr_val) and pd.notna(prev_val) and prev_val != 0:
                     yoy = (curr_val - prev_val) / prev_val
                     ws.cell(row=row_num, column=yoy_col, value=yoy).number_format = '0.00%'
 
                 # 环比 = (本月日均值 - 上月日均值) / 上月日均值
                 curr_month_avg = monthly_avg.get(month_key)
                 prev_month_avg_val = prev_month_avg.get(month_key)
-                if curr_month_avg and prev_month_avg_val and prev_month_avg_val != 0:
+                if pd.notna(curr_month_avg) and pd.notna(prev_month_avg_val) and prev_month_avg_val != 0:
                     mom = (curr_month_avg - prev_month_avg_val) / prev_month_avg_val
                     ws.cell(row=row_num, column=mom_col, value=mom).number_format = '0.00%'
 

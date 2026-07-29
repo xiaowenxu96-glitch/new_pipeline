@@ -1241,21 +1241,6 @@ sheets:
     target_start_col: AF
     target_start_row: 7
     recent_years: 5
-- sheet_name: 3.3 商圈、外卖指数
-  source_sheet: 3.3 商圈、外卖指数
-  actions:
-  - type: write_indicator_group
-    indicators:
-- sheet_name: 3.3 机票价格
-  source_sheet: 3.3 机票价格
-  actions:
-  - type: write_indicator_group
-    indicators:
-- sheet_name: 3.4 出口（海运）
-  source_sheet: 3.4 出口（海运）
-  actions:
-  - type: write_indicator_group
-    indicators:
 - sheet_name: 3.4 出口（集装箱吞吐）
   source_sheet: 3.4 出口（集装箱吞吐）
   actions:
@@ -1330,8 +1315,8 @@ sheets:
     target_start_col: EH
     target_start_row: 10
     recent_years: 5
-- sheet_name: 3.4 出口（其他国家）
-  source_sheet: 3.4 出口（其他国家）
+- sheet_name: "3.4 出口（其他国家) "
+  source_sheet: "3.4 出口（其他国家) " 
   actions:
   - type: write_indicator_group
     indicators:
@@ -1923,17 +1908,17 @@ sheets:
     start_row: 9
     start_col: BE
   - type: calc_indicator_yoy_mom
-  date_col: BE
-  value_cols:
-  - BF
-  - BG
-  yoy_cols:
-  - BI
-  - BJ
-  mom_cols:
-  - BL
-  - BM
-  start_row: 9
+    date_col: BE          
+    value_cols:           
+    - BF
+    - BG
+    yoy_cols:             
+    - BI
+    - BJ
+    mom_cols:             
+    - BL
+    - BM
+    start_row: 9
 - sheet_name: 5.2 五金机电价格指数(周度)
   source_sheet: 5.2 五金机电价格指数(周度)
   actions:
@@ -1972,7 +1957,7 @@ sheets:
     start_row: 5
     start_col: AW
     years: 7
-- sheet_name: sheet3
+- sheet_name: Sheet3
   source_sheet: sheet3
   actions:
   - type: write_indicator_group
