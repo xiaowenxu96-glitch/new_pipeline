@@ -5,7 +5,7 @@ from zhdate import ZhDate
 
 
 class MacroPlugin:
-    
+
     @staticmethod
     def macro_write_indicator_group(context, config):
         """
@@ -22,6 +22,10 @@ class MacroPlugin:
                 - start_col: str | int — 数据写入的起始列（列字母或列号）。
                 - date_format: str (默认 'yyyy-mm-dd') — 日期列的数字格式。
                 - ascending: bool (默认 False) — 日期排序方式，True 为升序，False 为降序。
+                - gap_cols: int (默认 0) — 日期列与第一个指标列之间的空列数。
+                - gaps: list[int] (可选) — 每个指标后面的空列数，长度 = 指标数 - 1。
+                        [2, 0] 表示指标1后空2列，指标2后不空。
+                        不填则所有指标之间紧挨着。
         """
         ws = context['ws']
         reader = context['data_reader']
@@ -31,38 +35,214 @@ class MacroPlugin:
         start_col = config['start_col']
         date_format = config.get('date_format', 'yyyy-mm-dd')
         ascending = config.get('ascending', False)
-        
+        gap_cols = config.get('gap_cols', 0)
+        gaps = config.get('gaps', None)
+
         start_col_num = column_index_from_string(start_col) if isinstance(start_col, str) else start_col
-        
-        reference_dates = None
-        
+
         from core_engine.data_processor import DataProcessor
         processor = DataProcessor(reader)
-        
+
+        # 预计算每个指标所在的列号
+        col_positions = [start_col_num + 1 + gap_cols]  # 第一个指标列
+        if gaps:
+            for g in gaps:
+                col_positions.append(col_positions[-1] + 1 + g)
+        else:
+            for i in range(1, len(indicators)):
+                col_positions.append(start_col_num + 1 + gap_cols + i)
+
         for i, indicator in enumerate(indicators):
             indicator_data = reader.read_indicator_data(source_sheet, indicator)
             sorted_data = processor.sort_by_date(indicator_data, ascending=ascending)
             df = sorted_data["data"]
-            
+
+            target_col = col_positions[i]
+
             if i == 0:
-                reference_dates = df['日期'].tolist()
                 for row_idx, row in df.iterrows():
                     target_row = start_row + row_idx
                     date_val = row['日期']
                     val = row[df.columns[-1]]
-                    if val == 0: val = None
-                    
+                    if val == 0:
+                        val = None
                     ws.cell(row=target_row, column=start_col_num, value=date_val).number_format = date_format
-                    ws.cell(row=target_row, column=start_col_num + 1, value=val)
+                    ws.cell(row=target_row, column=target_col, value=val)
                 print(f"[{ws.title}] 写入参考日期及指标1: {indicator} 到 {start_col}")
             else:
-                target_col = start_col_num + i + 1
                 for row_idx, row in df.iterrows():
                     target_row = start_row + row_idx
                     val = row[df.columns[-1]]
-                    if val == 0: val = None
+                    if val == 0:
+                        val = None
                     ws.cell(row=target_row, column=target_col, value=val)
                 print(f"[{ws.title}] 写入指标{i+1}: {indicator} 到列 {get_column_letter(target_col)}")
+
+    @staticmethod
+    def macro_calc_indicator_yoy_mom(context, config):
+        """
+        功能说明：
+            对已写入的指标数据计算同比和环比。
+            读取日期列和各指标值列，计算月环比(MoM)和年同比(YoY)，
+            结果写入指定的同比列和环比列。
+
+        params:
+            config:
+                - date_col: str | int — 日期所在列。
+                - value_cols: list[str | int] — 指标值列列表。
+                - yoy_cols: list[str | int] — 同比结果写入列，顺序与 value_cols 一一对应。
+                - mom_cols: list[str | int] — 环比结果写入列，顺序与 value_cols 一一对应。
+                - start_row: int — 数据起始行。
+        """
+        ws = context['ws']
+
+        date_col = config['date_col']
+        value_cols = config['value_cols']
+        yoy_cols = config['yoy_cols']
+        mom_cols = config['mom_cols']
+        start_row = config['start_row']
+
+        date_col_num = column_index_from_string(date_col) if isinstance(date_col, str) else date_col
+        val_col_nums = [column_index_from_string(c) if isinstance(c, str) else c for c in value_cols]
+        yoy_col_nums = [column_index_from_string(c) if isinstance(c, str) else c for c in yoy_cols]
+        mom_col_nums = [column_index_from_string(c) if isinstance(c, str) else c for c in mom_cols]
+
+        # 1. 读取所有行数据
+        rows = []
+        r = start_row
+        while True:
+            date_val = ws.cell(row=r, column=date_col_num).value
+            if date_val is None:
+                break
+            try:
+                dt = pd.to_datetime(date_val)
+                vals = {vc: ws.cell(row=r, column=vc).value for vc in val_col_nums}
+                rows.append({'date': dt, 'values': vals})
+            except:
+                pass
+            r += 1
+
+        if not rows:
+            print(f"[{ws.title}] 未找到数据")
+            return
+
+        # 2. 对每个指标分别计算
+        for idx, val_col in enumerate(val_col_nums):
+            yoy_col = yoy_col_nums[idx]
+            mom_col = mom_col_nums[idx]
+
+            # --- 按月聚合（计算月均值）---
+            monthly = {}
+            for row_entry in rows:
+                dt = row_entry['date']
+                val = row_entry['values'][val_col]
+                key = dt.strftime('%Y-%m')
+                monthly.setdefault(key, []).append(val if val else None)
+
+            monthly_avg = {}
+            for key, vals in monthly.items():
+                valid = [v for v in vals if v is not None]
+                monthly_avg[key] = sum(valid) / len(valid) if valid else None
+
+            sorted_months = sorted(monthly_avg.keys())
+
+            prev_month_avg = {}
+            for j, m in enumerate(sorted_months):
+                prev_month_avg[m] = monthly_avg[sorted_months[j - 1]] if j > 0 else None
+
+            # --- 同比：构建去年同日值的查找表 ---
+            last_year_val = {}
+            for row_entry in rows:
+                dt = row_entry['date']
+                val = row_entry['values'][val_col]
+                md = dt.strftime('%m-%d')
+                year = dt.year
+                last_year_val[(year + 1, md)] = val
+
+            # 3. 逐行写入
+            for row_idx, row_entry in enumerate(rows):
+                row_num = start_row + row_idx
+                dt = row_entry['date']
+                month_key = dt.strftime('%Y-%m')
+                md = dt.strftime('%m-%d')
+                year = dt.year
+                curr_val = row_entry['values'][val_col]
+
+                # 同比 = (今年值 - 去年同日值) / 去年同日值
+                prev_val = last_year_val.get((year, md))
+                if curr_val and prev_val and prev_val != 0:
+                    yoy = (curr_val - prev_val) / prev_val
+                    ws.cell(row=row_num, column=yoy_col, value=yoy).number_format = '0.00%'
+
+                # 环比 = (本月日均值 - 上月日均值) / 上月日均值
+                curr_month_avg = monthly_avg.get(month_key)
+                prev_month_avg_val = prev_month_avg.get(month_key)
+                if curr_month_avg and prev_month_avg_val and prev_month_avg_val != 0:
+                    mom = (curr_month_avg - prev_month_avg_val) / prev_month_avg_val
+                    ws.cell(row=row_num, column=mom_col, value=mom).number_format = '0.00%'
+
+            print(f"[{ws.title}] 指标 {get_column_letter(val_col)} → 同比 {get_column_letter(yoy_col)} | 环比 {get_column_letter(mom_col)}")
+
+        print(f"[{ws.title}] 全部同比环比计算完成")
+
+    @staticmethod
+    def macro_compute_indicator_formula(context, config):
+        """
+        功能说明：
+            对指标组中的数值列按行应用自定义公式，结果写入指定列。
+            公式：(SUM(sum_start_col:sum_end_col) - exclude_col) / divisor
+
+        params:
+            config:
+                - start_row: int — 数据起始行号。
+                - date_col: str | int — 日期列，用于判断行是否为空。
+                - sum_start_col: str | int — SUM 范围的起始列。
+                - sum_end_col: str | int — SUM 范围的结束列（包含）。
+                - exclude_col: str | int — 在 SUM 范围中需剔除的列。
+                - divisor: float (默认 10000) — 除数。
+                - target_col: str | int (可选) — 结果写入列，默认为 sum_end_col 的下一列。
+        """
+        ws = context['ws']
+        start_row = config['start_row']
+        date_col = config['date_col']
+        sum_start_col = config['sum_start_col']
+        sum_end_col = config['sum_end_col']
+        exclude_col = config['exclude_col']
+        divisor = config.get('divisor', 10000)
+        target_col = config.get('target_col', None)
+
+        date_col_num = column_index_from_string(date_col) if isinstance(date_col, str) else date_col
+        sum_start = column_index_from_string(sum_start_col) if isinstance(sum_start_col, str) else sum_start_col
+        sum_end = column_index_from_string(sum_end_col) if isinstance(sum_end_col, str) else sum_end_col
+        exclude_num = column_index_from_string(exclude_col) if isinstance(exclude_col, str) else exclude_col
+
+        if target_col is None:
+            target_col_num = sum_end + 1
+        else:
+            target_col_num = column_index_from_string(target_col) if isinstance(target_col, str) else target_col
+
+        row = start_row
+        while True:
+            date_val = ws.cell(row=row, column=date_col_num).value
+            if date_val is None:
+                break
+
+            total = 0
+            for c in range(sum_start, sum_end + 1):
+                v = ws.cell(row=row, column=c).value
+                if v is not None and isinstance(v, (int, float)):
+                    total += v
+
+            exclude_val = ws.cell(row=row, column=exclude_num).value
+            if exclude_val is not None and isinstance(exclude_val, (int, float)):
+                total -= exclude_val
+
+            result = total / divisor if divisor != 0 else None
+            ws.cell(row=row, column=target_col_num, value=result)
+            row += 1
+
+        formula_desc = f"(SUM({get_column_letter(sum_start)}:{get_column_letter(sum_end)}) - {get_column_letter(exclude_num)}) / {divisor}"
+        print(f"[{ws.title}] {formula_desc} 写入 {get_column_letter(target_col_num)}")
 
     @staticmethod
     def macro_create_pivot_table(context, config):
@@ -70,66 +250,98 @@ class MacroPlugin:
         功能说明：
             创建基础透视表，将日期数据按"月-日"为行、年份为列进行透视。
             自动处理闰年 2月29日 到 2月28日 的映射，并支持限定最近 N 年的数据。
+            支持两种数据来源：data_reader（默认）和当前工作表单元格。
 
         params:
             context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
             config: dict — 透视表配置，包含：
+                - source: str (默认 'reader') — 数据来源。
+                    'reader': 通过 data_reader 读取（需传 indicator_code）。
+                    'ws': 从当前工作表单元格读取（需传 date_col, value_col, data_start_row）。
+                【reader 模式】
                 - indicator_code: str — 指标代码。
+                【ws 模式】
+                - date_col: str | int — 日期列（列字母或列号）。
+                - value_col: str | int — 数值列（列字母或列号）。
+                - data_start_row: int (默认 10) — 数据读取起始行号。
+                【通用】
                 - start_row: int — 透视表写入的起始行号。
                 - start_col: str | int — 透视表写入的起始列（列字母或列号）。
                 - years: int (默认 7) — 包含的最近年份数量。
         """
         ws = context['ws']
-        reader = context['data_reader']
-        source_sheet = context['sheet_config']['source_sheet']
-        indicator_code = config['indicator_code']
+        source = config.get('source', 'reader')
         start_row = config['start_row']
         start_col = config['start_col']
         years = config.get('years', 7)
-        
         start_col_num = column_index_from_string(start_col) if isinstance(start_col, str) else start_col
-        
-        from core_engine.data_processor import DataProcessor
-        processor = DataProcessor(reader)
-        
-        indicator_data = reader.read_indicator_data(source_sheet, indicator_code)
-        sorted_data = processor.sort_by_date(indicator_data, ascending=True)
-        df = sorted_data["data"].copy()
-        
+
+        if source == 'ws':
+            date_col_num = column_index_from_string(config['date_col']) if isinstance(config['date_col'], str) else config['date_col']
+            value_col_num = column_index_from_string(config['value_col']) if isinstance(config['value_col'], str) else config['value_col']
+            data_start_row = config.get('data_start_row', 10)
+
+            records = []
+            row = data_start_row
+            while True:
+                date_val = ws.cell(row=row, column=date_col_num).value
+                val = ws.cell(row=row, column=value_col_num).value
+                if date_val is None:
+                    break
+                try:
+                    records.append({'日期': pd.to_datetime(date_val), 'value': val})
+                except:
+                    pass
+                row += 1
+
+            if not records:
+                print(f"[{ws.title}] 未找到数据以生成基础透视表")
+                return
+
+            df = pd.DataFrame(records)
+        else:
+            reader = context['data_reader']
+            source_sheet = context['sheet_config']['source_sheet']
+            indicator_code = config['indicator_code']
+
+            from core_engine.data_processor import DataProcessor
+            processor = DataProcessor(reader)
+
+            indicator_data = reader.read_indicator_data(source_sheet, indicator_code)
+            sorted_data = processor.sort_by_date(indicator_data, ascending=True)
+            df = sorted_data["data"].copy()
+            df.rename(columns={df.columns[-1]: 'value'}, inplace=True)
+
         df['日期'] = pd.to_datetime(df['日期'])
         df['年份'] = df['日期'].dt.year
         df['月日'] = df['日期'].dt.strftime('%m-%d')
         df['月日'] = df['月日'].replace('02-29', '02-28')
-        
+
         current_year = datetime.now().year
         start_year = current_year - years + 1
-        
+
         df_filtered = df[df['年份'] >= start_year].copy()
         df_filtered = df_filtered.drop_duplicates(subset=['月日', '年份'])
-        pivot_df = df_filtered.pivot(index='月日', columns='年份', values=df.columns[-3])
-        
-        # 写入表头
+        pivot_df = df_filtered.pivot(index='月日', columns='年份', values='value')
+
         for i, year in enumerate(pivot_df.columns):
             ws.cell(row=start_row, column=start_col_num + i + 1, value=year)
-            
-        # 写入行标题和数据
+
         for i, (month_day, row_data) in enumerate(pivot_df.iterrows()):
             try:
                 excel_date = datetime.strptime(f"1900-{month_day}", "%Y-%m-%d")
             except Exception:
                 excel_date = None
-                
-            ws.cell(row=start_row + i + 1, column=start_col_num, value=excel_date)
+            cell = ws.cell(row=start_row + i + 1, column=start_col_num, value=excel_date)
             if excel_date:
-                ws.cell(row=start_row + i + 1, column=start_col_num).number_format = "mm-dd"
-                
+                cell.number_format = "mm-dd"
             for j, year in enumerate(pivot_df.columns):
-                value = row_data.get(year, None)
-                if pd.isna(value) or value == 0:
-                    value = None
-                ws.cell(row=start_row + i + 1, column=start_col_num + j + 1, value=value)
-                
-        print(f"[{ws.title}] 创建透视表 {indicator_code} 到 {start_col}")
+                v = row_data.get(year, None)
+                if pd.isna(v) or v == 0:
+                    v = None
+                ws.cell(row=start_row + i + 1, column=start_col_num + j + 1, value=v)
+
+        print(f"[{ws.title}] 创建透视表到 {start_col}")
 
     # ==================================
     # 农历与春节相关逻辑
@@ -237,7 +449,6 @@ class MacroPlugin:
         target_start_row = config['target_start_row']
         recent_years = config.get('recent_years', 7)
         
-        # 1. 提取当前工作表 base_col 的最小最大日期，确定范围
         date_col_num = column_index_from_string(base_col) if isinstance(base_col, str) else base_col
         value_col_num = column_index_from_string(value_col) if isinstance(value_col, str) else value_col
         
@@ -278,7 +489,6 @@ class MacroPlugin:
         
         pivot_df = MacroPlugin.build_festival_pivot_table(df_result, recent_years=recent_years)
         
-        # 写入工作表
         MacroPlugin.write_df_to_ws(ws, pivot_df, target_start_col, target_start_row, header=True)
         print(f"[{ws.title}] 生成春节标签透视表到 {target_start_col}")
 
@@ -447,7 +657,6 @@ class MacroPlugin:
         df_chuxi = df.copy()
         df_chuxi["数值"] = df_chuxi["阳历"].map(date_to_value)
         
-        # build_chuxi_relative_pivot_table
         chuxi_tags = [f"t-{i}" for i in range(30, 0, -1)] + ["t"] + [f"t+{i}" for i in range(1, 61)]
         years = list(range(max_year-6, max_year+1))
         
@@ -596,4 +805,3 @@ class MacroPlugin:
         for i, row in enumerate(df.values):
             for j, value in enumerate(row):
                 ws.cell(row=data_start_row + i, column=col_num + j, value=value)
-

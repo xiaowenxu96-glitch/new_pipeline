@@ -72,11 +72,13 @@ class PipelineEngine:
             'aviation_write_report_data': AviationPlugin.aviation_write_report_data,
             # 宏观动作
             'write_indicator_group': MacroPlugin.macro_write_indicator_group,
+            'compute_indicator_formula': MacroPlugin.macro_compute_indicator_formula,
             'create_pivot_table': MacroPlugin.macro_create_pivot_table,
             'macro_create_festival_pivot': MacroPlugin.macro_create_festival_pivot,
             'macro_create_chuxi_pivot': MacroPlugin.macro_create_chuxi_pivot,
             'macro_create_weekly_pivot': MacroPlugin.macro_create_weekly_pivot,
             'macro_create_yearly_date_scaffold': MacroPlugin.macro_create_yearly_date_scaffold,
+            'calc_indicator_yoy_mom': MacroPlugin.macro_calc_indicator_yoy_mom, 
             # 电子动作
             'electronics_write_sheet': ElectronicsPlugin.electronics_write_sheet,
             'electronics_update_chart_ranges': ElectronicsPlugin.electronics_update_chart_ranges,
