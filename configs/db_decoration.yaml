@@ -15,6 +15,7 @@ sheets:
   - type: "decoration_write_sheet"
     start_row: 2
     date_col: A
+    start_date: "2007-03-30"
     formulas:
     - col: E
       template: "=C{row}-C{prev_row}"
@@ -28,6 +29,7 @@ sheets:
   - type: "decoration_write_sheet"
     start_row: 2
     date_col: A
+    start_date: "2007-03-30"
 - sheet_name: 图3-6 基建
   source_sheet: 图3-6 基建
   indicators:
@@ -39,6 +41,7 @@ sheets:
   - type: "decoration_write_sheet"
     start_row: 2
     date_col: A
+    start_date: "2006-03-30"
 - sheet_name: 水利管理业投资
   source_sheet: 水利管理业投资
   indicators:
@@ -47,13 +50,14 @@ sheets:
   - type: "decoration_write_sheet"
     start_row: 3
     date_col: A
+    start_date: "2004-03-30"
 - sheet_name: 各地区投资情况
   source_sheet: 各地区投资情况
   indicators:
-    AA000456488700：B
-    AA000456488800：C
-    AA000456488900：D
-    AA000456489000：E
+    AA000456488700: B
+    AA000456488800: C
+    AA000456488900: D
+    AA000456489000: E
   actions:
   - type: "decoration_write_sheet"
     start_row: 2
@@ -62,15 +66,12 @@ sheets:
     - col: G
       template: "=B{row}-B{prev_row}"
       start_row: 3
-    formulas:
     - col: H
       template: "=C{row}-C{prev_row}"
       start_row: 3
-    formulas:
     - col: I
       template: "=D{row}-D{prev_row}"
       start_row: 3
-    formulas:
     - col: J
       template: "=E{row}-E{prev_row}"
       start_row: 3
@@ -85,62 +86,59 @@ sheets:
   - type: "decoration_write_sheet"
     start_row: 3
     date_col: A
+    start_date: "2002-03-30"
     formulas:
     - col: F
-    template: "=(B{row}/B{row-11}-1)*100"
-    start_row: 14
-    formulas:
+      template: "=(B{row}/B{row-11}-1)*100"
+      start_row: 14
     - col: G
-    template: "=100*(C{row}/C{row-11}-1)"
-    start_row: 14
-    formulas:
+      template: "=100*(C{row}/C{row-11}-1)"
+      start_row: 14
     - col: H
-    template: "=100*(D{row}/D{row-11}-1)" 
-    start_row: 14
-    formulas:
+      template: "=100*(D{row}/D{row-11}-1)"
+      start_row: 14
     - col: I
-    template: "=100*(E{row}/E{row-11}-1)"
-    start_row: 14
-    formulas:
-    -col: K
-    template: "=(B{row}-B{row-1})/(B{row-11}-B{row-12})-1"
-    start_row: 14
+      template: "=100*(E{row}/E{row-11}-1)"
+      start_row: 14
+    - col: K
+      template: "=(B{row}-B{row-1})/(B{row-11}-B{row-12})-1"
+      start_row: 14
 - sheet_name: 图8 房地产新开工竣工
   source_sheet: 图8 房地产新开工竣工
   indicators:
-    AA000083596300:D
-    AA000083595800:E
-    AA000083595400:F
-    AA000085698200:K
-    AA000083596400:L
-    AA000083595900:M
-    AA000083595500:N
+    AA000083596300: D
+    AA000083595800: E
+    AA000083595400: F
+    AA000085698200: K
+    AA000083596400: L
+    AA000083595900: M
+    AA000083595500: N
   actions:
   - type: "decoration_write_sheet"
     start_row: 3
     date_col: A
+    start_date: "2000-03-30"
     formulas:
     - col: G
-    template: "=(D{row}/D{row-11}-1)*100"
-    start_row: 14
-    formulas:
+      template: "=(D{row}/D{row-11}-1)*100"
+      start_row: 14
     - col: H
-    template: "=(E{row}/E{row-11}-1)*100"
-    start_row: 14
-    formulas:
+      template: "=(E{row}/E{row-11}-1)*100"
+      start_row: 14
     - col: I
-    template: "=(F{row}/F{row-11}-1)*100"
-    start_row: 14
+      template: "=(F{row}/F{row-11}-1)*100"
+      start_row: 14
 - sheet_name: 图9-10 房地产
   source_sheet: 图9-10 房地产
   indicators:
-    AA000083594900:F
-    AA000083595000:G
-    AA000083594400:H
-    AA000083594500:I
+    AA000083594900: F
+    AA000083595000: G
+    AA000083594400: H
+    AA000083594500: I
   actions:
   - type: "decoration_write_sheet"
     start_row: 2
     date_col: A
+    start_date: "2007-03-30"
 
 

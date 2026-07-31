@@ -12,6 +12,8 @@ class DecorationPlugin:
             key = m.group(1)
             if key == 'prev_row':
                 return str(row - 1)
+            if key == 'row':
+                return str(row)
             parts = re.split(r'([+-])', key)
             if len(parts) == 3 and parts[0] == 'row':
                 op = parts[1]
@@ -54,10 +56,6 @@ class DecorationPlugin:
                 elif isinstance(v, str):
                     indicator_col_map[k] = v
 
-        if not indicator_col_map:
-            print("    - 未找到指标配置，跳过写入")
-            return
-
         start_row = params.get('start_row', defaults.get('start_row', 2))
         date_col = params.get('date_col', 'A')
         start_date = params.get('start_date', defaults.get('start_date', '2014-01-01'))
@@ -65,7 +63,7 @@ class DecorationPlugin:
         start_date_ts = pd.to_datetime(start_date)
         date_col_num = column_index_from_string(date_col)
 
-        formulas = params.get('formulas', [])
+        formulas = params.get('formulas') or []
 
         if not indicator_col_map and not formulas:
             print("    - 未找到指标配置和公式配置，跳过写入")
