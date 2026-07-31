@@ -23,6 +23,7 @@ from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
 from plugins.building_plugin import BuildingPlugin
+from plugins.decoration_plugin import DecorationPlugin
 
 # === Monkey-patch: 修复 openpyxl 无法读取含 ExternalData 图表的 bug ===
 # ExternalData.id 定义为 String() 但不支持命名空间属性 r:id，
@@ -112,6 +113,10 @@ class PipelineEngine:
             # 农业动作
             'farm_write_data': FarmPlugin.farm_write_data,
             'farm_write_linechart': FarmPlugin.farm_write_linechart,
+
+            # 装饰动作
+            'decoration_write_sheet': DecorationPlugin.decoration_write_sheet,
+            'decoration_write_formula': DecorationPlugin._render_template,
 
             # 建筑动作
             'building_write_data': BuildingPlugin.building_write_data,
