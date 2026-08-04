@@ -41,7 +41,35 @@ sheets:
   - type: "decoration_write_sheet"
     start_row: 2
     date_col: A
-    start_date: "2006-03-30"
+    start_date: "2006-01-30"
+    formulas:
+    - col: E
+      template: "=E{row-11}*(1+F{row}/100)"
+      start_row: 23
+    - col: G
+      template: "=G{row-11}*(1+H{row}/100)"
+      start_row: 23
+    - col: I
+      template: "=I{row-11}*(1+J{row}/100)"
+      start_row: 23
+    - col: K
+      template: "=G{row}+I{row}"
+      start_row: 2
+    - col: L
+      template: "=(K{row}/K{row-11}-1)*100"
+      start_row: 13
+    - col: N
+      template: "=G{row}+I{row}"
+      start_row: 2
+    - col: B
+      template: "=E{row}+G{row}+I{row}"
+      start_row: 2
+    - col: C
+      template: "=(B{row}/B{row-11}-1)*100"
+      start_row: 13
+    - col: D
+      template: "=(B{row}-B{row-1})/(B{row-11}-B{row-12})-1"
+      start_row: 15
 - sheet_name: 水利管理业投资
   source_sheet: 水利管理业投资
   indicators:
