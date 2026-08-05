@@ -1,10 +1,10 @@
 industry: "银行_各省银行业不良率"
-source_file: "D:/【交付审核】/_导出验收/Excel数据验收/银行/银行20260615_商业银行关键监管指标_20260616090415.xlsx"
+source_file: "D:/【交付审核】/_导出验收/Excel数据验收/银行/银行20260730_商业银行关键监管指标_20260804091501.xlsx"
 target_file: "D:/【交付审核】/_导出验收/Excel数据验收/银行/【申万宏源银行】商业银行关键监管指标.xlsx"
 output_file: "D:/【交付审核】/_导出验收/new_pipeline/output_files"
 
 defaults:
-  start_date: "2014-01-01"
+  start_date: "2003-12-30"
   date_format: "yyyy-mm"
 
 sheets:
@@ -29,7 +29,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "k", "S"]
-        start_date: "2011-01-01"
+        start_date: "2004-03-30"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "={source_column}{row}/100"
@@ -51,7 +51,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "k", "T"]
-        start_date: "2011-01-01"
+        start_date: "2004-06-29"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
@@ -81,7 +81,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "k", "T", "AC"]
-        start_date: "2011-01-01"
+        start_date: "2011-03-01"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
@@ -115,7 +115,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "k", "T", "AC"]
-        start_date: "2010-12-01"
+        start_date: "2011-03-30"
       - type: "bank_commercial_formula"
         start_row: 10
         target_formula: "=IF(ISBLANK({source_column}{row-4}),\"\",{source_column}{row}/{source_column}{row-4}-1)"
@@ -149,7 +149,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "k", "T", "AC"]
-        start_date: "2011-01-01"
+        start_date: "2011-03-30"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
@@ -177,7 +177,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "E", "H", "K"]
-        start_date: "2011-01-01"
+        start_date: "2011-03-30"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
@@ -205,7 +205,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "E", "H", "K"]
-        start_date: "2011-01-01"
+        start_date: "2011-03-30"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
@@ -249,8 +249,11 @@ sheets:
         target_column: ["R","S","T","U","V"]
         source_column: ["D","E","F","G","H"]
         format: "[Red]#,##0.00\" bps\";-#,##0.00\" bps\""
-  # - sheet_name: "关注率"
-  #   source_sheet: "关注率"
+    sheet_name: "关注率"
+    source_sheet: "关注率"
+    indicators:
+      "AA000323583000": "C"
+    
   - sheet_name: "拨备覆盖率"
     source_sheet: "拨备覆盖率"
     indicators:
@@ -265,7 +268,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "K", "T","AC"]
-        start_date: "2004-06-29"
+        start_date: "2003-12-30"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
@@ -298,7 +301,7 @@ sheets:
       - type: "bank_commercial_write_data"
         start_row: 6
         date_columns: ["B", "L", "U","AD"]
-        start_date: "2004-06-29"
+        start_date: "2009-06-29"
       - type: "bank_commercial_formula"
         start_row: 6
         target_formula: "=IF(ISBLANK({source_column}{row}),\"\",{source_column}{row}/100)"
