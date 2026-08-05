@@ -1,4 +1,4 @@
-industry: "银行_各省银行业不良率"
+industry: "银行"
 source_file: "C:/Users/27627/Desktop/堡垒机/银行/银行20260730_商业银行关键监管指标_20260804091501.xlsx"
 target_file: "C:/Users/27627/Desktop/【申万宏源银行】商业银行关键监管指标.xlsx"
 output_file: "C:/Users/27627/Desktop/商业银行/output_files"
