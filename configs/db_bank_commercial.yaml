@@ -249,11 +249,9 @@ sheets:
         target_column: ["R","S","T","U","V"]
         source_column: ["D","E","F","G","H"]
         format: "[Red]#,##0.00\" bps\";-#,##0.00\" bps\""
-    sheet_name: "关注率"
-    source_sheet: "关注率"
-    indicators:
-      "AA000323583000": "C"
-    
+    #sheet_name: "关注率"
+    #source_sheet: "关注率"
+   
   - sheet_name: "拨备覆盖率"
     source_sheet: "拨备覆盖率"
     indicators:
