@@ -14,7 +14,7 @@ class FarmPlugin:
             处理农业基础指标数据，写入到目标工作表中。
             从 data_reader 缓存中读取指标数据，以第一个指标的日期为基准，
             将所有指标数据按此日期对齐写入 Excel。
-            日期按降序排列（最新日期在前），使用日度数据格式。
+            日期按升序排列（最早日期在前），使用日度数据格式。
 
         params:
             context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
@@ -58,7 +58,7 @@ class FarmPlugin:
 
             # 只保留 start_date 及以后数据
             df = df[df['日期'].notna() & (df['日期'] >= start_date_ts)].copy()
-            df = df.sort_values('日期', ascending=False).reset_index(drop=True)
+            df = df.sort_values('日期', ascending=True).reset_index(drop=True)
 
             indicator_dfs[indicator] = df
 
@@ -198,33 +198,33 @@ class FarmPlugin:
         col_end_num = column_letter_to_number(col_end_str)
 
         # year_range processing - 确定数据行的起止范围
-        actual_row_end = row_end  # 实际使用的最后一行（最早的数据）
+        # 数据按时间升序排列（最早日期在 row_start，最新在 row_end）
+        actual_row_start = row_start  # 实际使用的起始行
         year_range = params.get('year_range')
-        
+
         if year_range and year_range > 0:
-            # 获取第一行（最新日期）的日期值
-            first_date_cell = ws.cell(row=row_start, column=col_start_num).value
-            
-            if first_date_cell:
+            # 获取最后一行（最新日期）的日期值
+            last_date_cell = ws.cell(row=row_end, column=col_start_num).value
+
+            if last_date_cell:
                 # 处理日期值（可能是 datetime 或 date 类型）
-                if isinstance(first_date_cell, datetime):
-                    latest_date = first_date_cell
+                if isinstance(last_date_cell, datetime):
+                    latest_date = last_date_cell
                 else:
                     try:
-                        latest_date = datetime.strptime(str(first_date_cell), '%Y-%m-%d')
+                        latest_date = datetime.strptime(str(last_date_cell), '%Y-%m-%d')
                     except:
-                        latest_date = first_date_cell
-                
+                        latest_date = last_date_cell
+
                 # 计算 X 轴起点日期（最新日期向前推 N 年）
                 if isinstance(latest_date, datetime):
                     start_date = latest_date - relativedelta(years=year_range)
-                    
-                    # 在数据行中查找最后一个 >= start_date 的行
-                    # 数据按时间倒序排列（第一行最新），所以从后往前找更高效
-                    # 我们从 row_start 开始往后找，找到第一个 < start_date 的行，其前一行就是最后有效行
+
+                    # 在数据行中从前往后查找第一个 >= start_date 的行
+                    # 数据按时间升序排列，找到第一个不早于 start_date 的行作为起始行
                     for row_idx in range(row_start, row_end + 1):
                         cell_value = ws.cell(row=row_idx, column=col_start_num).value
-                        
+
                         if cell_value:
                             # 转换为 datetime 进行比较
                             if isinstance(cell_value, datetime):
@@ -234,18 +234,18 @@ class FarmPlugin:
                                     current_date = datetime.strptime(str(cell_value), '%Y-%m-%d')
                                 except:
                                     continue
-                            
-                            # 找到第一个 < start_date 的数据行（超出范围了）
-                            if current_date < start_date:
-                                actual_row_end = row_idx - 1  # 前一行是最后一个有效行
+
+                            # 找到第一个 >= start_date 的数据行（进入范围了）
+                            if current_date >= start_date:
+                                actual_row_start = row_idx
                                 break
-                    
+
                     print(f"    - year_range={year_range}: 最新日期={latest_date.strftime('%Y-%m-%d')}, "
-                        f"起始日期={start_date.strftime('%Y-%m-%d')}, 数据行范围: 行{row_start}~行{actual_row_end}")
+                        f"起始日期={start_date.strftime('%Y-%m-%d')}, 数据行范围: 行{actual_row_start}~行{row_end}")
                 else:
-                    print(f"    - 无法解析第一行日期: {first_date_cell}，使用全部数据范围")
+                    print(f"    - 无法解析最后一行日期: {last_date_cell}，使用全部数据范围")
             else:
-                print(f"    - 第一行日期为空，使用全部数据范围")
+                print(f"    - 最后一行日期为空，使用全部数据范围")
 
         # 2. 创建折线图
         chart = LineChart()
@@ -256,8 +256,8 @@ class FarmPlugin:
             ws,
             min_col=col_start_num,
             max_col=col_start_num,
-            min_row=row_start,
-            max_row=actual_row_end,
+            min_row=actual_row_start,
+            max_row=row_end,
         )
 
         # 数据系列（第 2-n 列），每列作为一条折线
@@ -266,8 +266,8 @@ class FarmPlugin:
                 ws,
                 min_col=col_num,
                 max_col=col_num,
-                min_row=row_start,
-                max_row=actual_row_end,
+                min_row=actual_row_start,
+                max_row=row_end,
             )
             chart.add_data(data_ref, from_rows=False, titles_from_data=False)
 
@@ -315,8 +315,8 @@ class FarmPlugin:
 
         ws.add_chart(chart)
         
-        if actual_row_end != row_end:
-            print(f"    - 折线图创建完成，数据范围: 行{row_start}~行{actual_row_end}（原始范围: {data_range}），共 {col_end_num - col_start_num} 条折线")
+        if actual_row_start != row_start:
+            print(f"    - 折线图创建完成，数据范围: 行{actual_row_start}~行{row_end}（原始范围: {data_range}），共 {col_end_num - col_start_num} 条折线")
         else:
             print(f"    - 折线图创建完成，数据范围: {data_range}，共 {col_end_num - col_start_num} 条折线")
 

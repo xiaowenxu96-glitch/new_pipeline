@@ -1,0 +1,87 @@
+industry: 农业
+source_file: D:/SWS/new_pipeline/农业/农业20260803_日报底稿_20260805120101.xlsx
+target_file: D:/SWS/new_pipeline/农业/日报底稿目标文档.xlsx
+output_dir: D:/SWS/new_pipeline/农业/output_files
+defaults:
+  start_date: '2008-02-14'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: 玉米豆粕价格
+  source_sheet: 玉米豆粕价格
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811400": "B"
+      "AA000260811200": "C"
+    start_row: 6
+    start_date: "2008-02-14"
+    date_col: A
+    formulas:
+    - col: D
+      template: "=B{row}-B{prev_row}"
+      start_row: 7
+    - col: E
+      template: "=C{row}-C{prev_row}"
+      start_row: 7
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 5
+    y_axis_max: 12
+    year_range: 3
+- sheet_name: 22个省市生猪
+  source_sheet: 22个省市生猪
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260562400": "B"
+    start_row: 6
+    start_date: "2018-09-12"
+    date_col: A
+    formulas:
+    - col: D
+      template: "=B{row}-B{prev_row}"
+      start_row: 7
+  - type: farm_write_linechart
+    data_range: "A5:B800"
+    y_axis_min: 1600
+    y_axis_max: 3400
+    year_range: 3
+- sheet_name: 22个省市仔猪
+  source_sheet: 22个省市仔猪
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260573000": "B"
+    start_row: 3
+    start_date: "2018-09-12"
+    date_col: A
+    formulas:
+    - col: C
+      template: "=B{row}-B{prev_row}"
+      start_row: 4
+- sheet_name: 白羽肉鸡
+  source_sheet: 白羽肉鸡
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000514547500": "B"
+    start_row: 3
+    start_date: "2018-09-12"
+    date_col: A
+    formulas:
+    - col: C
+      template: "=B{row}-B{prev_row}"
+      start_row: 4
+- sheet_name: 肉鸡苗
+  source_sheet: 肉鸡苗
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000514547600": "B"
+    start_row: 3
+    start_date: "2018-09-12"
+    date_col: A
+    formulas:
+    - col: C
+      template: "=B{row}-B{prev_row}"
+      start_row: 4

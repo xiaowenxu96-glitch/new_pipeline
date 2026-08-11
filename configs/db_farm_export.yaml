@@ -1,0 +1,18 @@
+industry: 农业
+source_file: D:/SWS/new_pipeline/农业/农业20260803_日报底稿_20260805120101.xlsx
+target_file: D:/SWS/new_pipeline/农业/日报底稿目标文档.xlsx
+output_dir: D:/SWS/new_pipeline/农业/output_files
+defaults:
+  start_date: '2008-02-14'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: 玉米豆粕价格
+  source_sheet: 玉米豆粕价格
+  actions:
+  - type: farm_write_data
+    indicators:
+      "AA000260811400": "B"
+      "AA000260811200": "C"
+    start_row: 6
+    start_date: "2008-02-14"
+    date_col: A
