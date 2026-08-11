@@ -22,6 +22,7 @@ from plugins.petrochemical_plugin import PetrochemicalPlugin
 from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
+from plugins.farm_export_plugin import FarmPlugin as FarmExportPlugin
 from plugins.building_plugin import BuildingPlugin
 from plugins.decoration_plugin import DecorationPlugin
 from plugins.PO_plugin import PoPlugin
@@ -112,8 +113,9 @@ class PipelineEngine:
             'medical_write_formula': MedicalPlugin.medical_write_formula,
             'medical_merge_quarter_data': MedicalPlugin.medical_merge_quarter_data,
             # 农业动作
-            'farm_write_data': FarmPlugin.farm_write_data,
-            'farm_write_linechart': FarmPlugin.farm_write_linechart,
+            'farm_write_data': FarmExportPlugin.farm_write_data,
+            'farm_write_linechart': FarmExportPlugin.farm_write_linechart,
+            'farm_export_create_pivot': FarmExportPlugin.macro_create_pivot_table,
 
             # 装饰动作
             'decoration_write_sheet': DecorationPlugin.decoration_write_sheet,

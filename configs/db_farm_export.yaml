@@ -1,18 +1,105 @@
 industry: 农业
-source_file: D:/SWS/new_pipeline/农业/农业20260803_日报底稿_20260805120101.xlsx
-target_file: D:/SWS/new_pipeline/农业/日报底稿目标文档.xlsx
+source_file: D:/SWS/new_pipeline/农业/农业20260803_2月宠物食品及用品出口数据_20260805121200.xlsx
+target_file: D:/SWS/new_pipeline/农业/【宠物-申万农业】2月宠物食品及用品出口数据目标文档.xlsx
 output_dir: D:/SWS/new_pipeline/农业/output_files
 defaults:
   start_date: '2008-02-14'
   date_format: yyyy-mm-dd
 sheets:
-- sheet_name: 玉米豆粕价格
-  source_sheet: 玉米豆粕价格
+- sheet_name: 宠物食品出口金额
+  source_sheet: 宠物食品出口金额
   actions:
   - type: farm_write_data
     indicators:
-      "AA000260811400": "B"
-      "AA000260811200": "C"
-    start_row: 6
-    start_date: "2008-02-14"
+      AA000489762800: B
+      AA000305950100: G
+    start_row: 3
+    start_date: "2015-02-27"
+    date_col: A
+  - type: farm_export_create_pivot
+    source: reader
+    indicator_code: "AA000489762800"
+    start_row: 3
+    start_col: "S"
+    years: 10
+  - type: farm_export_create_pivot
+    source: reader
+    indicator_code: "AA000305950100"
+    start_row: 3
+    start_col: "AG"
+    years: 10
+- sheet_name: 分国家宠物食品出口金额
+  source_sheet: 分国家宠物食品出口金额
+  actions:
+  - type: farm_write_data
+    indicators:
+      AA000489762800: B
+      AA000489762900: E
+      AA000489763000: H
+      AA000489763100: K
+      AA000489763200: N
+      AA000489763300: Q
+    start_row: 2
+    start_date: "2015-02-27"
+    date_col: A
+  - type: farm_write_data
+    indicators:
+      AA000305950100: B
+      AA000489764900: E
+      AA000489765000: H
+      AA000489765100: K
+      AA000489765200: N
+      AA000489765300: Q
+    start_row: 24
+    start_date: "2015-02-27"
+    date_col: A
+- sheet_name: 宠物食品出口量
+  source_sheet: 宠物食品出口量
+  actions:
+  - type: farm_write_data
+    indicators:
+      AA000518147700: B
+    start_row: 3
+    start_date: "2015-02-27"
+    date_col: A
+  - type: farm_export_create_pivot
+    source: reader
+    indicator_code: "AA000518147700"
+    start_row: 2
+    start_col: "G"
+    years: 10
+- sheet_name: 分国家宠物食品出口量
+  source_sheet: 分国家宠物食品出口量
+  actions:
+  - type: farm_write_data
+    indicators:
+      AA000518147700: B
+      AA000521422800: E
+      AA000521422900: H
+      AA000521423000: K
+      AA000521423100: N
+      AA000521423200: Q
+    start_row: 5
+    start_date: "2015-02-27"
+    date_col: A
+- sheet_name: 美国
+  source_sheet: 美国
+  actions:
+  - type: farm_write_data
+    indicators:
+      AA000489763000: B
+      AA000489765000: C
+      AA000521422900: D
+    start_row: 2
+    start_date: "2015-02-27"
+    date_col: A
+#宠物食品出口国数据暂时未做
+- sheet_name: 中间价 美元兑人民币
+  source_sheet: 中间价 美元兑人民币
+  actions:
+  - type: farm_write_data
+    indicators:
+      AA000085865500: B
+    start_row: 2
+    start_date: "1994-01-02"
     date_col: A
