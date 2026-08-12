@@ -157,4 +157,27 @@ sheets:
     start_row: 3
     start_date: "2013-01-10"
     date_col: A
+- sheet_name: 饲料
+  source_sheet: 饲料
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000259951400: B
+      AA000259951800: C
+      AA000259952200: D
+    start_row: 4
+    start_date: "2015-06-18"
+- sheet_name: 美洲鳗流通价格
+  source_sheet: 美洲鳗流通价格
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000507237600: B
+      AA000507237700: C
+      AA000507237800: D
+      AA000507237900: E
+      AA000507238000: F
+      AA000507238100: G
+    start_row: 3
+    start_date: "2018-01-18"
 #金针菇没有
