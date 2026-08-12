@@ -1,0 +1,160 @@
+industry: 农业
+source_file: D:/SWS/new_pipeline/农业/农业20260803_【自留】周度数据库_20260805120214.xlsx
+target_file: D:/SWS/new_pipeline/农业/【自留】周度数据库目标文档.xlsx
+output_dir: D:/SWS/new_pipeline/农业/output_files
+defaults:
+  start_date: '2004-01-04'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: 200指数
+  source_sheet: 200指数
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000259921800: B
+      AA000259921900: C
+    start_row: 5
+    start_date: "2004-01-04"
+    date_col: A
+  - type: farm_zlzd_compute_period_avg    
+    week_avg_cols:
+      B: D          
+      C: E       
+    month_avg_cols:
+      B: F          
+      C: G          
+    date_col: A
+    data_start_row: 5
+- sheet_name: 玉米豆粕
+  source_sheet: 玉米豆粕
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000260811400: B
+      AA000260811200: C
+    start_row: 5
+    start_date: "2008-02-14"
+    date_col: A
+- sheet_name: 小麦
+  source_sheet: 小麦
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000260811100: B
+    start_row: 5
+    start_date: "2009-01-04"
+    date_col: A
+- sheet_name: 生猪
+  source_sheet: 生猪
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000267912600: B
+    start_row: 5
+    start_date: "2020-04-23"
+    date_col: A
+#仔猪没有
+- sheet_name: 猪
+  source_sheet: 猪
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000254033900: B
+      AA000254033800: C
+      AA000260020300: D
+      AA000260020600: E
+      AA000260020800: F
+    start_row: 5
+    start_date: "2006-06-22"
+    date_col: A
+- sheet_name: 主要农产品价格
+  source_sheet: 主要农产品价格
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000259986500: B
+      AA000259986700: C
+      AA000259986600: D
+      AA000259986900: E
+      AA000259986800: F
+    start_row: 5
+    start_date: "2016-05-28"
+    date_col: A
+- sheet_name: 体重与出栏占比
+  source_sheet: 体重与出栏占比
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000267980600: B
+    start_row: 2
+    start_date: "2018-08-01"
+    date_col: A
+- sheet_name: 体重与出栏占比
+  source_sheet: 体重与出栏占比
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000267982700: E
+      AA000267984800: F
+    start_row: 2
+    start_date: "2019-11-27"
+    date_col: D
+- sheet_name: 白羽鸡
+  source_sheet: 白羽鸡
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000260016600: B
+    start_row: 5
+    start_date: "2009-10-29"
+    date_col: A
+- sheet_name: 白羽鸡
+  source_sheet: 白羽鸡
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000277110500: D
+    start_row: 5
+    start_date: "2025-06-22"
+    date_col: C
+- sheet_name: 白羽鸡
+  source_sheet: 白羽鸡
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000260017400: F
+      AA000260017200: G
+    start_row: 5
+    start_date: "2011-06-16"
+    date_col: E
+- sheet_name: 水产价格
+  source_sheet: 水产价格
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000273246500: B
+      AA000260730200: C
+      AA000260730300: D
+      AA000260730400: E
+      AA000259987600: F
+      AA000260730500: G
+      AA000259987400: H
+    start_row: 5
+    start_date: "2011-01-01"
+    date_col: A
+#黄鸡没有
+- sheet_name: 日本鳗流通价格
+  source_sheet: 日本鳗流通价格
+  actions:
+  - type: farm_zlzd_write_data
+    indicators:
+      AA000489766900: B
+      AA000489767000: C
+      AA000489767100: D
+      AA000489767200: E
+      AA000489767300: F
+      AA000489767400: G
+    start_row: 3
+    start_date: "2013-01-10"
+    date_col: A
+#金针菇没有

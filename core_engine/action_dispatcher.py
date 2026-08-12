@@ -23,6 +23,7 @@ from plugins.electronics_plugin import ElectronicsPlugin
 from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
 from plugins.farm_export_plugin import FarmPlugin as FarmExportPlugin
+from plugins.farm_zlzd_plugin import FarmPlugin as FarmZlzdPlugin
 from plugins.building_plugin import BuildingPlugin
 from plugins.decoration_plugin import DecorationPlugin
 from plugins.PO_plugin import PoPlugin
@@ -114,6 +115,8 @@ class PipelineEngine:
             'medical_merge_quarter_data': MedicalPlugin.medical_merge_quarter_data,
             # 农业动作
             'farm_write_data': FarmExportPlugin.farm_write_data,
+            'farm_zlzd_write_data': FarmZlzdPlugin.farm_write_data,
+            'farm_zlzd_compute_period_avg': FarmZlzdPlugin.farm_compute_period_avg,
             'farm_write_linechart': FarmExportPlugin.farm_write_linechart,
             'farm_export_create_pivot': FarmExportPlugin.macro_create_pivot_table,
 
