@@ -35,6 +35,15 @@ sheets:
     start_row: 5
     start_date: "2008-02-14"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: D
+      C: E
+    month_avg_cols:
+      B: F
+      C: G
+    date_col: A
+    data_start_row: 5
 - sheet_name: 小麦
   source_sheet: 小麦
   actions:
@@ -44,6 +53,13 @@ sheets:
     start_row: 5
     start_date: "2009-01-04"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: C
+    month_avg_cols:
+      B: D
+    date_col: A
+    data_start_row: 5
 - sheet_name: 生猪
   source_sheet: 生猪
   actions:
@@ -53,6 +69,13 @@ sheets:
     start_row: 5
     start_date: "2020-04-23"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: C
+    month_avg_cols:
+      B: D
+    date_col: A
+    data_start_row: 5
 #仔猪没有
 - sheet_name: 猪
   source_sheet: 猪
@@ -67,6 +90,17 @@ sheets:
     start_row: 5
     start_date: "2006-06-22"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      D: G
+      E: H
+      F: I
+    month_avg_cols:
+      D: J
+      E: K
+      F: L
+    date_col: A
+    data_start_row: 5
 - sheet_name: 主要农产品价格
   source_sheet: 主要农产品价格
   actions:
@@ -80,6 +114,21 @@ sheets:
     start_row: 5
     start_date: "2016-05-28"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: G
+      C: H
+      D: I
+      E: J
+      F: K
+    month_avg_cols:
+      B: L
+      C: M
+      D: N
+      E: O
+      F: P
+    date_col: A
+    data_start_row: 5
 - sheet_name: 体重与出栏占比
   source_sheet: 体重与出栏占比
   actions:
@@ -108,6 +157,13 @@ sheets:
     start_row: 5
     start_date: "2009-10-29"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: H
+    month_avg_cols:
+      B: I
+    date_col: A
+    data_start_row: 5
 - sheet_name: 白羽鸡
   source_sheet: 白羽鸡
   actions:
@@ -117,6 +173,13 @@ sheets:
     start_row: 5
     start_date: "2025-06-22"
     date_col: C
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      D: J
+    month_avg_cols:
+      D: K
+    date_col: C
+    data_start_row: 5
 - sheet_name: 白羽鸡
   source_sheet: 白羽鸡
   actions:
@@ -127,6 +190,15 @@ sheets:
     start_row: 5
     start_date: "2011-06-16"
     date_col: E
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      F: L
+      G: M
+    month_avg_cols:
+      F: N
+      G: O
+    date_col: E
+    data_start_row: 5
 - sheet_name: 水产价格
   source_sheet: 水产价格
   actions:
@@ -142,6 +214,25 @@ sheets:
     start_row: 5
     start_date: "2011-01-01"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: I
+      C: J
+      D: K
+      E: L
+      F: M
+      G: N
+      H: O
+    month_avg_cols:
+      B: P
+      C: Q
+      D: R
+      E: S
+      F: T
+      G: U
+      H: V
+    date_col: A
+    data_start_row: 5
 #黄鸡没有
 - sheet_name: 日本鳗流通价格
   source_sheet: 日本鳗流通价格
@@ -157,6 +248,23 @@ sheets:
     start_row: 3
     start_date: "2013-01-10"
     date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: H
+      C: I
+      D: J
+      E: K
+      F: L
+      G: M
+    month_avg_cols:
+      B: N
+      C: O
+      D: P
+      E: Q
+      F: R
+      G: S
+    date_col: A
+    data_start_row: 3
 - sheet_name: 饲料
   source_sheet: 饲料
   actions:
@@ -167,6 +275,18 @@ sheets:
       AA000259952200: D
     start_row: 4
     start_date: "2015-06-18"
+    date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: E
+      C: F
+      D: G
+    month_avg_cols:
+      B: H
+      C: I
+      D: J
+    date_col: A
+    data_start_row: 4
 - sheet_name: 美洲鳗流通价格
   source_sheet: 美洲鳗流通价格
   actions:
@@ -180,4 +300,22 @@ sheets:
       AA000507238100: G
     start_row: 3
     start_date: "2018-01-18"
+    date_col: A
+  - type: farm_zlzd_compute_period_avg
+    week_avg_cols:
+      B: H
+      C: I
+      D: J
+      E: K
+      F: L
+      G: M
+    month_avg_cols:
+      B: N
+      C: O
+      D: P
+      E: Q
+      F: R
+      G: S
+    date_col: A
+    data_start_row: 3
 #金针菇没有
