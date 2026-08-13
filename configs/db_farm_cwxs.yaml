@@ -1,0 +1,18 @@
+industry: 农业
+source_file: D:/SWS/new_pipeline/农业/农业20260803_2月宠物食品及用品出口数据_20260805121200.xlsx
+target_file: D:/SWS/new_pipeline/农业/【宠物-申万农业】2月宠物食品及用品出口数据目标文档.xlsx
+output_dir: D:/SWS/new_pipeline/农业/output_files
+defaults:
+  start_date: '2008-02-14'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: 宠物食品出口金额
+  source_sheet: 宠物食品出口金额
+  actions:
+  - type: farm_write_data
+    indicators:
+      AA000489762800: B
+      AA000305950100: G
+    start_row: 3
+    start_date: "2015-02-27"
+    date_col: A

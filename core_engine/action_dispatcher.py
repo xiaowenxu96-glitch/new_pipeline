@@ -24,6 +24,7 @@ from plugins.baijiu_plugin import BaijiuPlugin
 from plugins.farm_plugin import FarmPlugin
 from plugins.farm_export_plugin import FarmPlugin as FarmExportPlugin
 from plugins.farm_zlzd_plugin import FarmPlugin as FarmZlzdPlugin
+from plugins.farm_chick_plugin import FarmPlugin as FarmChickPlugin
 from plugins.building_plugin import BuildingPlugin
 from plugins.decoration_plugin import DecorationPlugin
 from plugins.PO_plugin import PoPlugin
@@ -117,6 +118,8 @@ class PipelineEngine:
             'farm_write_data': FarmExportPlugin.farm_write_data,
             'farm_zlzd_write_data': FarmZlzdPlugin.farm_write_data,
             'farm_zlzd_compute_period_avg': FarmZlzdPlugin.farm_compute_period_avg,
+            # 鸡数据库
+            'farm_chick_write_data': FarmChickPlugin.farm_write_data,
             'farm_write_linechart': FarmExportPlugin.farm_write_linechart,
             'farm_export_create_pivot': FarmExportPlugin.macro_create_pivot_table,
 

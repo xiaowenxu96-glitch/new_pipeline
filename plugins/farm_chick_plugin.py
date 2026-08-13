@@ -10,28 +10,15 @@ class FarmPlugin:
     @staticmethod
     def farm_write_data(context, params):
         """
-        功能说明：
-            处理农业基础指标数据，写入到目标工作表中。
-            与 farm_export_plugin 的区别：支持 date_col 参数指定日期写入列。
-            从 data_reader 缓存中读取指标数据，以第一个指标的日期为基准，
-            将所有指标数据按此日期对齐写入 Excel。
-            日期按升序排列（最早日期在前），使用日度数据格式。
-
-        params:
-            context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
-            params: dict — 从 YAML action 配置中解析的参数，包含：
-                - start_row: int (默认 11) — 数据写入的起始行号。
-                - start_date: str (默认 '2014-01-01') — 数据最早日期。
-                - date_format: str (默认 'yyyy-mm-dd') — 日期列的数字格式。
-                - date_col: str (默认 'A') — 日期写入的目标列。
-                - indicators: dict — 指标编码到列号的映射（从 action 配置中读取）。
+        处理农业基础指标数据，写入到目标工作表中。
+        支持 date_col 参数指定日期写入列。
         """
         ws = context['ws']
         reader = context['data_reader']
         sheet_config = context['sheet_config']
         source_sheet = sheet_config['source_sheet']
         indicator_col_map = params.get('indicators') or {}
-        # 防御：YAML 中冒号后缺少空格时可能被解析为字符串而非字典
+
         if isinstance(indicator_col_map, str):
             print(f"    - 错误：indicators 被解析为字符串 '{indicator_col_map}'，"
                   f"请检查 YAML 配置中冒号后是否有空格")
@@ -45,14 +32,13 @@ class FarmPlugin:
         date_format = params.get('date_format', 'yyyy-mm-dd')
         start_date_ts = pd.to_datetime(start_date)
 
-        # 解析 date_col：日期写入的目标列，默认 A 列
         date_col_raw = params.get('date_col', 'A')
         try:
             date_col_num = column_letter_to_number(date_col_raw) if isinstance(date_col_raw, str) else int(date_col_raw)
         except Exception:
             date_col_num = 1
 
-        # 1. 从缓存中获取所需所有指标数据
+        # 1. 读取指标数据
         indicator_dfs = {}
         for indicator in indicator_col_map:
             ind_data = reader.read_indicator_data(source_sheet, indicator)
@@ -64,14 +50,12 @@ class FarmPlugin:
                 continue
 
             df['日期'] = pd.to_datetime(df['日期'], errors='coerce')
-
-            # 只保留 start_date 及以后数据
             df = df[df['日期'].notna() & (df['日期'] >= start_date_ts)].copy()
             df = df.sort_values('日期', ascending=True).reset_index(drop=True)
 
             indicator_dfs[indicator] = df
 
-        # 2. 使用第一个指标的数据作为基础日期表
+        # 2. 基础日期表
         first_indicator = list(indicator_col_map.keys())[0]
         first_df = indicator_dfs[first_indicator].copy()
 
@@ -82,28 +66,27 @@ class FarmPlugin:
         base_df = first_df.copy()
         last_data_row = start_row + len(base_df) - 1
 
-        # 0. 取消写入区域内已有的合并单元格，避免 MergedCell 只读报错
+        # 0. 取消合并单元格
         col_nums = set()
         for col in indicator_col_map.values():
             try:
                 col_nums.add(column_letter_to_number(col) if isinstance(col, str) else int(col))
             except Exception:
                 pass
-        all_cols = {date_col_num} | col_nums  # 加上日期列
+        all_cols = {date_col_num} | col_nums
         for merged_range in list(ws.merged_cells.ranges):
             if (merged_range.min_row >= start_row or merged_range.max_row >= start_row) and \
                any(merged_range.min_col <= c <= merged_range.max_col for c in all_cols):
                 ws.unmerge_cells(str(merged_range))
 
-        # 3. 写入统一日期列
+        # 3. 写入日期列
         for i, row in base_df.iterrows():
             current_row = start_row + i
             current_date = row['日期']
-
             date_cell = ws.cell(row=current_row, column=date_col_num, value=current_date)
             date_cell.number_format = date_format
 
-        # 4. 写入指标数据，全部按 base_df 的日期对齐
+        # 4. 写入指标数据
         base_date_list = base_df['日期'].tolist()
 
         for indicator, col in list(indicator_col_map.items()):
@@ -122,15 +105,11 @@ class FarmPlugin:
 
             for i, date in enumerate(base_date_list):
                 value = value_map.get(date, None)
-                ws.cell(
-                    row=start_row + i,
-                    column=col_num,
-                    value=value
-                )
+                ws.cell(row=start_row + i, column=col_num, value=value)
 
         print(f"    - 完成农业基础数据写入")
 
-        # 5. 处理公式（如果配置了 formulas）
+        # 5. 处理公式
         formulas = params.get('formulas', [])
         if formulas:
             for fm_cfg in formulas:
@@ -149,15 +128,13 @@ class FarmPlugin:
                     ws.cell(row=r, column=col_num, value=expr)
                 print(f"    - 公式写入完成: 列 {col_letter}，行 {fm_start_row}~{last_data_row}")
 
-        # 6. 清除下方残留旧数据，避免图表坐标轴出现 1900 日期
+        # 6. 清除残留
         clear_start = last_data_row + 1
-        clear_end = 2000  # 足够覆盖图表引用范围
+        clear_end = 2000
 
-        # 清除日期列残留
         for r in range(clear_start, clear_end + 1):
             ws.cell(row=r, column=date_col_num, value=None)
 
-        # 清除各指标列残留
         for col in indicator_col_map.values():
             try:
                 col_num = column_letter_to_number(col) if isinstance(col, str) else int(col)

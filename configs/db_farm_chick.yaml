@@ -1,0 +1,25 @@
+industry: 农业
+source_file: D:/SWS/new_pipeline/农业/农业20260803_【鸡-申万农业】白羽肉鸡数据库_20260805120915.xlsx
+target_file: D:/SWS/new_pipeline/农业/【鸡-申万农业】白羽肉鸡数据库目标文档.xlsx
+output_dir: D:/SWS/new_pipeline/农业/output_files
+defaults:
+  start_date: '2008-02-14'
+  date_format: yyyy-mm-dd
+sheets:
+- sheet_name: '引种国家 '
+  source_sheet: 引种国家
+  actions:
+  - type: farm_chick_write_data
+    indicators:
+      AA000469286200: B
+      AA000469286000: C
+      AA000469286100: D
+      AA000469285800: E
+      AA000469285900: F
+      AA000469286700: G
+      AA000469286500: H
+      AA000469286600: I
+      AA000469286300: J
+      AA000469286400: K
+    start_row: 4
+    date_col: A
