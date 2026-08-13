@@ -9,7 +9,7 @@ sheets:
 - sheet_name: 玉米豆粕价格
   source_sheet: 玉米豆粕价格
   actions:
-  - type: farm_write_data
+  - type: farm_rbdg_write_data
     indicators:
       "AA000260811400": "B"
       "AA000260811200": "C"
@@ -23,15 +23,10 @@ sheets:
     - col: E
       template: "=C{row}-C{prev_row}"
       start_row: 7
-  - type: farm_write_linechart
-    data_range: "A5:B800"
-    y_axis_min: 5
-    y_axis_max: 12
-    year_range: 3
 - sheet_name: 22个省市生猪
   source_sheet: 22个省市生猪
   actions:
-  - type: farm_write_data
+  - type: farm_rbdg_write_data
     indicators:
       "AA000260562400": "B"
     start_row: 6
@@ -41,15 +36,17 @@ sheets:
     - col: D
       template: "=B{row}-B{prev_row}"
       start_row: 7
-  - type: farm_write_linechart
-    data_range: "A5:B800"
-    y_axis_min: 1600
-    y_axis_max: 3400
-    year_range: 3
+  - type: farm_rbdg_write_linechart_periods
+    data_range: "A6:B5000"
+    y_axis_min: 9
+    y_axis_max: 40
+    period_years: 3
+    chart_position: "D5"
+    vertical_gap: 2
 - sheet_name: 22个省市仔猪
   source_sheet: 22个省市仔猪
   actions:
-  - type: farm_write_data
+  - type: farm_rbdg_write_data
     indicators:
       "AA000260573000": "B"
     start_row: 3
@@ -59,10 +56,17 @@ sheets:
     - col: C
       template: "=B{row}-B{prev_row}"
       start_row: 4
+  - type: farm_rbdg_write_linechart_periods
+    data_range: "A6:B5000"
+    y_axis_min: 9
+    y_axis_max: 120
+    period_years: 3
+    chart_position: "D5"
+    vertical_gap: 2
 - sheet_name: 白羽肉鸡
   source_sheet: 白羽肉鸡
   actions:
-  - type: farm_write_data
+  - type: farm_rbdg_write_data
     indicators:
       "AA000514547500": "B"
     start_row: 3
@@ -72,10 +76,17 @@ sheets:
     - col: C
       template: "=B{row}-B{prev_row}"
       start_row: 4
+  - type: farm_rbdg_write_linechart_periods
+    data_range: "A6:B5000"
+    y_axis_min: 5
+    y_axis_max: 15
+    period_years: 3
+    chart_position: "D5"
+    vertical_gap: 2
 - sheet_name: 肉鸡苗
   source_sheet: 肉鸡苗
   actions:
-  - type: farm_write_data
+  - type: farm_rbdg_write_data
     indicators:
       "AA000514547600": "B"
     start_row: 3
@@ -85,3 +96,10 @@ sheets:
     - col: C
       template: "=B{row}-B{prev_row}"
       start_row: 4
+  - type: farm_rbdg_write_linechart_periods
+    data_range: "A6:B5000"
+    y_axis_min: 1
+    y_axis_max: 5
+    period_years: 3
+    chart_position: "D5"
+    vertical_gap: 2

@@ -322,6 +322,170 @@ class FarmPlugin:
 
         return
 
+    @staticmethod
+    def farm_write_linechart_periods(context, params):
+        """
+        功能说明：
+            把数据按固定年限（period_years，默认3年）从最新日期倒推切成多段，
+            每一段各生成一张折线图，竖直排列在数据右侧。
+            最后一段不足 period_years 时也单独生成一张（用最早实际数据的日期裁剪）。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws。
+            params: dict — 包含：
+                - data_range: str (必需) — 数据范围，如 "A5:B5000"。
+                  第一列为时间轴，其余列为数据系列；末行号仅作占位上限，
+                  实际末行会由代码向下扫描日期列自动识别。
+                - period_years: int (默认 3) — 每张图覆盖的年数。
+                - y_axis_min / y_axis_max: float (可选) — Y 轴范围。
+                - chart_position: str (可选) — 第一张图左上角锚点，如 "D5"。
+                - chart_width / chart_height: int (可选，默认 15 / 8)。
+                - vertical_gap: int (可选，默认 2) — 相邻两张图之间的行数间隔。
+        """
+        import re
+        from datetime import datetime, timedelta
+        from dateutil.relativedelta import relativedelta
+        from openpyxl.chart import LineChart, Reference
+
+        ws = context['ws']
+
+        data_range = params.get('data_range', '')
+        if not data_range:
+            print("    - 未指定 data_range，跳过图表创建")
+            return
+
+        m = re.match(r'^\$?([A-Z]+)\$?(\d+):\$?([A-Z]+)\$?(\d+)$', data_range)
+        if not m:
+            print(f"    - 无法解析 data_range: {data_range}，跳过图表创建")
+            return
+
+        col_start_str, row_start_str, col_end_str, row_end_str = m.groups()
+        row_start = int(row_start_str)
+        row_end = int(row_end_str)  # 仅作占位上限，实际末行由扫描决定
+        col_start_num = column_letter_to_number(col_start_str)
+        col_end_num = column_letter_to_number(col_end_str)
+
+        period_years = params.get('period_years', 3)
+
+        # 1. 从 row_start 向下扫描日期列，收集所有数据行（遇空即止）
+        date_rows = []  # [(row, datetime), ...]
+        scan_cap = 100000  # 安全上限，实际在第一个空日期单元格处停止
+        for r in range(row_start, scan_cap + 1):
+            v = ws.cell(row=r, column=col_start_num).value
+            if v is None:
+                break  # 日期列连续，遇到空单元格即表示数据结束
+            if isinstance(v, datetime):
+                d = v
+            else:
+                try:
+                    d = datetime.strptime(str(v), '%Y-%m-%d')
+                except Exception:
+                    continue
+            date_rows.append((r, d))
+
+        if not date_rows:
+            print("    - 未找到任何日期数据，跳过图表创建")
+            return
+
+        latest_date = max(d for _, d in date_rows)
+        earliest_date = min(d for _, d in date_rows)
+
+        # 2. 从最新日期倒推，生成多个半开区间窗口 [start, end)
+        windows = []  # [(start_date, end_date), ...] 从最新往前
+        end = latest_date + timedelta(days=1)  # +1天 便于用 < 比较闭区间上界
+        while True:
+            start = end - relativedelta(years=period_years)
+            windows.append((start, end))
+            if start <= earliest_date:
+                break
+            end = start
+        windows = windows[::-1]  # 转为从早到晚，便于从上到下排列
+
+        y_axis_min = params.get('y_axis_min')
+        y_axis_max = params.get('y_axis_max')
+        chart_width = params.get('chart_width', 15)
+        chart_height = params.get('chart_height', 8)
+        vertical_gap = params.get('vertical_gap', 2)
+        default_col = column_number_to_letter(col_end_num + 2)
+
+        # 第一张图锚点
+        chart_pos = params.get('chart_position', '')
+        if chart_pos:
+            pos_m = re.match(r'^\$?([A-Z]+)\$?(\d+)$', chart_pos)
+            if pos_m:
+                anchor_col = pos_m.group(1)
+                anchor_base_row = int(pos_m.group(2))
+            else:
+                anchor_col = default_col
+                anchor_base_row = row_start
+        else:
+            anchor_col = default_col
+            anchor_base_row = row_start
+
+        # 图表高度(厘米)换算成大约占用的行数（默认行高约15点，1cm≈28.35点）
+        chart_height_rows = max(1, int(round(chart_height * 28.35 / 15)))
+        step = chart_height_rows + vertical_gap  # 相邻两张图向下移动的行数
+
+        chart_index = 0
+        for w_start, w_end in windows:
+            rows_in_window = [(r, d) for r, d in date_rows if w_start <= d < w_end]
+            if not rows_in_window:
+                continue
+
+            r_first = rows_in_window[0][0]
+            r_last = rows_in_window[-1][0]
+            d_first = rows_in_window[0][1]
+            d_last = rows_in_window[-1][1]
+
+            chart = LineChart()
+            chart.style = 2
+
+            cats = Reference(
+                ws,
+                min_col=col_start_num,
+                max_col=col_start_num,
+                min_row=r_first,
+                max_row=r_last,
+            )
+            for col_num in range(col_start_num + 1, col_end_num + 1):
+                data_ref = Reference(
+                    ws,
+                    min_col=col_num,
+                    max_col=col_num,
+                    min_row=r_first,
+                    max_row=r_last,
+                )
+                chart.add_data(data_ref, from_rows=False, titles_from_data=False)
+            chart.set_categories(cats)
+
+            if y_axis_min is not None:
+                chart.y_axis.scaling.min = y_axis_min
+            if y_axis_max is not None:
+                chart.y_axis.scaling.max = y_axis_max
+
+            chart.legend = None
+            chart.title = None
+            for series in chart.series:
+                series.tx = None
+            chart.y_axis.majorGridlines = None
+            chart.y_axis.minorGridlines = None
+            _set_chart_no_border(chart)
+
+            chart.anchor = f'{anchor_col}{anchor_base_row + chart_index * step}'
+            chart.width = chart_width
+            chart.height = chart_height
+
+            ws.add_chart(chart)
+            print(
+                f"    - 折线图{chart_index + 1}: "
+                f"{d_first.strftime('%Y-%m-%d')} ~ {d_last.strftime('%Y-%m-%d')}"
+                f"（行 {r_first}~{r_last}）"
+            )
+            chart_index += 1
+
+        print(f"    - 共生成 {chart_index} 张折线图")
+        return
+
 
 def _set_chart_no_border(chart):
     """
