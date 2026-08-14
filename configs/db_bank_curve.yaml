@@ -1,0 +1,55 @@
+industry: "银行_国股银票转贴现利率曲线"
+source_file: "C:/Users/27627/Desktop/new_pipeline/银行/银行20260811_国股银票转贴现利率曲线_20260813120629.xlsx"
+target_file: "C:/Users/27627/Desktop/new_pipeline/银行/【申万宏源银行】国股银票转贴现利率（公式.xlsx"
+output_file: "C:/Users/27627/Desktop/商业银行/output_files"
+
+defaults:
+  start_date: "1997-8-4"
+  date_format: "yyyy-mm-dd"
+
+sheets:
+  - sheet_name: "国股银票转贴现利率曲线"
+    source_sheet: "国股银票转贴现利率曲线"
+    indicators:
+      "AA000426244800": "D"
+      "AA000426244900": "E"
+      "AA000426245000": "F"
+      "AA000426245100": "G"
+      "AA000426245200": "H"
+      "AA000426245300": "I"
+      "AA000522367500": "J"
+      "AA000522367600": "K"
+      "AA000522367700": "L"
+      "AA000522367800": "M"
+      "AA000522367900": "N"
+      "AA000522368000": "O"
+    actions:
+      - type: "bank_write_data"
+        start_row: 5
+        data_start_row: 1
+        start_column: 1
+        start_date: "2022-06-23"
+
+      - type: "bank_commercial_formula"
+        is_curve: true
+        start_row: 5
+        target_formula: "={source_column}{row}/100" 
+        target_column: ["R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC"]
+        source_column: ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
+        format: "0.00%"
+
+  - sheet_name: "金融市场利率曲线"
+    source_sheet: "金融市场利率曲线"
+    indicators:
+      "AA000115464900": "B"
+      "AA000115465000": "C"
+      "AA000115490500": "D"
+      "AA000115490600": "E"
+      "AA000115490700": "F"
+    actions:
+      - type: "bank_write_data"
+        start_row: 5
+        data_start_row: 1
+        start_column: 1
+        start_date: "1997-08-04"
+      

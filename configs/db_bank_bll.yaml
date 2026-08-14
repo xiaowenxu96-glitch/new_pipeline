@@ -1,0 +1,129 @@
+industry: "银行_各省银行业不良率"
+source_file: "C:/Users/27627/Desktop/new_pipeline/银行/银行20260730_各省银行业不良率_20260804090600.xlsx"
+target_file: "C:/Users/27627/Desktop/new_pipeline/银行/【申万宏源银行】各省银行业不良率.xlsx"
+output_file: "C:/Users/27627/Desktop/商业银行/output_files"
+
+defaults:
+  start_date: "2010-04-29"
+  date_format: "yyyy-mm"
+
+sheets:
+  - sheet_name: "不良率"
+    source_sheet: "不良率"
+    indicators:
+      "AA000346162400": "D"
+      "AA000346163500": "E"
+      "AA000346165300": "F"
+      "AA000346166800": "G"
+
+      "AA000346180800": "I"
+      "AA000346185600": "J"
+
+      "AA000346189100": "L"
+      "AA000346198000": "M"
+      "AA000346203700": "N"
+      "AA000323599000": "O"
+      "AA000346206200": "P"
+      "AA000346208300": "Q"
+
+      "AA000346210000": "S"
+      "AA000417836500": "T"
+
+      "AA000346216900": "V"
+      "AA000346218500": "W"
+      "AA000346222400": "X"
+
+      "AA000346224200": "Z"
+      "AA000346228900": "AA"
+      "AA000346236900": "AB"
+      "AA000346243200": "AD"
+      "AA000346248700": "AE"
+    actions:
+      - type: "bank_write_data"
+        start_row: 3
+        date_columns: ["B"]
+        start_date: "2019-03-30"
+        date_format: "qQyy"
+        divide_by_100: true
+        #动态处理数据
+      - type: "bank_commercial_formula"
+        start_row: 3
+        ref_offset: 35  # 贷款余额行号 = 当前行号 + 12
+        ref_sheet: "贷款余额"
+        format: "0.00%"
+        rules:
+          - target: "C"
+            sources: ["D","E","F","G"]
+            weights: ["D", "E", "F", "G"]
+          - target: "H"
+            sources: ["I", "J"]
+            weights: ["K", "L"]
+          - target: "K"
+            sources: ["L", "M", "N", "O", "P", "Q"]
+            weights: ["N", "O", "P", "Q", "S", "T"]
+          - target: "R"
+            sources: ["S", "T"]
+            weights: ["V", "X"]
+          - target: "U"    # 华南整体
+            sources: ["V", "W", "X"]   
+            weights: ["Z", "AA", "AB"]
+          - target: "Y"
+            sources: ["Z", "AA", "AB"]
+            weights: ["AD", "AE", "AF"]
+          - target: "AC"
+            sources: ["AD", "AE"]
+            weights: ["AK", "AN"]
+
+  - sheet_name: "贷款余额"
+    source_sheet: "贷款余额"
+    indicators:
+      "AA000381970500": "D"
+      "AA000522334300": "E"
+      "AA000522333500": "F"
+      "AA000522334100": "G"
+      "AA000522334000": "H"
+      
+      "AA000522333900": "J"
+      "AA000522333700": "K"
+      "AA000522333600": "L"
+
+      "AA000522334200": "N"
+      "AA000522333800": "O"
+      "AA000522334400": "P"
+      "AA000386830900": "Q"
+      "AA000386855100": "R"
+      "AA000386855200": "S"
+      "AA000391580600": "T"
+
+      "AA000522366200": "V"
+      "AA000386855600": "W"
+      "AA000386855800": "X"
+
+      "AA000386855700": "Z"
+      "AA000391586900": "AA"
+      "AA000415060700": "AB"
+
+      "AA000417809900": "AD"
+      "AA000417910800": "AE"
+      "AA000420664700": "AF"
+      "AA000420740100": "AG"
+      "AA000423458900": "AH"
+
+      "AA000423461800": "AJ"
+      "AA000426244400": "AK"
+      "AA000426244700": "AL"
+      "AA000426245800": "AM"
+      "AA000391580400": "AN"
+    actions:
+      - type: "bank_write_data"
+        start_row: 3
+        date_columns: ["B"]
+        start_date: "2010-04-29"
+
+      - type: "bank_commercial_formula"
+        start_row: 3
+        target_formula: "=SUM({source_start}{row}:{source_end}{row})"
+        target_column: ["C",  "I",  "M",  "U",  "Y",   "AC",  "AI"]
+        source_start:  ["D",  "J",  "N",  "V",  "Z",   "AD",  "AJ"]
+        source_end:    ["H",  "L",  "T",  "X",  "AB",  "AH",  "AN"]
+        format: "#,##0.00"
