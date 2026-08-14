@@ -20,6 +20,7 @@ class BankPlugin:
         start_column = params.get('start_column', 2)
         start_date = params.get('start_date', '2021-01-01')
         date_format = params.get('date_format', 'yyyy-mm')
+        divide_by_100 = params.get('divide_by_100', False)
         start_date_ts = pd.to_datetime(start_date)
 
         # 1. 从缓存中获取所需所有指标数据
@@ -63,10 +64,19 @@ class BankPlugin:
             current_row = start_row + i
             current_date = row['日期']
 
-            # 第1列写日期
-            date_cell = ws.cell(row=current_row, column=start_column, value=current_date)
-            date_cell.number_format = date_format
-
+            if date_format == 'qQyy':
+                # 提取季度和两位数年份，拼接成 1Q19 的字符串
+                quarter = (current_date.month - 1) // 3 + 1
+                year_str = current_date.strftime('%y')
+                display_value = f"{quarter}Q{year_str}"
+                
+                date_cell = ws.cell(row=current_row, column=start_column, value=display_value)
+                # 字符串不需要额外设置 number_format
+            else:
+                # 其他常规格式，按标准日期格式写入
+                date_cell = ws.cell(row=current_row, column=start_column, value=current_date)
+                date_cell.number_format = date_format
+       
         # 4. 写入指标数据，全部按 base_df 的日期对齐（应用单位转换）
         base_date_list = base_df['日期'].tolist()
 
@@ -84,6 +94,9 @@ class BankPlugin:
             col_num = column_letter_to_number(col) if isinstance(col, str) else int(col)    
             for i, date in enumerate(base_date_list):
                 value = value_map.get(date, None)
+                if value is not None and isinstance(value, (int, float)):
+                    if divide_by_100:
+                        value = value /100.0
                 target_cell = ws.cell(
                     row=start_row + i,
                     column=col_num,
@@ -152,19 +165,15 @@ class BankPlugin:
         base_df = first_df.copy()
 
         # 3. 写入统一日期列和指标数据（应用单位转换）
-        # 确定需要写入日期的列列表
         if date_columns is not None:
-            # 如果配置了 date_columns，转换为列表格式
             if isinstance(date_columns, int):
                 date_cols_list = [date_columns]
             elif isinstance(date_columns, str):
-                # 如果是字符串形式的列字母，转换为数字
                 try:
                     date_cols_list = [column_letter_to_number(date_columns)]
                 except:
                     date_cols_list = [int(date_columns)]
             else:
-                # 已经是列表，处理每个元素
                 date_cols_list = []
                 for col in date_columns:
                     if isinstance(col, str):
@@ -175,14 +184,12 @@ class BankPlugin:
                     else:
                         date_cols_list.append(int(col))
         else:
-            # 如果没有配置 date_columns，使用默认的 start_column
             date_cols_list = [start_column]
         
         for i, row in base_df.iterrows():
             current_row = start_row + i
             current_date = row['日期']
 
-            # 在所有配置的日期列中写入日期
             for col_num in date_cols_list:
                 if col_num >= 1:
                     date_cell = ws.cell(row=current_row, column=col_num, value=current_date)
@@ -196,7 +203,6 @@ class BankPlugin:
             value_col = df.columns[-1]
             value_map = dict(zip(df['日期'], df[value_col]))
             
-            # 添加安全检查
             try:
                 col_num = column_letter_to_number(col) if isinstance(col, str) else int(col)
                 if col_num < 1:
@@ -224,7 +230,6 @@ class BankPlugin:
                     value=converted_value
                 )
                 
-                # 继承同列首行的原始格式
                 original_cell = ws.cell(row=start_row, column=col_num)
                 target_cell.number_format = original_cell.number_format
                 
@@ -232,108 +237,391 @@ class BankPlugin:
 
     @staticmethod
     def bank_commercial_formula(context, params):
-        """
-        通用公式写入函数，支持自定义公式模板
-        
-        参数说明：
-        - start_row: 起始行号
-        - target_formula: 公式模板字符串，支持 {source_column}, {row}, {tname} 等占位符
-        - target_column: 目标列列表（写入公式的列）
-        - source_column: 源列列表（公式中引用的列）
-        - tname: 可选的工作表名称，用于跨表引用
-        - format: 可选的数字格式字符串，如 "0.00%"、"#,##0.00"、"[Red](#,##0.00)" 等
-        
-        """
         ws = context['ws']
+
+        if params.get('is_curve'):
+            import math  # 引入 math 处理隐形的 NaN 空值
+            start_row = params.get('start_row', 5)
+            target_formula_template = params.get('target_formula', '={source_column}{row}/100')
+            target_columns = params.get('target_column', [])
+            source_columns = params.get('source_column', [])
+            custom_format = params.get('format', '0.00%')
+            max_row = ws.max_row
+            
+            for target_col, source_col in zip(target_columns, source_columns):
+                target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+                for current_row in range(start_row, max_row + 1):
+                    # 1. 检查 A 列时间列，跳过完全没有日期的空行
+                    time_val = ws.cell(row=current_row, column=1).value
+                    if time_val is None or str(time_val).strip() == "":
+                        continue
+                    
+                    # 2. 究极源数据空值校验
+                    source_val = ws[f"{source_col}{current_row}"].value
+                    is_empty = False
+                    
+                    if source_val is None:
+                        is_empty = True
+                    elif isinstance(source_val, str) and str(source_val).strip() == "":
+                        is_empty = True
+                    elif isinstance(source_val, float) and math.isnan(source_val):
+                        is_empty = True
+                    # 如果需要把真实的数字 0 也当成空值跳过，可以解除下面这行的注释
+                    # elif source_val == 0 or source_val == 0.0:
+                    #     is_empty = True
+                        
+                    if is_empty:
+                        # 如果源数据确实为空，强行给目标格留白，绝不写公式
+                        target_cell = ws.cell(row=current_row, column=target_col_num)
+                        target_cell.value = "" 
+                        continue
+                        
+                    # 3. 只有确认有真实数据，才写入公式和格式
+                    formula = target_formula_template.replace('{source_column}', source_col).replace('{row}', str(current_row))
+                    target_cell = ws.cell(row=current_row, column=target_col_num)
+                    target_cell.value = formula
+                    if custom_format:
+                        target_cell.number_format = custom_format
+                        
+            print("  -> [系统日志] 借壳执行利率曲线映射公式完毕（已部署究极空值过滤）。")
+            return
         
+        # 模式C：借壳执行连续求和（贷款余额SHEET
+        source_starts = params.get('source_start', [])
+        source_ends = params.get('source_end', [])
+        if source_starts and source_ends:
+            start_row = params.get('start_row', 3)
+            target_formula_template = params.get('target_formula', '=SUM({source_start}{row}:{source_end}{row})')
+            target_columns = params.get('target_column', [])
+            custom_format = params.get('format', '#,##0.00')
+
+            max_row = ws.max_row
+            
+            for target_col, src_start, src_end in zip(target_columns, source_starts, source_ends):
+                target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+                
+                # 改为 for 循环，绝不提前退出
+                for current_row in range(start_row, max_row + 1):
+                    time_val = ws.cell(row=current_row, column=2).value
+                    # 遇到空行直接跳过，继续往下处理
+                    if time_val is None or str(time_val).strip() == "":
+                        continue
+                        
+                    formula = target_formula_template.format(row=current_row, source_start=src_start, source_end=src_end)
+                    target_cell = ws.cell(row=current_row, column=target_col_num)
+                    target_cell.value = formula
+                    if custom_format:
+                        target_cell.number_format = custom_format
+                        
+            print("  -> [系统日志] 借壳执行区间求和公式完毕（已屏蔽空行干扰）。")
+            return
+        
+        # ==========================================
+        # 模式 A：全新的动态加权模式 (通过识别 rules 触发)
+        # ==========================================
+        rules = params.get('rules', [])
+        if rules:
+            import math
+            start_row = params.get('start_row', 3)
+            ref_offset = params.get('ref_offset', 35)
+            ref_sheet = params.get('ref_sheet', '贷款余额')
+            custom_format = params.get('format', '0.00%')
+            
+            print(f"  -> [系统日志] 借壳执行动态加权公式，共 {len(rules)} 条规则...")
+            
+            for rule in rules:
+                target_col = rule['target']
+                source_cols = rule['sources']
+                weight_cols = rule.get('weights', source_cols)
+                
+                target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+                current_row = start_row
+                written_count = 0
+                
+                while True:
+                    # 检查 B 列时间是否结束
+                    time_val = ws.cell(row=current_row, column=2).value
+                    if time_val is None or str(time_val).strip() == "":
+                        break
+                        
+                    ref_row = current_row + ref_offset
+                    active_sources = []
+                    active_weights = []
+                    
+                    # 校验哪些列是真的有数据
+                    for sc, wc in zip(source_cols, weight_cols):
+                        cell_val = ws[f"{sc}{current_row}"].value
+                        is_empty = False
+                        
+                        if cell_val is None:
+                            is_empty = True
+                        elif isinstance(cell_val, str) and str(cell_val).strip() == "":
+                            is_empty = True
+                        elif isinstance(cell_val, float) and math.isnan(cell_val):
+                            is_empty = True
+                            
+                        if not is_empty:
+                            active_sources.append(sc)
+                            active_weights.append(wc)
+                    
+                    # 动态拼接并写入
+                    if len(active_sources) == 0:
+                        formula = ""
+                    elif len(active_sources) == 1:
+                        formula = f"={active_sources[0]}{current_row}"
+                    else:
+                        num_parts = [f"{sc}{current_row}*{ref_sheet}!{wc}{ref_row}" for sc, wc in zip(active_sources, active_weights)]
+                        den_parts = [f"{ref_sheet}!{wc}{ref_row}" for wc in active_weights]
+                        formula = f"=({'+'.join(num_parts)})/SUM({','.join(den_parts)})"
+                        
+                    target_cell = ws.cell(row=current_row, column=target_col_num)
+                    target_cell.value = formula if formula else ""
+                    if custom_format:
+                        target_cell.number_format = custom_format
+                        
+                    current_row += 1
+                    written_count += 1
+                    
+            print(f"  -> [系统日志] 动态加权全部写入完成。")
+            return  # 动态模式执行完毕后，直接退出函数
+
+        # ==========================================
+        # 模式 B：兼容老配置的原有逻辑 (没有 rules 时触发)
+        # ==========================================
         start_row = params.get('start_row', 6)
         target_formula_template = params.get('target_formula', '')
         target_columns = params.get('target_column', [])
         source_columns = params.get('source_column', [])
-        tname = params.get('tname', None)  # 可选的工作表名称
-        custom_format = params.get('format', None)  # 可选的自定义格式
+        ref_offset = params.get('ref_offset', 0)
+        tname = params.get('tname', None)
+        custom_format = params.get('format', None)
         
-        # 检查参数有效性
-        if not target_formula_template:
-            print("    - 缺少 target_formula 配置，跳过公式写入")
+        if not target_formula_template or not target_columns:
             return
-            
-        if not target_columns or not source_columns:
-            print("    - 缺少 target_column 或 source_column 配置，跳过公式写入")
-            return
-            
-        if len(target_columns) != len(source_columns):
-            print(f"    - target_column 和 source_column 数量不匹配，跳过公式写入")
-            return
-        
-        # 遍历每一对源列和目标列
-        for target_col, source_col in zip(target_columns, source_columns):
-            try:
-                # 转换列标识为数字
-                target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
-                source_col_num = column_letter_to_number(source_col) if isinstance(source_col, str) else int(source_col)
-                
-                if target_col_num < 1 or source_col_num < 1:
-                    print(f"    - 跳过无效的列配置: target={target_col}, source={source_col}")
-                    continue
-                
-                # 从start_row开始，逐行写入公式，直到target_col的前一列（时间列）没有值为止
-                current_row = start_row
-                while True:
-                    # 检查target_column-1的列是否有值（用于判断是否停止）
-                    check_col_num = target_col_num - 1
-                    if check_col_num < 1:
-                        # 如果target是第1列，无法检查前一列，使用其他判断方式
-                        check_cell = ws.cell(row=current_row, column=target_col_num)
-                        if check_cell.value is None:
-                            break
-                    else:
-                        check_cell = ws.cell(row=current_row, column=check_col_num)
-                        if check_cell.value is None:
-                            break
-                    
-                    # 构建公式：替换模板中的占位符
-                    formula = target_formula_template
-                    
-                    # 替换 {source_column} 为实际的源列字母
-                    source_col_letter = column_number_to_letter(source_col_num)
-                    formula = formula.replace('{source_column}', source_col_letter)
-                    
-                    # 先替换所有 {row-N} 偏移占位符（需在 {row} 之前，避免误匹配）
-                    formula = re.sub(r'\{row-(\d+)\}', lambda m: str(current_row - int(m.group(1))), formula)
 
-                    # 替换 {row} 为当前行号
-                    formula = formula.replace('{row}', str(current_row))
+        if source_columns and len(target_columns) == len(source_columns):
+            for target_col, source_col in zip(target_columns, source_columns):
+                try:
+                    target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+                    source_col_num = column_letter_to_number(source_col) if isinstance(source_col, str) else int(source_col)
                     
-                    # 如果有 tname，替换 {tname}
-                    if tname:
-                        formula = formula.replace('{tname}', tname)
-                    
-                    # 在目标单元格写入公式
+                    current_row = start_row
+                    while True:
+                        check_col_num = target_col_num - 1
+                        check_cell = ws.cell(row=current_row, column=check_col_num if check_col_num >= 1 else target_col_num)
+                        if check_cell.value is None:
+                            break
+                        
+                        source_col_letter = column_number_to_letter(source_col_num)
+                        formula = target_formula_template.replace('{source_column}', source_col_letter)
+                        formula = re.sub(r'\{row-(\d+)\}', lambda m: str(current_row - int(m.group(1))), formula)
+                        formula = formula.replace('{row}', str(current_row))
+                        if tname:
+                            formula = formula.replace('{tname}', tname)
+                        
+                        target_cell = ws.cell(row=current_row, column=target_col_num)
+                        target_cell.value = formula
+                        target_cell.number_format = custom_format or "General"
+                        current_row += 1
+                except Exception as e:
+                    print(f"    - 处理列 {target_col} 时出错: {e}")
+        else:
+            # 模式 B 的另一半逻辑不变...
+            for target_col in target_columns:
+                try:
+                    target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+                    current_row = start_row
+                    while True:
+                        check_col_num = target_col_num - 1
+                        check_cell = ws.cell(row=current_row, column=check_col_num if check_col_num >= 1 else target_col_num)
+                        if check_cell.value is None:
+                            break
+                        ref_row = current_row + ref_offset
+                        prev_row = current_row - 1
+                        formula = target_formula_template.format(row=current_row, ref_row=ref_row, prev_row=prev_row)
+                        target_cell = ws.cell(row=current_row, column=target_col_num)
+                        target_cell.value = formula
+                        if custom_format:
+                            target_cell.number_format = custom_format
+                        current_row += 1
+                except Exception as e:
+                    pass
+    
+    @staticmethod
+    def bank_bll_formula(context, params):
+        """
+        新增：处理多列区间连续求和公式 (适用于贷款余额等 Sheet 中的整体列汇总)
+        支持 target_column, source_start, source_end 并行列表
+        """
+        ws = context['ws']
+        start_row = params.get('start_row', 3)
+        target_formula_template = params.get('target_formula', '=SUM({source_start}{row}:{source_end}{row})')
+        target_columns = params.get('target_column', [])
+        source_starts = params.get('source_start', [])
+        source_ends = params.get('source_end', [])
+        custom_format = params.get('format', '#,##0.00')
+
+        if not target_columns or not source_starts or not source_ends:
+            print("    - [警告] 缺少求和公式参数配置，跳过写入")
+            return
+
+        max_row = ws.max_row
+
+        print(f"  ->[系统日志] 开始执行 bank_bll_formula 区间求和，共 {len(target_columns)} 列...")
+        
+        for target_col, src_start, src_end in zip(target_columns, source_starts, source_ends):
+            try:
+                target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+                written_count = 0
+
+                # 强制循环到表格最底部
+                for current_row in range(start_row, max_row + 1):
+                    # 使用 B 列(时间列) 作为检测列
+                    time_val = ws.cell(row=current_row, column=2).value
+                    # 如果时间列为空，跳过该行，继续往下找（绝不使用 break 提前退出）
+                    if time_val is None or str(time_val).strip() == "":
+                        continue
+
+                    # 渲染公式
+                    formula = target_formula_template.format(
+                        row=current_row,
+                        source_start=src_start,
+                        source_end=src_end
+                    )
+
+                    # 写入单元格
                     target_cell = ws.cell(row=current_row, column=target_col_num)
                     target_cell.value = formula
-
-                    # 设置单元格格式
                     if custom_format:
-                        # 如果提供了自定义格式，直接使用
                         target_cell.number_format = custom_format
-                    else:
-                        # 否则从源列继承格式
-                        source_cell = ws.cell(row=current_row, column=source_col_num)
-                        target_cell.number_format = source_cell.number_format
-                        
-                        # 如果源单元格没有特定格式，则使用会计格式（负数用括号表示）
-                        if not source_cell.number_format or source_cell.number_format == 'General':
-                            target_cell.number_format = '#,##0.00_);(#,##0.00)'
 
-                    current_row += 1
-                
-                print(f"    - 完成列 {target_col} 的公式写入（共 {current_row - start_row} 行）")
-                
+                    written_count += 1
+
+                print(f"    - [成功] 列 {target_col} 求和公式写入完毕（共 {written_count} 行）")
             except Exception as e:
-                print(f"    - 处理列 {target_col} 时出错: {e}")
-                continue
+                print(f"    - 处理列 {target_col} 求和公式出错: {e}")
         
-        return
+    @staticmethod
+    def bank_dynamic_weighted_formula(context, params):
+        import math
+        
+        ws = context['ws']
+        start_row = params.get('start_row', 3)
+        ref_offset = params.get('ref_offset', 35)
+        ref_sheet = params.get('ref_sheet', '贷款余额')
+        custom_format = params.get('format', '0.00%')
+        rules = params.get('rules', [])
+        
+        print(f"  -> [系统日志] 开始执行动态加权公式，共读取到 {len(rules)} 条列规则...")
+        
+        if not rules:
+            print("    - [警告] 缺少 rules 配置，跳过写入")
+            return
+            
+        for rule in rules:
+            target_col = rule['target']
+            source_cols = rule['sources']
+            weight_cols = rule.get('weights', source_cols)
+            
+            target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+            current_row = start_row
+            
+            print(f"    - 正在计算目标列 {target_col} (源: {source_cols})")
+            
+            written_count = 0
+            while True:
+                # 检查 B列（时间列，column=2）是否为空来判断是否到底
+                time_val = ws.cell(row=current_row, column=2).value
+                if time_val is None or str(time_val).strip() == "":
+                    print(f"      * 行号 {current_row} 的时间列(B列)为空，停止往下遍历。")
+                    break
+                    
+                ref_row = current_row + ref_offset
+                active_sources = []
+                active_weights = []
+                
+                # 1. 扫描当前行真实的有效数据
+                for sc, wc in zip(source_cols, weight_cols):
+                    cell_val = ws[f"{sc}{current_row}"].value
+                    
+                    is_empty = False
+                    if cell_val is None:
+                        is_empty = True
+                    elif isinstance(cell_val, str) and str(cell_val).strip() == "":
+                        is_empty = True
+                    elif isinstance(cell_val, float) and math.isnan(cell_val):
+                        is_empty = True
+                        
+                    if not is_empty:
+                        active_sources.append(sc)
+                        active_weights.append(wc)
+                
+                # 2. 动态生成公式
+                if len(active_sources) == 0:
+                    formula = ""
+                elif len(active_sources) == 1:
+                    formula = f"={active_sources[0]}{current_row}"
+                else:
+                    num_parts = [f"{sc}{current_row}*{ref_sheet}!{wc}{ref_row}" for sc, wc in zip(active_sources, active_weights)]
+                    den_parts = [f"{ref_sheet}!{wc}{ref_row}" for wc in active_weights]
+                    formula = f"=({'+'.join(num_parts)})/SUM({','.join(den_parts)})"
+                    
+                # 3. 写入单元格
+                target_cell = ws.cell(row=current_row, column=target_col_num)
+                target_cell.value = formula if formula else ""
+                
+                if custom_format:
+                    target_cell.number_format = custom_format
+                    
+                current_row += 1
+                written_count += 1
+                
+            print(f"    - [成功] 列 {target_col} 写入完成，共填入 {written_count} 行公式。")
 
+    @staticmethod
+    def bank_curve_formula(context, params):
+        ws = context['ws']
+        start_row = params.get('start_row', 5)
+        target_formula_template = params.get('target_formula', '={source_column}{row}/100')
+        target_columns = params.get('target_column', [])
+        source_columns = params.get('source_column', [])
+        custom_format = params.get('format', '0.00%')
 
+        if not target_columns or not source_columns:
+            print("    - [警告] 缺少 target_column 或 source_column 配置")
+            return
+
+        max_row = ws.max_row
+        
+        # 将 target (如 R) 和 source (如 D) 一一对应遍历
+        for target_col, source_col in zip(target_columns, source_columns):
+            target_col_num = column_letter_to_number(target_col) if isinstance(target_col, str) else int(target_col)
+            written_count = 0
+            
+            # 强制遍历到表格底部，跳过空行
+            for current_row in range(start_row, max_row + 1):
+                # 检查 B 列时间列，为空则跳过 (防空行中断)
+                time_val = ws.cell(row=current_row, column=2).value
+                if time_val is None or str(time_val).strip() == "":
+                    continue
+                    
+                # 渲染公式：替换为如 =D5/100
+                formula = target_formula_template.replace('{source_column}', source_col).replace('{row}', str(current_row))
+                
+                target_cell = ws.cell(row=current_row, column=target_col_num)
+                target_cell.value = formula
+                if custom_format:
+                    target_cell.number_format = custom_format
+                
+                written_count += 1
+                
+        print("  -> [系统日志] 利率曲线映射公式写入完毕。")
+   
+ACTION_REGISTRY = {
+    "bank_write_data": BankPlugin.bank_write_data,
+    "bank_commercial_write_data": BankPlugin.bank_commercial_write_data,
+    "bank_commercial_formula": BankPlugin.bank_commercial_formula,
+    "bank_bll_formula": BankPlugin.bank_bll_formula,
+    "bank_dynamic_weighted_formula": BankPlugin.bank_dynamic_weighted_formula,
+    "bank_curve_formula": BankPlugin.bank_curve_formula,
+}
