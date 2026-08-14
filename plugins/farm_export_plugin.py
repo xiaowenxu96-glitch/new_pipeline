@@ -160,103 +160,195 @@ class FarmPlugin:
         print(f"    - 已清除第 {clear_start}-{clear_end} 行残留数据")
 
     @staticmethod
-    def macro_create_pivot_table(context, config):
-            """
-            功能说明：
-                创建基础透视表，将日期数据按"月-日"为行、年份为列进行透视。
-                自动处理闰年 2月29日 到 2月28日 的映射，并支持限定最近 N 年的数据。
-                支持两种数据来源：data_reader（默认）和当前工作表单元格。
-    
-            params:
-                context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
-                config: dict — 透视表配置，包含：
-                    - source: str (默认 'reader') — 数据来源。
-                        'reader': 通过 data_reader 读取（需传 indicator_code）。
-                        'ws': 从当前工作表单元格读取（需传 date_col, value_col, data_start_row）。
-                    【reader 模式】
-                    - indicator_code: str — 指标代码。
-                    【ws 模式】
-                    - date_col: str | int — 日期列（列字母或列号）。
-                    - value_col: str | int — 数值列（列字母或列号）。
-                    - data_start_row: int (默认 10) — 数据读取起始行号。
-                    【通用】
-                    - start_row: int — 透视表写入的起始行号。
-                    - start_col: str | int — 透视表写入的起始列（列字母或列号）。
-                    - years: int (默认 7) — 包含的最近年份数量。
-            """
-            ws = context['ws']
-            source = config.get('source', 'reader')
-            start_row = config['start_row']
-            start_col = config['start_col']
-            years = config.get('years', 7)
-            start_col_num = column_letter_to_number(start_col) if isinstance(start_col, str) else start_col
-    
-            if source == 'ws':
-                date_col_num = column_letter_to_number(config['date_col']) if isinstance(config['date_col'], str) else config['date_col']
-                value_col_num = column_letter_to_number(config['value_col']) if isinstance(config['value_col'], str) else config['value_col']
-                data_start_row = config.get('data_start_row', 10)
-    
-                records = []
-                row = data_start_row
-                while True:
-                    date_val = ws.cell(row=row, column=date_col_num).value
-                    val = ws.cell(row=row, column=value_col_num).value
-                    if date_val is None:
-                        break
-                    try:
-                        records.append({'日期': pd.to_datetime(date_val), 'value': val})
-                    except:
-                        pass
-                    row += 1
-    
-                if not records:
-                    print(f"[{ws.title}] 未找到数据以生成基础透视表")
-                    return
-    
-                df = pd.DataFrame(records)
-            else:
-                reader = context['data_reader']
-                source_sheet = context['sheet_config']['source_sheet']
-                indicator_code = config['indicator_code']
-    
-                from core_engine.data_processor import DataProcessor
-                processor = DataProcessor(reader)
-    
-                indicator_data = reader.read_indicator_data(source_sheet, indicator_code)
-                sorted_data = processor.sort_by_date(indicator_data, ascending=True)
-                df = sorted_data["data"].copy()
-                df.rename(columns={df.columns[-1]: 'value'}, inplace=True)
-    
-            df['日期'] = pd.to_datetime(df['日期'])
-            df['年份'] = df['日期'].dt.year
-            df['月日'] = df['日期'].dt.strftime('%m-%d')
-            df['月日'] = df['月日'].replace('02-29', '02-28')
-    
-            current_year = datetime.now().year
-            start_year = current_year - years + 1
-    
-            df_filtered = df[df['年份'] >= start_year].copy()
-            df_filtered = df_filtered.groupby(['月日', '年份'], as_index=False).first()
-            pivot_df = df_filtered.pivot(index='月日', columns='年份', values='value')
-    
-            for i, year in enumerate(pivot_df.columns):
-                ws.cell(row=start_row, column=start_col_num + i + 1, value=year)
-    
-            for i, (month_day, row_data) in enumerate(pivot_df.iterrows()):
+    def create_pivot_table(context, config):
+        """
+        功能说明：
+            创建基础透视表，将日期数据按"月-日"为行、年份为列进行透视。
+            自动处理闰年 2月29日 到 2月28日 的映射，并支持限定最近 N 年的数据。
+            支持两种数据来源：data_reader（默认）和当前工作表单元格。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
+            config: dict — 透视表配置，包含：
+                - source: str (默认 'reader') — 数据来源。
+                    'reader': 通过 data_reader 读取（需传 indicator_code）。
+                    'ws': 从当前工作表单元格读取（需传 date_col, value_col, data_start_row）。
+                【reader 模式】
+                - indicator_code: str — 指标代码。
+                【ws 模式】
+                - date_col: str | int — 日期列（列字母或列号）。
+                - value_col: str | int — 数值列（列字母或列号）。
+                - data_start_row: int (默认 10) — 数据读取起始行号。
+                【通用】
+                - start_row: int — 透视表写入的起始行号。
+                - start_col: str | int — 透视表写入的起始列（列字母或列号）。
+                - years: int (默认 7) — 包含的最近年份数量。
+        """
+        ws = context['ws']
+        source = config.get('source', 'reader')
+        start_row = config['start_row']
+        start_col = config['start_col']
+        years = config.get('years', 7)
+        start_col_num = column_letter_to_number(start_col) if isinstance(start_col, str) else start_col
+
+        if source == 'ws':
+            date_col_num = column_letter_to_number(config['date_col']) if isinstance(config['date_col'], str) else config['date_col']
+            value_col_num = column_letter_to_number(config['value_col']) if isinstance(config['value_col'], str) else config['value_col']
+            data_start_row = config.get('data_start_row', 10)
+
+            records = []
+            row = data_start_row
+            while True:
+                date_val = ws.cell(row=row, column=date_col_num).value
+                val = ws.cell(row=row, column=value_col_num).value
+                if date_val is None:
+                    break
                 try:
-                    excel_date = datetime.strptime(f"1900-{month_day}", "%Y-%m-%d")
-                except Exception:
-                    excel_date = None
-                cell = ws.cell(row=start_row + i + 1, column=start_col_num, value=excel_date)
-                if excel_date:
-                    cell.number_format = "mm-dd"
-                for j, year in enumerate(pivot_df.columns):
-                    v = row_data.get(year, None)
-                    if pd.isna(v) or v == 0:
-                        v = None
-                    ws.cell(row=start_row + i + 1, column=start_col_num + j + 1, value=v)
-    
-            print(f"[{ws.title}] 创建透视表到 {start_col}")
+                    records.append({'日期': pd.to_datetime(date_val), 'value': val})
+                except:
+                    pass
+                row += 1
+
+            if not records:
+                print(f"[{ws.title}] 未找到数据以生成基础透视表")
+                return
+
+            df = pd.DataFrame(records)
+        else:
+            reader = context['data_reader']
+            source_sheet = context['sheet_config']['source_sheet']
+            indicator_code = config['indicator_code']
+
+            from core_engine.data_processor import DataProcessor
+            processor = DataProcessor(reader)
+
+            indicator_data = reader.read_indicator_data(source_sheet, indicator_code)
+            sorted_data = processor.sort_by_date(indicator_data, ascending=True)
+            df = sorted_data["data"].copy()
+            df.rename(columns={df.columns[-1]: 'value'}, inplace=True)
+
+        df['日期'] = pd.to_datetime(df['日期'])
+        df['年份'] = df['日期'].dt.year
+        df['月日'] = df['日期'].dt.strftime('%m-%d')
+        df['月日'] = df['月日'].replace('02-29', '02-28')
+
+        current_year = datetime.now().year
+        start_year = current_year - years + 1
+
+        df_filtered = df[df['年份'] >= start_year].copy()
+        df_filtered = df_filtered.groupby(['月日', '年份'], as_index=False).first()
+        pivot_df = df_filtered.pivot(index='月日', columns='年份', values='value')
+
+        for i, year in enumerate(pivot_df.columns):
+            ws.cell(row=start_row, column=start_col_num + i + 1, value=year)
+
+        for i, (month_day, row_data) in enumerate(pivot_df.iterrows()):
+            try:
+                excel_date = datetime.strptime(f"1900-{month_day}", "%Y-%m-%d")
+            except Exception:
+                excel_date = None
+            cell = ws.cell(row=start_row + i + 1, column=start_col_num, value=excel_date)
+            if excel_date:
+                cell.number_format = "mm-dd"
+            for j, year in enumerate(pivot_df.columns):
+                v = row_data.get(year, None)
+                if pd.isna(v) or v == 0:
+                    v = None
+                ws.cell(row=start_row + i + 1, column=start_col_num + j + 1, value=v)
+
+        print(f"[{ws.title}] 创建透视表到 {start_col}")
+
+    @staticmethod
+    def create_country_pivot(context, config):
+        """
+        功能说明：
+            创建"国家 × 年份"透视表：行为国家，列为年份，单元格为该国家当年的汇总值。
+            每个指标代码代表一个国家，国家名由 YAML 显式映射提供。
+
+        params:
+            context: dict — Pipeline 上下文，包含 ws、data_reader、sheet_config。
+            config: dict — 透视表配置，包含：
+                - indicators: dict (必需) — {国家名: 指标代码}，如 {"美国": "AA000489763000"}。
+                - start_row: int — 透视表写入的起始行号。
+                - start_col: str | int — 透视表写入的起始列（列字母或列号）。
+                - years: int (默认 10) — 包含的最近年份数量。
+                - agg: str (默认 'sum') — 年度聚合方式，'sum' 求和 / 'mean' 平均 / 'last' 取每年末值（适用于年内累计值数据）。
+        """
+        ws = context['ws']
+        reader = context['data_reader']
+        source_sheet = context['sheet_config']['source_sheet']
+
+        indicators = config.get('indicators') or {}
+        if isinstance(indicators, str) or not indicators:
+            print(f"    - 错误：indicators 无效（类型: {type(indicators).__name__}），跳过创建")
+            return
+
+        start_row = config['start_row']
+        start_col = config['start_col']
+        years = config.get('years', 10)
+        agg = config.get('agg', 'sum')
+        start_col_num = column_letter_to_number(start_col) if isinstance(start_col, str) else start_col
+
+        current_year = datetime.now().year
+        start_year = current_year - years + 1
+
+        records = []
+        for country, code in indicators.items():
+            ind_data = reader.read_indicator_data(source_sheet, code)
+            df = ind_data["data"].copy()
+            if df.empty or '日期' not in df.columns:
+                print(f"    - 工作表[{source_sheet}] 未找到指标 {code}（{country}），跳过")
+                continue
+
+            df['日期'] = pd.to_datetime(df['日期'], errors='coerce')
+            df = df[df['日期'].notna()].copy()
+            df = df.sort_values('日期', ascending=True).reset_index(drop=True)
+
+            # 在添加 '年份' 列之前确定数值列，避免 df.columns[-1] 取到 '年份' 列
+            value_cols = [c for c in df.columns if c not in ('日期', '指标代码', '指标名称')]
+            if not value_cols:
+                print(f"    - 指标 {code}（{country}）未找到数值列，跳过")
+                continue
+            val_col = value_cols[-1]
+
+            df['年份'] = df['日期'].dt.year
+            df = df[df['年份'] >= start_year].copy()
+
+            for year, grp in df.groupby('年份'):
+                vals = grp[val_col].dropna()
+                if vals.empty:
+                    continue
+                if agg == 'sum':
+                    val = vals.sum()
+                elif agg == 'mean':
+                    val = vals.mean()
+                else:
+                    # 'last'：取每年最后一个非空值（年内累计值应取年末值，而非求和）
+                    val = vals.iloc[-1]
+                records.append({'国家': country, '年份': year, 'value': val})
+
+        if not records:
+            print(f"[{ws.title}] 未找到数据以生成国家透视表")
+            return
+
+        pivot_df = pd.DataFrame(records).pivot(index='国家', columns='年份', values='value')
+
+        # pivot() 会按索引字典序重排国家，这里按 YAML 中 indicators 的原始顺序恢复
+        country_order = [c for c in indicators.keys() if c in pivot_df.index]
+        pivot_df = pivot_df.reindex(country_order)
+
+        for i, year in enumerate(pivot_df.columns):
+            ws.cell(row=start_row, column=start_col_num + i + 1, value=year)
+
+        for i, (country, row_data) in enumerate(pivot_df.iterrows()):
+            ws.cell(row=start_row + i + 1, column=start_col_num, value=country)
+            for j, year in enumerate(pivot_df.columns):
+                v = row_data.get(year, None)
+                if pd.isna(v) or v == 0:
+                    v = None
+                ws.cell(row=start_row + i + 1, column=start_col_num + j + 1, value=v)
+
+        print(f"[{ws.title}] 创建国家透视表到 {start_col}")
     @staticmethod
     def farm_write_linechart(context, params):
         """

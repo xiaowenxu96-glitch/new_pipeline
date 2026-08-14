@@ -126,7 +126,8 @@ class PipelineEngine:
             'farm_rbdg_write_linechart': FarmRbdgPlugin.farm_write_linechart,
             'farm_rbdg_write_linechart_periods': FarmRbdgPlugin.farm_write_linechart_periods,
             'farm_write_linechart': FarmExportPlugin.farm_write_linechart,
-            'farm_export_create_pivot': FarmExportPlugin.macro_create_pivot_table,
+            'farm_export_create_pivot': FarmExportPlugin.create_pivot_table,
+            'farm_export_create_country_pivot': FarmExportPlugin.create_country_pivot,
 
             # 装饰动作
             'decoration_write_sheet': DecorationPlugin.decoration_write_sheet,

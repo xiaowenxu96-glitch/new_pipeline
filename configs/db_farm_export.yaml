@@ -93,7 +93,43 @@ sheets:
     start_row: 2
     start_date: "2015-02-27"
     date_col: A
-#宠物食品出口国数据暂时未做
+- sheet_name: 宠物食品出口国数据
+  source_sheet: 宠物食品出口国数据
+  actions:
+  - type: farm_export_create_country_pivot
+    indicators:
+      德国: AA000489763900
+      美国: AA000489764000
+      日本: AA000489764100
+      英国: AA000489764200
+      韩国: AA000489764300
+      菲律宾: AA000489764400
+      荷兰: AA000489764500
+      泰国: AA000489764600
+      印度尼西亚: AA000489764700
+      俄罗斯: AA000489764800
+      合计: AA000521426500
+    agg: last
+    start_row: 2
+    start_col: A
+    years: 12
+  - type: farm_export_create_country_pivot
+    indicators:
+      美国: AA000521423400
+      德国: AA000521423300
+      日本: AA000521423500
+      韩国: AA000521423700
+      英国: AA000521423600
+      荷兰: AA000521423900
+      印度尼西亚: AA000521424100
+      菲律宾: AA000521423800
+      泰国: AA000521424000
+      俄罗斯: AA000521424200
+      合计: AA000518147800
+    agg: last
+    start_row: 41
+    start_col: A
+    years: 12
 - sheet_name: 中间价 美元兑人民币
   source_sheet: 中间价 美元兑人民币
   actions:
